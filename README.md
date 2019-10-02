@@ -1,4 +1,4 @@
-# ZEN3MP Social Network/RPG
+# ZEN3MP
 ### Developed by Scawful in 2019 CE
 
 I finally made my first git repository mom.
