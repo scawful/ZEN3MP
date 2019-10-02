@@ -1,0 +1,95 @@
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #9DAAD9;
+	background-color: #0F1528;
+	font-size: 10px; /* This sets the default font size to be equivalent to 10px */
+}
+h3 {
+	font-size: 1.3em;
+	font-weight: bold;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	line-height: 120%;
+}
+
+/* Links
+ ------------ */
+a:link {
+	color: #567194;
+	text-decoration: none;
+}
+
+a:active,
+a:visited {
+	color: #4C5A8E;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #FFFFFF !important;
+	text-decoration: underline;
+}
+/* Posts
+  ------------ */
+.card {
+  background-color: #191E33 !important;
+}
+.btn-primary {
+  background-color: #192136 !important;
+  border: 1px solid #000 !important;
+}
+.badge-primary {
+  background-color: #121726 !important;
+  border: 1px solid #000 !important;
+}
+.btn-post {
+  background-color: #192136 !important;
+  border: 1px solid #000 !important;
+}
+.titleBar { background-color: #121726; }
+.nav-link {
+  color: #fff;
+  background-color: #192136 !important;
+}
+.nav-link.active { background-color: #121726 !important; }
+.nav-link:hover {
+  color: #fff !important;
+}
+
+.boxes  {
+  color: #9DAAD9;
+}
+#mainBox		{
+  background-color: #1A2237;
+}
+#sideBox	{
+  background-color:	#192136;
+}
+#profileBox {
+  background-color: #192136;
+}
+#adBox {
+  background-color: #1A2237;
+}
+#navBox  {
+  color: #fff;
+  background-color: #1A2237;
+}
+#navBox a {
+  color: #9DAAD9;
+}
+
+#navBox input[type="text"] {
+  background-color: #192136;
+}
+
+
+
+/* Bootstrap colors */
+
+.alert-primary {
+  background-color: #121726 !important;
+}
+
+.card-header {
+  background-color: #121726 !important;
+}

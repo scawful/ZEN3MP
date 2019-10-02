@@ -1,0 +1,106 @@
+{% extends "base.twig" %}
+{% block title %}Store{% endblock %}
+
+{% block main %}
+    <div class="titleBar">Item Store</div>
+
+    {% if i_id == 0 %}
+    <br>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" href="#general" aria-controls="general" data-toggle="tab" aria-selected="true">General</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#weapons" aria-controls="weapons" data-toggle="tab" aria-selected="true">Weapons</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#armor" aria-controls="armor" data-toggle="tab" aria-selected="true">Armor</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#magic" aria-controls="magic" data-toggle="tab" aria-selected="true">Magic</a>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+        <div role="tabpanel" class="tab-pane fade show active" id="general" aria-labelledby="general">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+             {{ inventory.listItems('1') }}
+            </tbody>
+          </table>
+        </div>
+  <div role="tabpanel" class="tab-pane fade" id="weapons" aria-labelledby="weapons">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Price</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ inventory.listItems('2') }}
+        </tbody>
+      </table>
+
+  </div>
+  <div role="tabpanel" class="tab-pane fade" id="armor" aria-labelledby="armor">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Price</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ inventory.listItems('3') }}
+        </tbody>
+      </table>
+
+  </div>
+  <div role="tabpanel" class="tab-pane fade" id="magic" aria-labelledby="magic">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Price</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ inventory.listItems('4') }}
+        </tbody>
+      </table>
+
+  </div>
+  </div>
+
+  {% else %}
+    <div class="article">
+      <a href='?store'><button type='button' class='btn btn-secondary'>Return</button></a><br><br>
+      {{ inventory.getItemInfo(i_id) }}
+    </div>
+  {% endif %}
+
+ {% endblock %}
+
+ {% block side %}
+ <div class="titleBar">Economy</div>
+   <div class="article">
+     {{ character.getAllCharacterMoney() }}
+     {{ inventory.getInventoryValue() }}
+   </div>
+
+ {% endblock %}

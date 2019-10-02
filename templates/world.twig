@@ -1,0 +1,34 @@
+{% extends "base.twig" %}
+{% block title %}World{% endblock %}
+
+{% block main %}
+
+    {% if q_id == 0 %}
+    <div class="card">
+      <h5 class="card-header">Main Quests</h5>
+        <div class="card-body">
+          {{ quest.listQuests(1) }}
+        </div>
+      <h5 class="card-header">Wild Areas</h5>
+        <div class="card-body">
+          {{ quest.listQuests(2) }}
+        </div>
+    </div>
+    {% else %}
+        {% if p_id == 0 %}
+            {{ quest.loadPage(p_id) }}
+        {% else %}
+            {{ quest.loadQuestHome(q_id) }}
+        {% endif %}
+    {% endif %}
+
+
+{% endblock %}
+
+{% block side %}
+<div class="titleBar">Activity</div>
+    <div class="article">
+      <p>Active Quests: 0</p>
+      <p>Players Online: N/A</p>
+    </div>
+{% endblock %}

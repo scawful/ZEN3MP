@@ -1,0 +1,26 @@
+{% extends "base.twig" %}
+{% block title %}Users{% endblock %}
+
+{% block main %}
+    <div class="titleBar">Active Users</div>
+    {{ user.listUsers }}
+
+{% endblock %}
+
+{% block side %}
+<div class="titleBar">Ads served by Google</div>
+    <div class="article">
+    <br />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- TallBoi -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-8036786549441922"
+         data-ad-slot="1140152702"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+{% endblock %}

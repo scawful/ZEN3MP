@@ -1,0 +1,131 @@
+body {
+	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+  color: #444;
+  background: #A4ACB2 url(img/body.gif);
+	font-size: 10px; /* This sets the default font size to be equivalent to 10px */
+}
+h3 {
+	font-size: 1.3em;
+	font-weight: bold;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	line-height: 120%;
+}
+header {
+  color: #ff3706;
+  text-shadow: 1px 1px 2px #ecedee;
+}
+
+/* Links
+ ------------ */
+a:link {
+	color: #889095;
+	text-decoration: none;
+}
+
+a:active,
+a:visited {
+	color: #889095;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #889095 !important;
+	text-decoration: underline;
+}
+/* Posts
+  ------------ */
+.card {
+  background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+  background-size: auto 100%;
+  border-top: solid 1px #C6CACF !important;
+  border-bottom: solid 1px #C6CACF !important;
+}
+.btn-primary {
+  background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+  border: 1px solid #999 !important;
+	color: #999 !important;
+}
+.badge-primary {
+  background-color: #889095 !important;
+  border: 1px solid #999 !important;
+}
+.btn-post {
+  background: url(img/hdr_mid.gif) top left repeat-x;
+  background-size: auto 100%;
+  border: 1px solid #999 !important;
+}
+.titleBar {
+  background: url(img/hdr_mid.gif) top left repeat-x;
+  white-space: nowrap;
+  height: 27px;
+  text-align: left;
+	border-radius: 5px;
+}
+/* Navigation Bar
+  ------------ */
+.nav-link {
+  color: #444;
+  background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+}
+.nav-link.active {
+  background: url(img/hdr_mid.gif) top left repeat-x;
+  background-size: auto 100%;
+}
+.nav-link:hover {
+  color: #fff !important;
+}
+
+.boxes  {
+  color: #444;
+  border: solid 1px #C6CACF !important;
+  border-radius: 5px;
+}
+#mainBox		{
+  background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+}
+#sideBox	{
+  background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+}
+#profileBox {
+  background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+}
+#adBox {
+  background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+}
+#aboveBox {
+  background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+}
+#navBox  {
+  background: url(img/buttons.gif) top left repeat-x;
+  background-size: auto 100%;
+  color: #A8AFB3;
+  text-align: center;
+  font-size: 11px;
+}
+#navBox a {
+  color: #889095;
+}
+
+#navBox input[type="text"] {
+  background-color: #889095;
+}
+
+.user_found_messages {
+	background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+
+}
+
+
+/* Bootstrap colors */
+
+.alert-primary {
+  background-color: #889095 !important;
+}
+.label-notification,
+.badge-notification {
+  background-color: #889095 !important;
+}
+
+.card-header {
+  background-color: #889095 !important;
+}

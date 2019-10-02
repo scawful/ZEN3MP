@@ -1,0 +1,5 @@
+DirectoryIndex index.html index.htm default.htm index.php index.php3 index.phtml index.php5 index.shtml mwindex.phtml
+
+RewriteEngine On
+RewriteRule ^([a-zA-Z0-9_-]+)$ profile.php?profile_username=$1
+RewriteRule ^([a-zA-z0-9_-]+)/$ profile.php?profile_username=$1

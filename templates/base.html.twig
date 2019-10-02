@@ -1,0 +1,56 @@
+{% include('header.html.twig') %}
+
+{% if login_flag > 0 %}
+    {% block container %}
+    <div id="container">
+    {% endblock %}
+    {% else %}
+    <div id="container3">
+{% endif %}
+
+    <header> {% block title %}{% endblock %} </header>
+
+    <div id="profileBox" class="boxes">
+    {% block profile %}
+      {% if login_flag > 0 %}
+        <div class="titleBar">User</div>
+          <div class="column">
+            <img class="avatar" src="{{ user.avatar }}" alt="{{ user.displayname }}'s Avatar">
+            <a href="/{{ user.username }}"><strong>{{ user.displayname }}</strong></a>
+            <span class="badge badge-dark">{{ user.rank }}</span>
+            <br />{{ user.numPosts }}
+            <br />{{ user.numLikes }}
+        {{ character.dispCharacterStats }}
+        </div>
+      {% else %}
+
+      {% endif %}
+    {% endblock %}
+    </div>
+
+    <div id="mainBox" class="boxes"> {% block main %} {% endblock %} </div>
+
+    <div id="sideBox" class="boxes"> {%block side %} {% endblock %} </div>
+
+    <div id="adBox" class="boxes">
+      <div class="titleBar">Ads served by Google</div>
+      <div style="text-align: center; margin: 5px;">
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- ZCMS -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-8036786549441922"
+             data-ad-slot="6715135446"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </div>
+
+    {% include('footer.twig') %}
+
+    </div>
+
+{% block javascript %}{% endblock %}

@@ -1,0 +1,241 @@
+{% extends "base.twig" %}
+{% block title %} {{ username }} {% endblock %}
+
+{% block main %}
+
+        <img src="{{ user_array.header_img }}" class="card-img-top">
+
+     <!-- <div class="profile_header" > style="background-image:url('{{ user_array.header_img }}'); width: 100%; height: 400px;" -->
+
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#posts_div" aria-controls="posts_div" data-toggle="tab" aria-selected="true">
+              &nbsp;<i class="typcn typcn-rss icon btnProfile"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#about_div" aria-controls="about_div" data-toggle="tab" aria-selected="false">
+              <i class="typcn typcn-business-card icon btnProfile"></i>About
+            </a>
+          </li>
+          {% if login_flag > 0 %}
+            {% if userLoggedIn != username %}
+          <li class="nav-item">
+            <a class="nav-link" href="#messages_div" aria-controls="messages_div" role="tab" data-toggle="tab" aria-selected="false">
+              <i class="typcn typcn-message icon btnProfile"></i>Messages
+            </a>
+          </li>
+            {% endif %}
+        {% endif %}
+          {% if login_flag > 0 %}
+            {% if userLoggedIn == username %}
+          <li class="nav-item">
+            <a class="nav-link" href="#inventory_div" aria-controls="inventory_div" role="tab" data-toggle="tab" aria-selected="false">
+              <i class="typcn typcn-briefcase icon btnProfile"></i>Inventory
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#settings_div" aria-controls="settings_div" role="tab" data-toggle="tab" aria-selected="false">
+              <i class="typcn typcn-cog icon btnProfile"></i>Settings
+            </a>
+          </li>
+            {% endif %}
+        {% endif %}
+        </ul>
+
+      <div class="tab-content" id="myTabContent">
+
+          <div role="tabpanel" class="tab-pane fade show active" id="posts_div" aria-labelledby="posts_div">
+            <div class="titleBar">Displaying Posts</div>
+            <br>
+            <div class="posts_area">
+            </div>
+            <img id="loading" src="img/icons/loading.gif">
+          </div>
+
+          <div role="tabpanel" class="tab-pane fade" id="about_div" aria-labelledby="about_div">
+            <div class="titleBar">About {{ username }}</div>
+              <div class="article">
+                {{ profile_user_obj.getUserAboutDetails }}
+              </div>
+          </div>
+
+          <div role="tabpanel" class="tab-pane fade" id="messages_div">
+            <div class='article'>
+                  <h4> You and <a href='{{ username }}'>{{ profile_user_obj.getDisplayName }}</a></h4><hr><br/>
+                  <div class='loaded_messages' id='scroll_messages'>
+                      {{ message_obj.getMessages.username }}
+                      </div>
+                  </div>
+                <form class="" action="" method="POST">
+                    <textarea name='message_body' id='message_textarea' placeholder='Write your message...'></textarea>
+                    <button type='submit' name='post_message' class='btn btn-primary' id='message_submit' value='Send'>Send</button>
+                </form>
+          </div>
+
+          <div role="tabpanel" class="tab-pane fade" id="inventory_div">
+            <div class="titleBar">Inventory</div> {{ inventory.getPlayerInventory }}
+          </div>
+
+          <div role="tabpanel" class="tab-pane fade" id="settings_div">
+            <div class="titleBar">Profile Settings</div>
+            {# include 'lib/pages/settings.php' #}
+
+          </div>
+
+      </div>
+
+
+{% endblock %}
+
+{% block profile %}
+    <div class="titleBar">User</div>
+        <div class="column">
+            <img src="{{ user_array.avatar }}" class="avatar">
+            {{ user_array.displayname }}
+            <span class="badge badge-dark">{{ user_array.user_title }}</span>
+            <br>Posts: {{ user_array.num_posts }}
+            <br>Likes: {{ user_array.num_likes }}
+            <br>Friends: {{ num_friends }}
+
+            {% if login_flag > 0 %}
+              <form class="" action="{{ username }}" method="POST">
+                {% if userLoggedIn != username %}
+                    {% if profile_user_obj.isClosed %}
+                        {% include 'lib/pages/user_closed.php' %}
+                    {% endif %}
+
+                    {% if userLoggedIn != username %}
+                        Mutual Friends: {{ user_obj.getMutualFriends(username) }} <br />
+                    {% endif %}
+
+                    {% if user_obj.isFriend(username) %}
+                        <input type="submit" name="remove_friend" class="btn btn-danger" value="Remove Friend"><br>
+                    {% elseif user_obj.didReceiveRequest(username) %}
+                        <input type="submit" name="respond_request" class="btn-warning" value="Respond to Request"><br>
+                    {% elseif user_obj.didSendRequest(username) %}
+                        <input type="submit" name="" class="btn btn-default" value="Request Sent."><br>
+                    {% else %}
+                        <input type="submit" name="add_friend" class="btn btn-success" value="Add Friend."><br>
+                    {% endif %}
+                    <button type="button" class="btn btn-secondary btn-block">Challenge to a battle!</button>
+                    <button type="button" class="btn btn-info btn-block">Offer to trade.</button>
+
+                {% endif %}
+               </form>
+               <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#post_form" style="margin-top: 10px;">Post Something</button>
+
+            {% endif %}
+        </div>
+
+{% endblock %}
+
+{% block side %}
+    <div class="titleBar">Character</div>
+        <div class="article">
+            {{ char_obj.getCharacterName }} <br />
+            Level: {{ char_obj.getCharacterLevel }} <br />
+            Class: {{ char_obj.getCharacterClass }} <br />
+            Race: {{ char_obj.getCharacterRace }} <br />
+                {{ char_obj.dispCharacterStats }}
+                {{ char_obj.listCharacterAttributes }}
+        </div>
+{% endblock %}
+
+{% block javascript %}
+<!-- Modal -->
+<div class="modal fade" id="post_form" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="postModalLabel">Post something!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>This will appear on the user's profile page and also their newsfeed for your friends to see!</p>
+
+        <form class="profile_post" action="" method="POST">
+          <div class="form-group">
+            <textarea class="form-control" name="post_body"></textarea>
+            <input type="hidden" name="user_from" value="<?php echo $userLoggedIn; ?>">
+            <input type="hidden" name="user_to" value="<?php echo $username; ?>">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" name="post_button" id="submit_profile_post">Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$(function(){
+
+         var userLoggedIn = '{{ userLoggedIn }}';
+         var profileUsername = '{{ username }}';
+         var inProgress = false;
+
+         loadPosts(); //Load first posts
+
+         $(window).scroll(function() {
+             var bottomElement = $(".status_post").last();
+             var noMorePosts = $('.posts_area').find('.noMorePosts').val();
+
+             // isElementInViewport uses getBoundingClientRect(), which requires the HTML DOM object, not the jQuery object. The jQuery equivalent is using [0] as shown below.
+             if (isElementInView(bottomElement[0]) && noMorePosts == 'false') {
+                loadPosts();
+            }
+         });
+
+         function loadPosts() {
+             if(inProgress) { //If it is already in the process of loading some posts, just return
+               return;
+             }
+
+             inProgress = true;
+             $('#loading').show();
+
+             var page = $('.posts_area').find('.nextPage').val() || 1; //If .nextPage couldn't be found, it must not be on the page yet (it must be the first time loading posts), so use the value '1'
+
+             $.ajax({
+                 url: "lib/forms/ajax_load_profile_posts.php",
+                 type: "POST",
+                 data: "page="+page+"&userLoggedIn=" + userLoggedIn + "&profileUsername=" + profileUsername,
+                 cache:false,
+
+                 success: function(response) {
+                     $('.posts_area').find('.nextPage').remove(); //Removes current .nextpage
+                     $('.posts_area').find('.noMorePosts').remove(); //Removes current .nextpage
+                     $('.posts_area').find('.noMorePostsText').remove(); //Removes current .nextpage
+
+                     $('#loading').hide();
+                     $(".posts_area").append(response);
+
+                     inProgress = false;
+                 }
+             });
+         }
+
+         //Check if the element is in view
+         function isElementInView (el) {
+             if(el == null) {
+                 return;
+             }
+
+             var rect = el.getBoundingClientRect();
+
+             return (
+                 rect.top >= 0 &&
+                 rect.left >= 0 &&
+                 rect.bottom <= $(window).height() &&
+                 rect.right <= $(window).width()
+                 //rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && //* or $(window).height()
+                 //rect.right <= (window.innerWidth || document.documentElement.clientWidth) //* or $(window).width()
+             );
+         }
+     });
+ </script>
+ {% endblock %}
