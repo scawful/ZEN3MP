@@ -11,7 +11,7 @@ if(isset($_SESSION['username']))
 } else {
     // header("Location: index.php");
     // session_destroy();
-    $userLoggedIn = "Secret";
+    $userLoggedIn = "Guest";
     $login_flag = 0;
 }
 
@@ -35,7 +35,7 @@ $character = new Character($userLoggedIn, $spdo, $rpdo);
 $inventory = new Inventory($connect_social, $connect_rpg, $userLoggedIn, $spdo);
 $quest_obj = new Quest($userLoggedIn, $rpdo, $spdo);
 $messages = new Message($connect_social, $userLoggedIn, $spdo);
-$notifications = new Notification($connect_social, $userLoggedIn, $spdo);
+$notifications = new Notification($userLoggedIn, $spdo);
 
 $style = $user_obj->getUserStyle();
 

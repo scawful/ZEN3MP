@@ -1,35 +1,34 @@
 <?php
 class Notification {
 	private $user_obj;
-	private $connect_social;
 	private $spdo;
 
-	public function __construct($connect_social, $user, $spdo){
-		$this->con = $connect_social;
+	public function __construct($user, $spdo){
 		$this->user_obj = new User($user, $spdo);
 		$this->spdo = $spdo;
 	}
 
   public function getUnreadNumber() {
-    $userLoggedIn = $this->user_obj->getUsername();
+    	$userLoggedIn = $this->user_obj->getUsername();
 		$stmt = $this->spdo->prepare('SELECT COUNT(*) FROM notifications WHERE viewed = ? AND user_to = ?');
 		$stmt->execute(["no", $userLoggedIn]);
 		$num_unread = $stmt->fetchColumn();
-		return $num_unread;
-    //$query = mysqli_query($this->con, "SELECT * FROM notifications WHERE viewed='no' AND user_to='$userLoggedIn'");
+		//$query = mysqli_query($this->con, "SELECT * FROM notifications WHERE viewed='no' AND user_to='$userLoggedIn'");
 		//return mysqli_num_rows($query);
+		return $num_unread;
   }
 
   public function getNotifications($data, $limit) {
 
-    $page = $data['page'];
+    	$page = $data['page'];
 		$userLoggedIn = $this->user_obj->getUsername();
 		$return_string = "";
 
-		if($page == 1)
-				$start = 0;
-		else
-				$start = ($page - 1) * $limit;
+		if($page == 1) {
+			$start = 0;
+		} else {
+			$start = ($page - 1) * $limit;
+		}
 
 		$set_viewed = $this->spdo->prepare('UPDATE notifications SET viewed = ? WHERE user_to = ?');
 		$set_viewed->execute(["yes", $userLoggedIn]);
@@ -43,10 +42,10 @@ class Notification {
 		$num_rows = $stmt->fetchColumn();
 		//$query = mysqli_query($this->con, "SELECT * FROM notifications WHERE user_to='$userLoggedIn' ORDER BY id DESC");
 
-    if($num_rows == 0) {
-      echo "You have no notifications.";
-      return;
-    }
+	    if($num_rows == 0) {
+	      echo "You have no notifications.";
+	      return;
+	    }
 
 		$num_iterations = 0; // num messages checked
 		$count = 1; // number of messages posted
@@ -54,11 +53,11 @@ class Notification {
 		while($row = $stmt->fetch()) {
 
 				if($num_iterations++ < $start)
-						continue;
+					continue;
 
-				if($count > $limit)
-						break;
-				else {
+				if($count > $limit) {
+					break;
+				} else {
 					$count++;
 				}
 
@@ -68,14 +67,14 @@ class Notification {
 				$user_data_query = $this->spdo->prepare('SELECT * FROM users WHERE username = ?');
 				$user_data_query->execute([$user_from]);
 				$user_data = $user_data_query->fetch();
-        // $user_data_query = mysqli_query($this->con, "SELECT * FROM users WHERE username='$user_from'");
-        // $user_data = mysqli_fetch_array($user_data_query);
+		        // $user_data_query = mysqli_query($this->con, "SELECT * FROM users WHERE username='$user_from'");
+		        // $user_data = mysqli_fetch_array($user_data_query);
 
-        //Timeframe
-        $time_message = $this->datetime($date_time);
+		        //Timeframe
+		        $time_message = $this->datetime($date_time);
 
 
-        $opened = $row['opened'];
+        		$opened = $row['opened'];
 				$style = ($row['opened'] == 'no') ? "background-color: #374925;" : "";
 
 				$return_string .= " <a href='" . $row['link'] . "' class='list-group-item list-group-item-action flex-column align-items-start'>
@@ -89,9 +88,9 @@ class Notification {
 		}
 
 		//if posts were loaded
-		if($count > $limit)
-				$return_string .= "<input type='hidden' class='nextPageDropDownData' value='" . ($page + 1) . "'><input type='hidden' class='noMoreDropDownData' value='false'>";
-		else {
+		if($count > $limit) {
+			$return_string .= "<input type='hidden' class='nextPageDropDownData' value='" . ($page + 1) . "'><input type='hidden' class='noMoreDropDownData' value='false'>";
+		} else {
 			$return_string .= "<input type='hidden' class='noMoreDropDownData' value='true'> <p style='text-align: center; margin: 3px;'>No more notifications to load.</p>";
 		}
 
@@ -123,8 +122,8 @@ class Notification {
             break;
     }
 
-    $link = "post.php?id=" . $post_id;
-    // $insert_query = mysqli_query($this->con, "INSERT INTO notifications VALUES(0, '$user_to', '$userLoggedIn', '$message', '$link', '$date_time', 'no', 'no')");
+	    $link = "post.php?id=" . $post_id;
+	    // $insert_query = mysqli_query($this->con, "INSERT INTO notifications VALUES(0, '$user_to', '$userLoggedIn', '$message', '$link', '$date_time', 'no', 'no')");
 		$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
 		$stmt->execute([$user_to, $userLoggedIn, $message, $link, $date_time, "no", "no"]);
   }

@@ -1,0 +1,114 @@
+<br>
+<div class="card">
+  <form class="" action="" method="POST" style="text-align: left; margin: 10px;">
+
+    <h4>Modify User Details:</h4>
+    <div class="form-group">
+      <label for="formGroupExampleInput">Display Name:</label>
+      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_array.displayname }}" name="displayname"  style="width: 300px;">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">E-Mail: </label>
+      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_array.email }}" name="email"  style="width: 300px;">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">Avatar: (Temporary Solution) </label>
+      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_array.avatar }}" name="avatar" style="width: 300px;">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">Header Image: (Temporary Solution) </label>
+      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_array.header_img }}" name="header_image" style="width: 300px;">
+    </div>
+
+    <!-- echo $message; -->
+    <button type="submit" name="update_details" id="update_details" class="btn btn-primary">Submit</button>
+  </form>
+  <br>
+
+  <form action="" method="POST" style="text-align: left; margin: 10px;">
+
+    <h4>Modify User About:</h4>
+    <div class="form-group">
+      <label for="formGroupExampleInput">Bio: *stripped tags until i add markdown*</label>
+      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.bio }}" name="userBio" style="width: 600px;">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput">Website: </label>
+      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.website }}" name="userWebsite"  style="width: 300px;">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">Twitter: </label>
+      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.twitter }}" name="userTwitter"  style="width: 300px;">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">YouTube: </label>
+      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.youtube }}" name="userYouTube" style="width: 300px;">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">Discord: </label>
+      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.discord }}" name="userDiscord" style="width: 300px;">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">Github: </label>
+      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.github }}" name="userGithub" style="width: 300px;">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">Nintendo Switch: </label>
+      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.switch }}" name="userSwitch" style="width: 300px;">
+    </div>
+
+    <button type="submit" name="update_about" id="update_details" class="btn btn-primary">Submit</button>
+
+  </form>
+  <br>
+
+  <form class="" action="" method="POST" style="text-align: left; margin: 10px;">
+
+    <div class="form-group">
+    <label for="exampleFormControlSelect1">Select Style</label>
+    <select class="form-control" id="style_change" name="style_change">
+      <option {% if style == 'purpleStyle' %} selected="selected" {% endif %} value="purpleStyle">Zeniea Purple</option>
+      <option {% if style == 'darkSky' %} selected="selected" {% endif %} value="darkSky">Darksky [Legacy]</option>
+      <option {% if style == 'themes/acidtech' %} selected="selected" {% endif %} value="themes/acidtech">AcidTech (Incomplete)</option>
+      <option {% if style == 'themes/pinkie' %} selected="selected" {% endif %} value="themes/pinkie">Pinkie (Incomplete)</option>
+      <option {% if style == 'themes/proSilver' %} selected="selected" {% endif %} value="proSilver">ProSilver (Incomplete)</option>
+      <option {% if style == 'themes/avalon' %} selected="selected" {% endif %} value="themes/avalon">Avalon (Incomplete)</option>
+      <option {% if style == 'themes/lightpurple' %} selected="selected" {% endif %} value="themes/lightpurple">Light Purple (Incomplete)</option>
+    </select>
+  </div>
+  <button type="submit" name="update_style" id="update_style" class="btn btn-primary">Submit</button>
+
+  </form>
+
+
+  <form class="" action="" method="POST" style="text-align: left; margin: 10px;">
+    <h4>Reset Password:</h4>
+    <div class="form-group">
+      <label for="formGroupExampleInput3">Old Password: </label>
+      <input type="password" class="form-control" id="formGroupExampleInput" name="oldpassword">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput4">New Password: </label>
+      <input type="password" class="form-control" id="formGroupExampleInput" name="newpassword">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput5">New Password Again: </label>
+      <input type="password" class="form-control" id="formGroupExampleInput" name="newpassword2">
+    </div>
+
+    <!-- echo $password_message; -->
+
+
+    <button type="submit" name="update_password" id="update_password" class="btn btn-primary">Reset</button>
+  </form>
+
+<hr>
+  <form class="" action="" method="POST" style="text-align: left; margin: 5px;">
+    <h4>Close Account</h4>
+    <p>This button closes your account from being seen. Log back in to reactivate your account, does not delete any of your data.</p>
+    <div class="form-group">
+      <input type="submit" class="btn btn-danger" id="formGroupExampleInput" name="close_account" value="Close Account">
+    </div>
+  </form>
+
+</div>

@@ -213,7 +213,7 @@ class Post {
 			$data_query = $this->spdo->prepare('SELECT * FROM posts WHERE deleted = ? ORDER BY id DESC');
 			$data_query->execute(["no"]);
 			$num_query = $this->spdo->prepare('SELECT COUNT(*) FROM posts WHERE deleted = ?');
-      $num_query->execute(["no"]);
+      		$num_query->execute(["no"]);
 			$num_rows = $num_query->fetchColumn();
 		  ///$data_query = mysqli_query($this->con, "SELECT * FROM posts WHERE deleted='no' ORDER BY id DESC");
 

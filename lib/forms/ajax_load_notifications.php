@@ -5,6 +5,6 @@ include ("classes/Notification.php");
 
 $limit = 7; // Number of messages to be loaded per call
 
-$notification = new Notification($connect_social, $_REQUEST['userLoggedIn'], $spdo);
+$notification = new Notification($_REQUEST['userLoggedIn'], $spdo);
 echo $notification->getNotifications($_REQUEST, $limit);
 ?>
