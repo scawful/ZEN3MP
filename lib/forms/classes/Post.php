@@ -570,11 +570,11 @@ class Post {
 
 
 			        while($row = $stmt->fetch())  {
-			          $id = $row['id'];
-								$title = $row['title'];
-			          $body = $row['body'];
-			          $added_by = $row['added_by'];
-			          $date_time = $row['date_added'];
+			        	$id = $row['id'];
+						$title = $row['title'];
+			          	$body = $row['body'];
+			          	$added_by = $row['added_by'];
+			          	$date_time = $row['date_added'];
 
 
 								$user_logged_obj = new User($userLoggedIn, $this->spdo);

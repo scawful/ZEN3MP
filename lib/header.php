@@ -88,7 +88,7 @@ $messages = new Message($connect_social, $userLoggedIn, $spdo);
 $num_messages = $messages->getUnreadNumber();
 
 //unread notifications
-$notifications = new Notification($connect_social, $userLoggedIn, $spdo);
+$notifications = new Notification($userLoggedIn, $spdo);
 $num_notifications = $notifications->getUnreadNumber();
 
 //unanswered friend friend_requests
