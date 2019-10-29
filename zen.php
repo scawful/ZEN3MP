@@ -7,7 +7,6 @@ include("lib/forms/classes/Message.php");
 include("lib/forms/classes/Notification.php");
 include("lib/forms/classes/Inventory.php");
 include("lib/forms/classes/Quest.php");
-
 require __DIR__ . '/vendor/autoload.php';
 
 use Twig\Environment;
