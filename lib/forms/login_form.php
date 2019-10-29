@@ -7,11 +7,14 @@ if(isset($_POST['login_button'])) {
 	$_SESSION['login_email'] = $email; //Store email into session variable
 	$password = $_POST['login_password']; //Get password
 
-	$check_database_query = mysqli_query($connect_social, "SELECT * FROM users WHERE email='$email'");
-	$check_login_query = mysqli_num_rows($check_database_query);
+	//$check_database_query = mysqli_query($connect_social, "SELECT * FROM users WHERE email='$email'");
+	$check_db_query = $spdo->prepare('SELECT * FROM users WHERE email = ? ');
+	$check_db_query->execute([$email]);
+	$check_login_query = $check_db_query->rowCount();
+	//$check_login_query = mysqli_num_rows($check_database_query);
 
-
-	if($row = mysqli_fetch_array($check_database_query)) {
+	//if($row = mysqli_fetch_array($check_database_query)) {
+	if($row = $check_db_query->fetch()) {
 
 			if($row['verify_user'] == 'yes') {
 				if (password_verify($password, $row['password'])) {
@@ -25,7 +28,7 @@ if(isset($_POST['login_button'])) {
 					header("Location: index.php");
 					exit();
 				} else {
-					array_push($error_array, "Email or password was incorrect<br>");
+					array_push($error_array, "IncorrectCredentials");
 				}
 			} else {
 				array_push($error_array, "UserNotVerified");

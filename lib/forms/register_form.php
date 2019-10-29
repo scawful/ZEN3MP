@@ -8,6 +8,20 @@ $password2 = ""; //password 2
 $date = ""; //Sign up date
 $error_array = array(); //Holds error messages
 
+if(isset($_POST['register_button'])) {
+	echo '
+	<script>
+
+	$(document).ready(function() {
+		$("#first").hide();
+		$("#second").show();
+	});
+
+	</script>
+
+	';
+}
+
 if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 
 	//Registration form values
