@@ -2,9 +2,9 @@
 class Inventory {
 
 	private $user_obj;
-  private $item_obj;
+  	private $item_obj;
 	private $connect_social;
-  private $connect_rpg;
+  	private $connect_rpg;
 	private $spdo;
 
   public function __construct($connect_social, $connect_rpg, $user_obj, $spdo){

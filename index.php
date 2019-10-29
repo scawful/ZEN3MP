@@ -46,12 +46,12 @@ switch (True) {
         include ('lib/pages/privacy.html');
         break;
     default:
-				if(isset($_SESSION['username'])) {
+		if(isset($_SESSION['username'])) {
             include ('lib/pages/profile_box.php');
-		        include ('lib/pages/timeline.php');
-				} else {
-						include ('lib/pages/register.php');
-				}
+	        include ('lib/pages/timeline.php');
+		} else {
+			include ('lib/pages/register.php');
+		}
         break;
 }
 include('lib/footer.php');
