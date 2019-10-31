@@ -60,10 +60,13 @@ if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 				$em = filter_var($em, FILTER_VALIDATE_EMAIL);
 
 				//Check if email already exists
-				$e_check = mysqli_query($connect_social, "SELECT email FROM users WHERE email='$em'");
+				//$e_check = mysqli_query($connect_social, "SELECT email FROM users WHERE email='$em'");
+				$e_check = $spdo->prepare('SELECT email FROM users WHERE email = ?');
+				$e_check->execute([$em]);
 
 				//Count the number of rows returned
-				$num_rows = mysqli_num_rows($e_check);
+				//$num_rows = mysqli_num_rows($e_check);
+				$num_rows = $e_check->rowCount();
 
 				if($num_rows > 0) {
 					array_push($error_array, "Email already in use<br>");
@@ -106,14 +109,20 @@ if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 
 				//Generate username by concatenating first name and last name
 				$displayname = $uname;
-				$check_username_query = mysqli_query($connect_social, "SELECT username FROM users WHERE username='$displayname'");
+				//$check_username_query = mysqli_query($connect_social, "SELECT username FROM users WHERE username='$displayname'");
+				$check_username_query = $spdo->prepare('SELECT username FROM users WHERE username = ?');
+				$check_username_query->execute([$displayname]);
+
 
 				$i = 0;
 				//if username exists add number to username
-				while(mysqli_num_rows($check_username_query) != 0) {
+				//while(mysqli_num_rows($check_username_query) != 0) {
+				while($check_username_query->rowCount() != 0) {
 						$i++; //Add 1 to i
 						$displayname = $displayname . "_" . $i;
-						$check_username_query = mysqli_query($connect_social, "SELECT username FROM users WHERE username='$displayname'");
+						//$check_username_query = mysqli_query($connect_social, "SELECT username FROM users WHERE username='$displayname'");
+						$check_username_query = $spdo->prepare('SELECT username FROM users WHERE username = ?');
+						$check_username_query->execute([$displayname]);
 				}
 
 				//Profile picture assignment
@@ -153,7 +162,10 @@ if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 				$headers = 'From:noreply@zeniea.com' . "\r\n"; // Set from headers
 				$mail = mail($to, $subject, $message, $headers); // Send our email
 				if($mail){
-					$query = mysqli_query($connect_social, "INSERT INTO users VALUES (0, '$uname', '$displayname', '$em', '$password', '$date', '$profile_pic', '0', '0', 'yes', ',', '/img/default-wallpaper.png', 'New User', 'no', '$verify_hash')");
+					//$query = mysqli_query($connect_social, "INSERT INTO users VALUES (0, '$uname', '$displayname', '$em', '$password', '$date', '$profile_pic', '0', '0', 'yes', ',', '/img/default-wallpaper.png', 'New User', 'no', '$verify_hash')");
+
+					$query = $spdo->prepare('INSERT INTO users VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+					$query->execute([$uname, $displayname, $em, $password, $date, $profile_pic, '0', '0', 'yes', ',', '/img/default-wallpaper.png', 'New User', 'no', '$verify_hash']);
 
 					$new_user_id = mysqli_insert_id($connect_social);
 
