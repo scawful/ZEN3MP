@@ -20,9 +20,14 @@ if(isset($_POST['login_button'])) {
 				if (password_verify($password, $row['password'])) {
 					$username = $row['username'];
 					// Check if closed, reopen if closed
-					$user_closed_query = mysqli_query($connect_social, "SELECT * FROM users WHERE email='$email' AND user_closed='yes'");
-					if(mysqli_num_rows($user_closed_query) == 1) {
-						$reopen_account = mysqli_query($connect_social, "UPDATE users SET user_closed='no' WHERE email='$email'");
+					//$user_closed_query = mysqli_query($connect_social, "SELECT * FROM users WHERE email='$email' AND user_closed='yes'");
+					$user_closed_query = $spdo->prepare('SELECT * FROM users WHERE email = ? AND user_closed = ?');
+					$user_closed_query->execute([$email, 'yes']);
+					//if(mysqli_num_rows($user_closed_query) == 1) {
+					if($user_closed_query->rowCount() == 1) {
+						//$reopen_account = mysqli_query($connect_social, "UPDATE users SET user_closed='no' WHERE email='$email'");
+						$reopen_account = $spdo->prepare('UPDATE users SET user_closed = ? WHERE email = ?');
+						$reopen_account->execute(['no', $email]);
 					}
 					$_SESSION['username'] = $username;
 					header("Location: index.php");
@@ -46,14 +51,19 @@ if(isset($_POST['resend'])) {
 
 	$_SESSION['login_email'] = $email; //Store email into session variable
 
-	$check_database_query1 = mysqli_query($connect_social, "SELECT * FROM users WHERE email='$email'");
+	//$check_database_query1 = mysqli_query($connect_social, "SELECT * FROM users WHERE email='$email'");
+	$check_database_query1 = $spdo->prepare('SELECT * FROM users WHERE email = ?');
+	$check_database_query1->execute([$email]);
 
-	$row = mysqli_fetch_array($check_database_query1);
+	//$row = mysqli_fetch_array($check_database_query1);
+	$row = $check_database_query1->rowCount();
 	$uname = $row['username'];
 
 	$verify_hash = md5(rand(0,1000));
 
-	$query = mysqli_query($connect_social, "UPDATE users SET verify_hash='$verify_hash' WHERE email='$email'");
+	//$query = mysqli_query($connect_social, "UPDATE users SET verify_hash='$verify_hash' WHERE email='$email'");
+	$query = $spdo->prepare('UPDATE users SET verify_hash = ? WHERE email = ?');
+	$query->execute([$verify_hash, $email]);
 
 	// Verify User Email
 
@@ -78,7 +88,7 @@ if(isset($_POST['resend'])) {
 	$mail = mail($to, $subject, $message, $headers); // Send our email
 	if($mail){
 	  echo "";
-	}else{
+	} else {
 	  echo "Mail sending failed.";
 	}
 

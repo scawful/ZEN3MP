@@ -167,9 +167,13 @@ if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 					$query = $spdo->prepare('INSERT INTO users VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 					$query->execute([$uname, $displayname, $em, $password, $date, $profile_pic, '0', '0', 'yes', ',', '/img/default-wallpaper.png', 'New User', 'no', '$verify_hash']);
 
-					$new_user_id = mysqli_insert_id($connect_social);
+					//$new_user_id = mysqli_insert_id($connect_social);
+					$new_user_id = $spdo->lastInsertID();
 
-					$about_query = mysqli_query($connect_social, "INSERT INTO users_about (id, user_id, style) VALUES (0, '$new_user_id', 'purpleStyle')");
+					//$about_query = mysqli_query($connect_social, "INSERT INTO users_about (id, user_id, style) VALUES (0, '$new_user_id', 'purpleStyle')");
+
+					$about_query = $spdo->prepare('INSERT INTO users_about (id, user_id, style) VALUES (0, ?, ?)');
+					$about_query->execute([$new_user_id, 'purpleStyle']);
 
 					array_push($error_array, "<span style='color: #14C800;'>You're all set! Wait for the email to complete the registration process. </span><br>");
 				}else{
