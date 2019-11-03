@@ -1,60 +1,60 @@
-<?php include ('lib/header.php');
-define('DIV', '<div class = "titleBar">');
-define('NDIV', '</div>');
+<?php
+require('lib/config.php');
+include("lib/forms/classes/User.php");
+include("lib/forms/classes/Post.php");
+include("lib/forms/classes/Character.php");
+include("lib/forms/classes/Message.php");
+include("lib/forms/classes/Notification.php");
+include("lib/forms/classes/Inventory.php");
+include("lib/forms/classes/Quest.php");
+require __DIR__ . '/vendor/autoload.php';
+
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+$loader = new FilesystemLoader(__DIR__ . '/templates');
+$twig = new Environment($loader);
+
+include("lib/globals.php");
+include("lib/auth.php");
+
+include("lib/forms/timeline_post_form.php");
+include("lib/forms/register_form.php");
+include("lib/forms/login_form.php");
+
 switch (True) {
-    case isset($_GET['world']):
-        include ('lib/pages/world.php');
-        break;
     case isset($_GET['news']):
-        include ('lib/pages/news.php');
+        echo $twig->render('news.twig');
         break;
-    case isset($_GET['verify']):
-        include ('lib/pages/blank_box.php');
-        include ('lib/pages/verify.php');
-        break;
-    case isset($_GET['store']):
-        include ('lib/pages/store.php');
-        break;
-    case isset($_GET['zelda']):
-        include ('lib/pages/blank_box.php');
-        include ('lib/pages/zelda.html');
+    case isset($_GET['board']):
+        echo $twig->render('board.twig');
         break;
     case isset($_GET['users']):
-        include ('lib/pages/users.php');
+        echo $twig->render('users.twig');
         break;
-    case isset($_GET['inbox']):
-        include ('lib/pages/profile_box.php');
-        include ('lib/pages/messages.php');
+    case isset($_GET['store']):
+        echo $twig->render('store.twig');
         break;
-    case isset($_GET['settings']):
-        include ('lib/pages/profile_box.php');
-        include ('lib/pages/settings.php');
+    case isset($_GET['world']):
+        echo $twig->render('world.twig');
+        break;
+    case isset($_GET['privacy']):
+        echo $twig->render('privacy.twig');
         break;
     case isset($_GET['rules']):
-        include ('lib/pages/blank_box.php');
-        include ('lib/pages/rules.html');
-        break;
-    case isset($_GET['faq']):
-        include ('lib/pages/blank_box.php');
-        include ('lib/pages/faq.html');
+        echo $twig->render('rules.twig');
         break;
     case isset($_GET['logout']):
         include ('lib/pages/logout.php');
         break;
-    case isset($_GET['privacy']):
-        include ('lib/pages/blank_box.php');
-        include ('lib/pages/privacy.html');
-        break;
     default:
-		if(isset($_SESSION['username'])) {
-            include ('lib/pages/profile_box.php');
-	        include ('lib/pages/timeline.php');
-		} else {
-			include ('lib/pages/register.php');
-		}
+        if(isset($_SESSION['username'])) {
+            echo $twig->render('home.twig');
+        } else {
+            echo $twig->render('login.twig');
+        }
         break;
 }
-include('lib/footer.php');
+
+
+
 ?>
-</body>
-</html>
