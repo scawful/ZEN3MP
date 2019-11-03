@@ -8,20 +8,6 @@ $password2 = ""; //password 2
 $date = ""; //Sign up date
 $error_array = array(); //Holds error messages
 
-if(isset($_POST['register_button'])) {
-	echo '
-	<script>
-
-	$(document).ready(function() {
-		$("#first").hide();
-		$("#second").show();
-	});
-
-	</script>
-
-	';
-}
-
 if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 
 	//Registration form values
@@ -69,39 +55,39 @@ if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 				$num_rows = $e_check->rowCount();
 
 				if($num_rows > 0) {
-					array_push($error_array, "Email already in use<br>");
+					array_push($error_array, "EmailTaken");
 				}
 
 			}
 			else {
-				array_push($error_array, "Invalid email format<br>");
+				array_push($error_array, "InvalidEmail");
 			}
 
 		}
 		else {
-			array_push($error_array, "Emails don't match<br>");
+			array_push($error_array, "EmailMismatch");
 		}
 
 
 		if(strlen($uname) > 25 || strlen($uname) < 2) {
-			array_push($error_array, "Your first name must be between 2 and 25 characters<br>");
+			array_push($error_array, "UsernameLength");
 		}
 
 		if($password != $password2) {
-			array_push($error_array,  "Your passwords do not match<br>");
+			array_push($error_array,  "PasswordMismatch");
 		}
 		else {
 			if(preg_match('/[^A-Za-z0-9!@#$%]/', $password)) {
-				array_push($error_array, "Your password can only contain english characters, numbers or !@#$% <br>");
+				array_push($error_array, "InvalidPasswordCharacters");
 			}
 		}
 
 		if(strlen($password > 30 || strlen($password) < 5)) {
-			array_push($error_array, "Your password must be betwen 5 and 30 characters<br>");
+			array_push($error_array, "PasswordLength");
 		}
 	} else {
 		array_push($error_array, "Captcha Failed!!!");
-}
+	}
 
 
 		if(empty($error_array)) {
@@ -161,11 +147,11 @@ if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 
 				$headers = 'From:noreply@zeniea.com' . "\r\n"; // Set from headers
 				$mail = mail($to, $subject, $message, $headers); // Send our email
-				if($mail){
+				if($mail) {
 					//$query = mysqli_query($connect_social, "INSERT INTO users VALUES (0, '$uname', '$displayname', '$em', '$password', '$date', '$profile_pic', '0', '0', 'yes', ',', '/img/default-wallpaper.png', 'New User', 'no', '$verify_hash')");
 
 					$query = $spdo->prepare('INSERT INTO users VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-					$query->execute([$uname, $displayname, $em, $password, $date, $profile_pic, '0', '0', 'yes', ',', '/img/default-wallpaper.png', 'New User', 'no', '$verify_hash']);
+					$query->execute([$uname, $displayname, $em, $password, $date, $profile_pic, '0', '0', 'yes', ',', '/img/default-wallpaper.png', 'New User', 'no', $verify_hash]);
 
 					//$new_user_id = mysqli_insert_id($connect_social);
 					$new_user_id = $spdo->lastInsertID();
@@ -175,15 +161,15 @@ if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 					$about_query = $spdo->prepare('INSERT INTO users_about (id, user_id, style) VALUES (0, ?, ?)');
 					$about_query->execute([$new_user_id, 'purpleStyle']);
 
-					array_push($error_array, "<span style='color: #14C800;'>You're all set! Wait for the email to complete the registration process. </span><br>");
-				}else{
+					array_push($error_array, "EmailSent");
+				} else {
 					echo "Mail sending failed.";
 				}
 
 				//Clear session variables
-				$_SESSION['reg_uname'] = "";
-				$_SESSION['reg_email'] = "";
-				$_SESSION['reg_email2'] = "";
+				$_SESSION['uname'] = "";
+				$_SESSION['em'] = "";
+				$_SESSION['em2'] = "";
 		}
 
 }

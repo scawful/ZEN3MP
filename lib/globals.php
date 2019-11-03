@@ -10,7 +10,6 @@ if(isset($_SESSION['username']))
     $login_flag = 1;
 } else {
     // header("Location: index.php");
-    // session_destroy();
     $userLoggedIn = "Guest";
     $login_flag = 0;
 }
@@ -52,4 +51,5 @@ $twig->addGlobal('q_id', $quest_id);
 $twig->addGlobal('p_id', $page_id);
 $twig->addGlobal('i_id', $item_id);
 $twig->addGlobal('inventory', $inventory);
+$twig->addGlobal('session', $_SESSION);
 ?>

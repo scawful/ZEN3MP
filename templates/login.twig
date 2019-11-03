@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "guestbase.twig" %}
 {% block title %}Home{% endblock %}
 
 {% block main %}
@@ -6,17 +6,18 @@
 
   <div class="card">
     <div class="card-body">
-      <h5>This website is currently under heavy development, but is accepting new members.</h5>
-      Zeniea operates like most social media platforms, with the added feature of giving you a custom character to develop. Over time I will add a variety of rpg-esque features to the site such as:
-      <ul>
-        <li>Posting reward system (experience, gold)</li>
-        <li>Comprehensive Item Store (weapons, gear)</li>
-        <li>Interactive webcomic style questing</li>
-        <li>P.V.P. turn-based battles</li>
-        <li>And much more! (I hope)</li>
-      </ul>
-      Right now you can go ahead and register for an account and create a character with the verification link provided to you in the e-mail.
-      <br>For updates on progress check the <a href="?news">site news</a> section.
+        <!-- <h5>This website is currently under heavy development, but is accepting new members.</h5> -->
+        <h5>Registration is currently experiencing technical difficulties</h5>
+            Zeniea operates like most social media platforms, with the added feature of giving you a custom character to develop. Over time I will add a variety of rpg-esque features to the site such as:
+            <ul>
+                <li>Posting reward system (experience, gold)</li>
+                <li>Comprehensive Item Store (weapons, gear)</li>
+                <li>Interactive webcomic style questing</li>
+                <li>P.V.P. turn-based battles</li>
+                <li>And much more! (I hope)</li>
+            </ul>
+            <s>Right now you can go ahead and register for an account and create a character with the verification link provided to you in the e-mail.</s>
+            <br>For updates on progress check the <a href="?news">site news</a> section.
     </div>
   </div>
   <h2>Projects:</h2>
@@ -67,4 +68,64 @@
     <a class='dropdown-item' href='#'>Forgot password?</a>
     </div>
 
+    <!-- Register Form -->
+    <div id='second'>
+    <form class="px-4 py-3" action="" method="POST">
+        <div class='form-group'>
+            <input type='username' name="reg_uname" class='form-control' id='register_username' placeholder="Username" value="{% if session.reg_uname %}{{ session.reg_uname }}{% endif %}" required>
+        </div>
+
+        {% if "UsernameLength" in error_array %}
+            Your username must be between 2 and 25 characters<br>
+        {% endif %}
+
+        <div class='form-group'>
+            <input type='email' name="reg_email" class='form-control' id='exampleDropdownFormEmail1' placeholder="Email" value="
+            {% if session.reg_email %} {{ session.reg_email }} {% endif %}" required>
+        </div>
+        <div class='form-group'>
+            <input type='email' name="reg_email2" class='form-control' id='exampleDropdownFormEmail2' placeholder="Confirm Email" value="
+            {% if session.reg_email2 %} {{ session.reg_email2 }} {% endif %}" required>
+        </div>
+
+        {% if "EmailTaken" in error_array %}
+            Email already in use<br>
+        {% endif %}
+        {% if "InvalidEmail" in error_array %}
+            Invalid email format<br>
+        {% endif %}
+        {% if "EmailMismatch" in error_array %}
+            Emails don't match<br>
+        {% endif %}
+
+        <div class='form-group'>
+            <input type='password' name="reg_password" class='form-control' id='exampleDropdownFormPassword1' placeholder='Password' required>
+        </div>
+        <div class='form-group'>
+            <input type='password' name="reg_password2" class='form-control' id='exampleDropdownFormPassword2' placeholder='Confirm Password' required>
+        </div>
+
+        {% if "PasswordMismatch" in error_array %}
+            Your passwords do not match<br>
+        {% endif %}
+        {% if "InvalidPasswordCharacters" in error_array %}
+            Your password can only contain english characters or numbers<br>
+        {% endif %}
+        {% if "PasswordLength" in error_array %}
+            Your password must be betwen 5 and 30 characters<br>
+        {% endif %}
+
+        <div class='g-recaptcha' data-sitekey='6LdNwpoUAAAAANq-7GkziNyXo5hVqO1bNeqWXaHF'></div>
+        <br />
+        <button type="submit" name="register_button" class='btn btn-primary'>Register</button>
+
+        {% if "EmailSent" in error_array %}
+            <br><span style='color: #14C800;'>You're all set! Wait for the email to complete the registration process. </span><br>
+        {% endif %}
+
+        <div class='dropdown-divider'></div>
+        <a class='dropdown-item' href='#' id='signin' class='signin'>Already have an account? Sign in here!</a>
+    </form>
+
+</div>
 {% endblock %}

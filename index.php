@@ -21,6 +21,8 @@ include("lib/forms/timeline_post_form.php");
 include("lib/forms/register_form.php");
 include("lib/forms/login_form.php");
 
+$twig->addGlobal('error_array', $error_array);
+
 switch (True) {
     case isset($_GET['news']):
         echo $twig->render('news.twig');
@@ -55,6 +57,16 @@ switch (True) {
         break;
 }
 
+if(isset($_POST['register_button'])) {
+	echo '
+	<script>
 
+	$(document).ready(function() {
+		$("#first").hide();
+		$("#second").show();
+	});
+	</script>
+	';
+}
 
 ?>

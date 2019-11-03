@@ -52,8 +52,8 @@ if(isset($_POST['login_button'])) {
 
 		            // mark existing token as expired
 		            $userToken = $user_obj->getTokenByUser($username, 0);
-		            if (! empty($userToken[0]["id"])) {
-		                $user_obj->markAsExpired($userToken[0]["id"]);
+		            if (! empty($userToken["id"])) {
+		                $user_obj->markExpired($userToken["id"]);
 		            }
 		            // Insert new token
 		            $user_obj->insertToken($username, $random_password_hash, $random_selector_hash, $expiry_date);
