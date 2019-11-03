@@ -77,11 +77,11 @@
 
       <div class="profile-options">
         {% if login_flag > 0 %}
-            {{ user_obj.aboveButton }}
+            {{ user.aboveButton }}
             <a href="/{{ userLoggedIn }}" title="Profile"><i class="typcn typcn-user icon btnPurp"></i></a>
-                  {% if user_obj.getNumberOfFriendRequests > 0 %}
+                  {% if user.getNumberOfFriendRequests > 0 %}
                     <a href="requests.php"><span class="badge badge-notification" id="unread_requests">
-                    {{ user_obj.getNumberOfFriendRequests }}
+                    {{ user.getNumberOfFriendRequests }}
                     </span></a>
                   {% endif %}
             <a href="/?inbox" title="Inbox"><i class="typcn typcn-mail icon btnPurp"></i></a>
