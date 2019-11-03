@@ -257,7 +257,7 @@ class User {
 
 	// ==================== Authentication =========================
 
-	function getToken($username, $expired) {
+	function getTokenByUser($username, $expired) {
 		$stmt = $this->spdo->prepare('SELECT * from token_auth where username = ? and is_expired = ?');
 		$stmt->execute([$username, $expired]);
 		$result = $stmt->fetch();
