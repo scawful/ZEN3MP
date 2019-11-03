@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require "../config.php";
 include ("../classes/User.php");
 include ("../classes/Post.php");
@@ -37,7 +40,7 @@ $style = $user_obj->getUserStyle();
   		$post_id = $_GET['post_id'];
   	}
 
-  	$get_likes = mysqli_query($connect_social, "SELECT likes, added_by FROM posts WHERE id='$post_id'");
+  	//$get_likes = mysqli_query($connect_social, "SELECT likes, added_by FROM posts WHERE id='$post_id'");
 	$get_likes = $spdo->prepare('SELECT likes, added_by FROM posts WHERE id = ?');
 	$get_likes->execute([$post_id]);
 	$row = $get_likes->fetch();
@@ -58,7 +61,7 @@ $style = $user_obj->getUserStyle();
 		$user_likes = $spdo->prepare('UPDATE users SET num_likes = ? WHERE username = ?');
 		$user_likes->execute([$total_user_likes, $user_liked]);
 		$insert_user = $spdo->prepare('INSERT INTO likes VALUES (0, ?, ?)');
-		$user_user->execute([$userLoggedIn, $post_id]);
+		$insert_user->execute([$userLoggedIn, $post_id]);
 
   		//Insert Notification
       if($user_liked != $userLoggedIn) {

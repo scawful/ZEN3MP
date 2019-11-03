@@ -1,9 +1,11 @@
 <?php
-require('../config.php');
-
-require('../forms/classes/User.php');
-require('../forms/classes/Post.php');
-require('../forms/classes/Notification.php');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+require "../../src/config.php";
+include ("../../src/classes/User.php");
+include ("../../src/classes/Post.php");
+include ("../../src/classes/Notification.php");
 
 if (isset($_SESSION['username'])) {
   $userLoggedIn = $_SESSION['username'];
@@ -11,7 +13,7 @@ if (isset($_SESSION['username'])) {
   $user = mysqli_fetch_array($user_details_query);
 }
 else {
-  		sheader("Location: index.php");
+  	header("Location: index.php");
 }
 $user_obj = new User($userLoggedIn, $spdo);
 $style = $user_obj->getUserStyle();
@@ -66,12 +68,12 @@ $style = $user_obj->getUserStyle();
    		$insert_post = mysqli_query($connect_social, "INSERT INTO comments VALUES (0, '$post_body', '$userLoggedIn', '$posted_to', '$date_time_now', 'no', '$post_id')");
 
       if($posted_to != $userLoggedIn) {
-        $notification = new Notification($connect_social, $userLoggedIn, $spdo);
+        $notification = new Notification($userLoggedIn, $spdo);
         $notification->insertNotification($post_id, $posted_to, "comment");
       }
 
       if($user_to != 'none' && $user_to != $userLoggedIn) {
-        $notification = new Notification($connect_social, $userLoggedIn, $spdo);
+        $notification = new Notification($userLoggedIn, $spdo);
         $notification->insertNotification($post_id, $user_to, "profile_comment");
       }
 
@@ -82,7 +84,7 @@ $style = $user_obj->getUserStyle();
         if($row['posted_by'] != $posted_to && $row['posted_by'] != $user_to
             && $row['posted_by'] != $userLoggedIn && !in_array($row['posted_by'], $notified_users)) {
 
-              $notification = new Notification($connect_social, $userLoggedIn, $spdo);
+              $notification = new Notification($userLoggedIn, $spdo);
               $notification->insertNotification($returned_id, $row['posted_by'], "comment_non_owner");
 
               array_push($notified_users, $row['posted_by']);
