@@ -45,6 +45,12 @@ switch (True) {
     case isset($_GET['rules']):
         echo $twig->render('rules.twig');
         break;
+    case isset($_GET['verify']):
+        echo $twig->render('verify.twig');
+        break;
+    case isset($_GET['zelda']):
+        echo $twig->render('zelda.twig');
+        break;
     case isset($_GET['logout']):
         include ('lib/pages/logout.php');
         break;

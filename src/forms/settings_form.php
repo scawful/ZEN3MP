@@ -1,4 +1,9 @@
 <?php
+if(isset($_SESSION['username']))
+{
+    $userLoggedIn = $_SESSION['username'];
+}
+
 if(isset($_POST['update_details'])) {
 
   $displayname = strip_tags($_POST['displayname']);

@@ -38,6 +38,7 @@ $notifications = new Notification($userLoggedIn, $spdo);
 $utils = new Utils();
 
 $style = $user_obj->getUserStyle();
+$session_id = session_id();
 
 $twig->addGlobal('login_flag', $login_flag);
 $twig->addGlobal('userLoggedIn', $userLoggedIn);
@@ -52,4 +53,5 @@ $twig->addGlobal('p_id', $page_id);
 $twig->addGlobal('i_id', $item_id);
 $twig->addGlobal('inventory', $inventory);
 $twig->addGlobal('session', $_SESSION);
+$twig->addGlobal('session_id', $session_id);
 ?>
