@@ -2,42 +2,69 @@
 
 if(isset($_POST['login_button'])) {
 
+	$isAuthenticated = false;
+
 	$email = filter_var($_POST['login_email'], FILTER_SANITIZE_EMAIL); //sanitize email
 
 	$_SESSION['login_email'] = $email; //Store email into session variable
 	$password = $_POST['login_password']; //Get password
 
-	//$check_database_query = mysqli_query($connect_social, "SELECT * FROM users WHERE email='$email'");
 	$check_db_query = $spdo->prepare('SELECT * FROM users WHERE email = ? ');
 	$check_db_query->execute([$email]);
-	$check_login_query = $check_db_query->rowCount();
-	//$check_login_query = mysqli_num_rows($check_database_query);
 
-	//if($row = mysqli_fetch_array($check_database_query)) {
 	if($row = $check_db_query->fetch()) {
 
 			if($row['verify_user'] == 'yes') {
 				if (password_verify($password, $row['password'])) {
 					$username = $row['username'];
 					// Check if closed, reopen if closed
-					//$user_closed_query = mysqli_query($connect_social, "SELECT * FROM users WHERE email='$email' AND user_closed='yes'");
 					$user_closed_query = $spdo->prepare('SELECT * FROM users WHERE email = ? AND user_closed = ?');
 					$user_closed_query->execute([$email, 'yes']);
-					//if(mysqli_num_rows($user_closed_query) == 1) {
 					if($user_closed_query->rowCount() == 1) {
-						//$reopen_account = mysqli_query($connect_social, "UPDATE users SET user_closed='no' WHERE email='$email'");
 						$reopen_account = $spdo->prepare('UPDATE users SET user_closed = ? WHERE email = ?');
 						$reopen_account->execute(['no', $email]);
 					}
-					$_SESSION['username'] = $username;
-					header("Location: index.php");
-					exit();
+					$isAuthenticated = true;
 				} else {
 					array_push($error_array, "IncorrectCredentials");
 				}
 			} else {
 				array_push($error_array, "UserNotVerified");
 			}
+
+			if($isAuthenticated) {
+				$_SESSION['username'] = $username;
+
+				// Set Auth Cookies if 'Remember Me' checked
+		        if (! empty($_POST["remember"])) {
+		            setcookie("user_login", $username, $cookie_expiration_time);
+
+		            $random_password = $utils->getToken(16);
+		            setcookie("random_password", $random_password, $cookie_expiration_time);
+
+		            $random_selector = $utils->getToken(32);
+		            setcookie("random_selector", $random_selector, $cookie_expiration_time);
+
+		            $random_password_hash = password_hash($random_password, PASSWORD_DEFAULT);
+		            $random_selector_hash = password_hash($random_selector, PASSWORD_DEFAULT);
+
+		            $expiry_date = date("Y-m-d H:i:s", $cookie_expiration_time);
+
+		            // mark existing token as expired
+		            $userToken = $user_obj->getTokenByUser($username, 0);
+		            if (! empty($userToken[0]["id"])) {
+		                $user_obj->markAsExpired($userToken[0]["id"]);
+		            }
+		            // Insert new token
+		            $user_obj->insertToken($username, $random_password_hash, $random_selector_hash, $expiry_date);
+		        } else {
+		            $utils->clearAuthCookie();
+		        }
+
+				header("Location: index.php");
+				exit();
+			}
+
 
 		} else {
 		echo "This user does not exist"; //email entered does not match any in DB
@@ -51,17 +78,14 @@ if(isset($_POST['resend'])) {
 
 	$_SESSION['login_email'] = $email; //Store email into session variable
 
-	//$check_database_query1 = mysqli_query($connect_social, "SELECT * FROM users WHERE email='$email'");
 	$check_database_query1 = $spdo->prepare('SELECT * FROM users WHERE email = ?');
 	$check_database_query1->execute([$email]);
 
-	//$row = mysqli_fetch_array($check_database_query1);
 	$row = $check_database_query1->rowCount();
 	$uname = $row['username'];
 
 	$verify_hash = md5(rand(0,1000));
 
-	//$query = mysqli_query($connect_social, "UPDATE users SET verify_hash='$verify_hash' WHERE email='$email'");
 	$query = $spdo->prepare('UPDATE users SET verify_hash = ? WHERE email = ?');
 	$query->execute([$verify_hash, $email]);
 
