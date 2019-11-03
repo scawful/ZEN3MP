@@ -1,12 +1,19 @@
 <?php
-session_start();
+if(isset($_GET['s']) == session_id()) {
 
-//Clear Session
-$_SESSION["user_login"] = "";
-session_destroy();
+    session_start();
+    //Clear Session
+    $_SESSION["user_login"] = "";
+    session_destroy();
 
-// clear cookies
-$utils->clearAuthCookie();
+    // clear cookies
+    $utils->clearAuthCookie();
 
-header("Location: ../../index.php")
- ?>
+    header("Location: ../../index.php");
+
+} else {
+    echo 'No';
+}
+
+
+?>
