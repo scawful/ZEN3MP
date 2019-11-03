@@ -4,14 +4,10 @@ include ("classes/User.php");
 include ("classes/Post.php");
 include ("classes/Notification.php");
 
-if (isset($_SESSION['username'])) {
+if (isset($_SESSION['username']))
 	$userLoggedIn = $_SESSION['username'];
-	$user_details_query = mysqli_query($connect_social, "SELECT * FROM users WHERE username='$userLoggedIn'");
-	$user = mysqli_fetch_array($user_details_query);
-}
-else {
+else
 	header("Location: index.php");
-}
 
 $user_obj = new User($userLoggedIn, $spdo);
 $style = $user_obj->getUserStyle();
@@ -36,34 +32,37 @@ $style = $user_obj->getUserStyle();
   </head>
   <body>
 <div class="float-right">
-<?php
-
-
-    //Get id of post
+	<?php
   	if(isset($_GET['post_id'])) {
   		$post_id = $_GET['post_id'];
   	}
 
   	$get_likes = mysqli_query($connect_social, "SELECT likes, added_by FROM posts WHERE id='$post_id'");
-  	$row = mysqli_fetch_array($get_likes);
+	$get_likes = $spdo->prepare('SELECT likes, added_by FROM posts WHERE id = ?');
+	$get_likes->execute([$post_id]);
+	$row = $get_likes->fetch();
   	$total_likes = $row['likes'];
   	$user_liked = $row['added_by'];
 
-    $user_details_query = mysqli_query($connect_social, "SELECT * FROM users WHERE username='$user_liked'");
-    $row = mysqli_fetch_array($user_details_query);
+	$user_details_query = $spdo->prepare('SELECT * FROM users WHERE username = ?');
+	$user_details_query->execute([$user_liked]);
+	$row = $user_details_query->fetch();
     $total_user_likes = $row['num_likes'];
 
     //Like button
   	if(isset($_POST['like_button'])) {
   		$total_likes++;
-  		$query = mysqli_query($connect_social, "UPDATE posts SET likes='$total_likes' WHERE id='$post_id'");
-  		$total_user_likes++;
-  		$user_likes = mysqli_query($connect_social, "UPDATE users SET num_likes='$total_user_likes' WHERE username='$user_liked'");
-  		$insert_user = mysqli_query($connect_social, "INSERT INTO likes VALUES(0, '$userLoggedIn', '$post_id')");
+		$query = $spdo->prepare('UPDATE posts SET likes = ? WHERE id = ?');
+		$query->execute([$total_likes, $post_id]);
+		$total_user_likes++;
+		$user_likes = $spdo->prepare('UPDATE users SET num_likes = ? WHERE username = ?');
+		$user_likes->execute([$total_user_likes, $user_liked]);
+		$insert_user = $spdo->prepare('INSERT INTO likes VALUES (0, ?, ?)');
+		$user_user->execute([$userLoggedIn, $post_id]);
 
   		//Insert Notification
       if($user_liked != $userLoggedIn) {
-        $notification = new Notification($connect_social, $userLoggedIn, $spdo);
+        $notification = new Notification($userLoggedIn, $spdo);
         $notification->insertNotification($post_id, $user_liked, "like");
       }
 
@@ -71,15 +70,19 @@ $style = $user_obj->getUserStyle();
   	//Unlike button
   	if(isset($_POST['unlike_button'])) {
   		$total_likes--;
-  		$query = mysqli_query($connect_social, "UPDATE posts SET likes='$total_likes' WHERE id='$post_id'");
+		$query = $spdo->prepare('UPDATE posts SET likes = ? WHERE id = ?');
+		$query->execute([$total_likes, $post_id]);
   		$total_user_likes--;
-  		$user_likes = mysqli_query($connect_social, "UPDATE users SET num_likes='$total_user_likes' WHERE username='$user_liked'");
-  		$insert_user = mysqli_query($connect_social, "DELETE FROM likes WHERE username='$userLoggedIn' AND post_id='$post_id'");
+		$user_likes = $spdo->prepare('UPDATE users SET num_likes = ? WHERE username = ?');
+		$user_likes->execute([$total_user_likes, $user_liked]);
+		$insert_user = $spdo->prepare('DELETE FROM likes WHERE username = ? AND post_id = ?');
+		$insert_user->execute([$userLoggedIn, $post_id]);
   	}
 
     //Check for previous likes
-  	$check_query = mysqli_query($connect_social, "SELECT * FROM likes WHERE username='$userLoggedIn' AND post_id='$post_id'");
-  	$num_rows = mysqli_num_rows($check_query);
+	$check_query = $spdo->prepare('SELECT * FROM likes WHERE username = ? AND post_id = ?');
+	$check_query->execute([$userLoggedIn, $post_id]);
+	$num_rows = $check_query->rowCount();
 
     if($num_rows > 0) {
   		echo '<form action="like_form.php?post_id=' . $post_id . '" method="POST" name="unlike_form" class="comment_like">
