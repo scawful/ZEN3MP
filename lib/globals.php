@@ -36,6 +36,7 @@ $inventory = new Inventory($connect_social, $connect_rpg, $userLoggedIn, $spdo);
 $quest_obj = new Quest($userLoggedIn, $rpdo, $spdo);
 $messages = new Message($connect_social, $userLoggedIn, $spdo);
 $notifications = new Notification($userLoggedIn, $spdo);
+$utils = new Utils();
 
 $style = $user_obj->getUserStyle();
 

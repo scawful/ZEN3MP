@@ -15,7 +15,11 @@ $loader = new FilesystemLoader(__DIR__ . '/templates');
 $twig = new Environment($loader);
 
 include("lib/globals.php");
+include("lib/auth.php");
+
 include("lib/forms/timeline_post_form.php");
+include("lib/forms/register_form.php");
+include("lib/forms/login_form.php");
 
 switch (True) {
     case isset($_GET['news']):
@@ -38,6 +42,9 @@ switch (True) {
         break;
     case isset($_GET['rules']):
         echo $twig->render('rules.twig');
+        break;
+    case isset($_GET['logout']):
+        include ('lib/pages/logout.php');
         break;
     default:
         if(isset($_SESSION['username'])) {
