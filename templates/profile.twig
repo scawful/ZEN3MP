@@ -201,7 +201,7 @@ $(function(){
              var page = $('.posts_area').find('.nextPage').val() || 1; //If .nextPage couldn't be found, it must not be on the page yet (it must be the first time loading posts), so use the value '1'
 
              $.ajax({
-                 url: "lib/forms/ajax_load_profile_posts.php",
+                 url: "src/forms/ajax_load_profile_posts.php",
                  type: "POST",
                  data: "page="+page+"&userLoggedIn=" + userLoggedIn + "&profileUsername=" + profileUsername,
                  cache:false,

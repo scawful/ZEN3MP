@@ -329,7 +329,7 @@ class Post {
 												<a onClick='javascript:toggle$id()' class='btn btn-primary card-link'>
 													<i class='typcn typcn-arrow-back icon'> Replies
 													<span class='badge badge-primary'>$comments_check_num</span></i></a>
-													<span class='likes'><iframe src='lib/forms/like_form.php?post_id=$id' scrolling='no'></iframe></span>
+													<span class='likes'><iframe src='src/forms/like_form.php?post_id=$id' scrolling='no'></iframe></span>
 											</div>
 											</div>
 											</div>
@@ -353,7 +353,7 @@ class Post {
 	                  if (result) {
 	                    // AJAX Request
 	                    $.ajax({
-	                      url: 'lib/forms/delete_post.php?post_id=<?php echo $id; ?>',
+	                      url: 'src/forms/delete_post.php?post_id=<?php echo $id; ?>',
 	                      type: 'POST',
 	                      data: {
 	                        result: result
@@ -491,7 +491,7 @@ class Post {
 											<br/>
 	                    <div class='widgets'>
 	                      <a onClick='javascript:toggle$id()' class='btn btn-primary card-link'><i class='typcn typcn-arrow-back icon'> Replies <span class='badge badge-primary'>$comments_check_num</span></i></a>
-	                      <span class='likes'><iframe src='lib/forms/like_form.php?post_id=$id' scrolling='no'></iframe></span>
+	                      <span class='likes'><iframe src='src/forms/like_form.php?post_id=$id' scrolling='no'></iframe></span>
 	                    </div>
 	                    </div>
 	                    </div>
@@ -513,7 +513,7 @@ class Post {
 	                  if (result) {
 	                    // AJAX Request
 	                    $.ajax({
-	                      url: 'lib/forms/delete_post.php?post_id=<?php echo $id; ?>',
+	                      url: 'src/forms/delete_post.php?post_id=<?php echo $id; ?>',
 	                      type: 'POST',
 	                      data: {
 	                        result: result
@@ -597,9 +597,9 @@ class Post {
 			          else
 			            $delete_button = "";
 
-								$user_details_query = $this->spdo->prepare('SELECT displayname, avatar FROM users WHERE username = ?');
-								$user_details_query->execute([$added_by]);
-								$user_row = $user_details_query->fetch();
+						$user_details_query = $this->spdo->prepare('SELECT displayname, avatar FROM users WHERE username = ?');
+						$user_details_query->execute([$added_by]);
+						$user_row = $user_details_query->fetch();
 			          $displayname = $user_row['displayname'];
 			          $avatar = $user_row['avatar'];
 
@@ -754,7 +754,7 @@ class Post {
 											<br/>
 											<div class='widgets'>
 												<a onClick='javascript:toggle$id()' class='btn btn-primary card-link'><i class='typcn typcn-arrow-back icon'> Replies <span class='badge badge-primary'>$comments_check_num</span></i></a>
-												<span class='likes'><iframe src='lib/forms/like_form.php?post_id=$id' scrolling='no'></iframe></span>
+												<span class='likes'><iframe src='src/forms/like_form.php?post_id=$id' scrolling='no'></iframe></span>
 											</div>
 											</div>
 											</div>
@@ -776,7 +776,7 @@ class Post {
 	                  if (result) {
 	                    // AJAX Request
 	                    $.ajax({
-	                      url: 'lib/forms/delete_post.php?post_id=<?php echo $id; ?>',
+	                      url: 'src/forms/delete_post.php?post_id=<?php echo $id; ?>',
 	                      type: 'POST',
 	                      data: {
 	                        result: result

@@ -1,8 +1,8 @@
 <?php
 include "../config.php";
-include ("classes/User.php");
-include ("classes/Post.php");
-include ("classes/Notification.php");
+include ("../classes/User.php");
+include ("../classes/Post.php");
+include ("../classes/Notification.php");
 
 
 if(isset($_POST['post_body'])) {

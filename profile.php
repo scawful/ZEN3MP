@@ -1,13 +1,13 @@
 <?php
-require('lib/config.php');
-include("lib/forms/classes/User.php");
-include("lib/forms/classes/Post.php");
-include("lib/forms/classes/Message.php");
-include("lib/forms/classes/Notification.php");
-include("lib/forms/classes/Character.php");
-include("lib/forms/classes/Inventory.php");
-include("lib/forms/classes/Quest.php");
-include("lib/forms/settings_form.php");
+require('src/config.php');
+include("src/classes/User.php");
+include("src/classes/Post.php");
+include("src/classes/Character.php");
+include("src/classes/Message.php");
+include("src/classes/Notification.php");
+include("src/classes/Inventory.php");
+include("src/classes/Quest.php");
+include("src/forms/settings_form.php");
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -17,7 +17,7 @@ use Twig\Loader\FilesystemLoader;
 $loader = new FilesystemLoader(__DIR__ . '/templates');
 $twig = new Environment($loader);
 
-include("lib/globals.php");
+include("src/globals.php");
 
 if(isset($_GET['profile_username'])) {
   $username = $_GET['profile_username'];
@@ -73,7 +73,7 @@ $twig->addGlobal('profile_user_obj', $profile_user_obj);
 $twig->addGlobal('profile_uid', $profile_uid);
 $twig->addGlobal('char_obj', $character_obj);
 $twig->addGlobal('num_friends', $prof_num_friends);
-$twig->addGlobal('user_obj', $user_obj);
+$twig->addGlobal('user', $user_obj);
 $twig->addGlobal('user_about', $user_about);
 
 echo $twig->render('profile.twig');

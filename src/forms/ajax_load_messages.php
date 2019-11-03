@@ -1,11 +1,11 @@
 <?php
 include "../config.php";
-include ("classes/User.php");
-include ("classes/Message.php");
-include ("classes/Character.php");
-include ("classes/Inventory.php");
-include ("classes/Quest.php");
-include ("classes/Notification.php");
+include ("../classes/User.php");
+include ("../classes/Message.php");
+include ("../classes/Character.php");
+include ("../classes/Inventory.php");
+include ("../classes/Quest.php");
+include ("../classes/Notification.php");
 
 require ('../../vendor/autoload.php');
 

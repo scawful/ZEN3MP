@@ -1,12 +1,12 @@
 <?php
-require('lib/config.php');
-include("lib/forms/classes/User.php");
-include("lib/forms/classes/Post.php");
-include("lib/forms/classes/Message.php");
-include("lib/forms/classes/Notification.php");
-include("lib/forms/classes/Character.php");
-include("lib/forms/classes/Inventory.php");
-include("lib/forms/classes/Quest.php");
+require('src/config.php');
+include("src/classes/User.php");
+include("src/classes/Post.php");
+include("src/classes/Message.php");
+include("src/classes/Notification.php");
+include("src/classes/Character.php");
+include("src/classes/Inventory.php");
+include("src/classes/Quest.php");
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -283,7 +283,7 @@ $style = $user_obj->getUserStyle();
                 pageName = "ajax_load_messages.php";
 
             var ajaxReq = $.ajax({
-              url: "lib/forms/" + pageName,
+              url: "src/forms/" + pageName,
               type: "POST",
               data: "page=" + page + "&userLoggedIn=" + userLoggedIn,
               cache:false,
