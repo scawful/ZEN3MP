@@ -1,0 +1,97 @@
+<!-- Warrior's Name Input -->
+<div class="input-group mb-3">
+<div class="input-group-prepend">
+  <span class="input-group-text" id="basic-addon1"><i class="typcn typcn-business-card" style="font-size: 18px;"></i></span>
+</div>
+<input type="text" class="form-control" name="character_name_select" placeholder="Character Name" aria-label="Username" aria-describedby="basic-addon1" required>
+</div>
+
+
+ <!-- Warrior Race Select -->
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="character_race_select" id="inlineRadio1" value="Human" required>
+    <label class="form-check-label" for="inlineRadio1">
+      <a data-toggle="collapse" href="#humanInfo" role="button" aria-expanded="false" aria-controls="humanInfo">Human</a>
+    </label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="character_race_select" id="inlineRadio2" value="Elf" required>
+    <label class="form-check-label" for="inlineRadio2">
+      <a data-toggle="collapse" href="#elfInfo" role="button" aria-expanded="false" aria-controls="elfInfo">Elf</a>
+    </label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="character_race_select" id="inlineRadio2" value="Dwarf" required>
+    <label class="form-check-label" for="inlineRadio3">
+      <a data-toggle="collapse" href="#dwarfInfo" role="button" aria-expanded="false" aria-controls="dwarfInfo">Dwarf</a>
+    </label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="character_race_select" id="inlineRadio2" value="Lizard" required>
+    <label class="form-check-label" for="inlineRadio4">
+      <a data-toggle="collapse" href="#lizardInfo" role="button" aria-expanded="false" aria-controls="lizardInfo">Lizard</a>
+    </label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="character_race_select" id="inlineRadio2" value="Giant" required>
+    <label class="form-check-label" for="inlineRadio5">
+      <a data-toggle="collapse" href="#giantInfo" role="button" aria-expanded="false" aria-controls="giantInfo">Giant</a>
+    </label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="character_race_select" id="inlineRadio3" value="nevit" disabled>
+    <label class="form-check-label" for="inlineRadio3">
+      <a data-toggle="collapse" href="#nevitInfo" role="button" aria-expanded="false" aria-controls="nevitInfo">Nevit (disabled)</a>
+    </label>
+  </div><br>
+
+
+  <!-- Warrior Race Info -->
+
+  <div class="collapse" id="humanInfo">
+    <br>
+    <div class="card card-body">
+      Humans<br>
+      +1 Personality, +1 Luck, No Negatives.
+    </div>
+  </div>
+
+  <div class="collapse" id="elfInfo">
+    <br>
+    <div class="card card-body">
+      Elves<br>
+      +2 Intelligence, +2 Agility, -2 Endurance.
+    </div>
+  </div>
+
+  <div class="collapse" id="dwarfInfo">
+    <br>
+    <div class="card card-body">
+      Dwarves<br>
+      +2 Strength, +2 Speed, -2 Personality
+    </div>
+  </div>
+
+  <div class="collapse" id="lizardInfo">
+    <br>
+    <div class="card card-body">
+      Lizards<br>
+      +2 Willpower, +2 Agility, -2 Intelligence.
+    </div>
+  </div>
+
+  <div class="collapse" id="giantInfo">
+    <br>
+    <div class="card card-body">
+      Giants<br>
+      +3 Strength, +1 Endurance, -2 Agility.
+    </div>
+  </div>
+
+  <div class="collapse" id="nevitInfo">
+    <br>
+    <div class="card card-body">
+      Experimental Shape Shifter Race (In development)<br>
+      +2 Intelligence, +2 Speed, +2 Wisdom, -5 Personality.
+    </div>
+  </div><br>
