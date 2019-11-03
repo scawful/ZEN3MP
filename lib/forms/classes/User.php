@@ -266,7 +266,7 @@ class User {
 
 	function insertToken($username, $random_password_hash, $random_selector_hash, $expiry_date) {
 		$stmt = $this->spdo->prepare('INSERT INTO token_auth (username, password_hash, selector_hash, expiry_date) values (?, ?, ?,?)');
-		$stmt->execute([$username. $random_password_hash, $random_selector_hash, $expiry_date]);
+		$stmt->execute([$username, $random_password_hash, $random_selector_hash, $expiry_date]);
 		$result = $stmt->fetch();
 		return $result;
 	}
