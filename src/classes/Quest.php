@@ -2,15 +2,13 @@
 class Quest {
 
 	private $user_obj;
-	private $connect_social;
-  private $connect_rpg;
-  private $rpdo;
+	private $rpdo;
 	private $spdo;
 
-  public function __construct($user_obj, $rpdo, $spdo){
-    $this->rpdo = $rpdo;
-		$this->spdo = $spdo;
-    $this->user = new User($user_obj, $spdo);
+  public function __construct($user_obj, $rpdo, $spdo) {
+	$this->rpdo = $rpdo;
+	$this->spdo = $spdo;
+	$this->user = new User($user_obj, $spdo);
   }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +40,6 @@ class Quest {
 
   public function showQuestHome($quest_id) { // load first page of a quest
 
-    // $stmt = $this->rpdo->query("SELECT * FROM quest_pages WHERE q_id='$qid'");
     $stmt = $this->rpdo->prepare('SELECT * FROM quest_pages WHERE q_id = ?');
     $stmt->execute([$quest_id]);
     $quest = $stmt->fetch();
@@ -82,10 +79,10 @@ class Quest {
             <div class='card-header'>$title</div>
             <img class='card-img-top' src='$media'>
             <div class='card-body'>
-              <p class='card-text'>$body</p>
-                <div class='float-left'>
-                <a href='#' class='btn btn-primary'>Put Commands Here <i class='typcn typcn-arrow-right-thick icon'></i></a>
-                </div>
+              	<p class='card-text'>$body</p>
+	            <div class='float-left'>
+	            <a href='#' class='btn btn-primary'>Put Commands Here <i class='typcn typcn-arrow-right-thick icon'></i></a>
+	            </div>
             </div>
           </div>
           ";
