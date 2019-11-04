@@ -51,6 +51,9 @@ switch (True) {
     case isset($_GET['zelda']):
         echo $twig->render('zelda.twig');
         break;
+    case isset($_GET['faq']):
+        echo $twig->render('faq.twig');
+        break;
     case isset($_GET['logout']):
         include ('lib/pages/logout.php');
         break;
