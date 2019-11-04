@@ -3,18 +3,16 @@
 if(isset($_POST['post']))
 {
 
-  $uploadOk = 1;
+    $uploadOk = 1;
 	$imageName = $_FILES['fileToUpload']['name'];
 	$errorMessage = "";
 
-	if($imageName != "")
-  {
+	if($imageName != "") {
 		$targetDir = "img/uploads/posts/";
 		$imageName = $targetDir . uniqid() . basename($imageName);
 		$imageFileType = pathinfo($imageName, PATHINFO_EXTENSION);
 
-		if($_FILES['fileToUpload']['size'] > 10000000)
-    {
+		if($_FILES['fileToUpload']['size'] > 10000000) {
 			$errorMessage = "Sorry your file is too large";
 			$uploadOk = 0;
 		}
@@ -24,8 +22,7 @@ if(isset($_POST['post']))
 			$uploadOk = 0;
 		}
 
-		if($uploadOk)
-    {
+		if($uploadOk) {
 			if(move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $imageName)) {
 				//image uploaded okay
 			}
@@ -37,21 +34,22 @@ if(isset($_POST['post']))
 
 	}
 
-  if($uploadOk) {
-    $post = new Post($connect_social, $userLoggedIn, $spdo);
-    $newPostBody = (!isset($_POST['post_text']) || empty($_POST['post_text'])) ? "" : $_POST['post_text'];
-    if($newPostBody != "") {
-      $post->submitPost($newPostBody, 'none', $imageName);
-    }
-    else {
-      $post->submitPhoto('none', $imageName);
-    }
-  }
-  else {
-    echo "<div style='text-align: center; padding: 2px;' class='alert alert-danger'>
+    if($uploadOk) {
+        $post = new Post($connect_social, $userLoggedIn, $spdo);
+        $newPostBody = (!isset($_POST['post_text']) || empty($_POST['post_text'])) ? "" : $_POST['post_text'];
+        if($newPostBody != "") {
+          $post->submitPost($newPostBody, 'none', $imageName);
+          header("Location: index.php");
+        }
+        else {
+          $post->submitPhoto('none', $imageName);
+          header("Location: index.php");
+        }
+    } else {
+        echo "<div style='text-align: center; padding: 2px;' class='alert alert-danger'>
             $errorMessage
-          </div>";
-  }
+            </div>";
+    }
 
 
 }

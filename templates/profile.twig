@@ -140,37 +140,38 @@
                 {{ char_obj.dispCharacterStats }}
                 {{ char_obj.listCharacterAttributes }}
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="post_form" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="postModalLabel">Post something!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>This will appear on the user's profile page and also their newsfeed for your friends to see!</p>
+
+                <form class="profile_post" action="" method="POST">
+                  <div class="form-group">
+                    <textarea class="form-control" name="post_body"></textarea>
+                    <input type="hidden" name="user_from" value="<?php echo $userLoggedIn; ?>">
+                    <input type="hidden" name="user_to" value="<?php echo $username; ?>">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" name="post_button" id="submit_profile_post">Post</button>
+              </div>
+            </div>
+          </div>
+        </div>
 {% endblock %}
 
 {% block javascript %}
-<!-- Modal -->
-<div class="modal fade" id="post_form" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="postModalLabel">Post something!</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>This will appear on the user's profile page and also their newsfeed for your friends to see!</p>
 
-        <form class="profile_post" action="" method="POST">
-          <div class="form-group">
-            <textarea class="form-control" name="post_body"></textarea>
-            <input type="hidden" name="user_from" value="<?php echo $userLoggedIn; ?>">
-            <input type="hidden" name="user_to" value="<?php echo $username; ?>">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" name="post_button" id="submit_profile_post">Post</button>
-      </div>
-    </div>
-  </div>
-</div>
 <script>
 $(function(){
 
@@ -203,7 +204,7 @@ $(function(){
              $.ajax({
                  url: "src/forms/ajax_load_profile_posts.php",
                  type: "POST",
-                 data: "page="+page+"&userLoggedIn=" + userLoggedIn + "&profileUsername=" + profileUsername,
+                 data: "page="+ page + "&userLoggedIn=" + userLoggedIn + "&profileUsername=" + profileUsername,
                  cache:false,
 
                  success: function(response) {
@@ -230,10 +231,8 @@ $(function(){
              return (
                  rect.top >= 0 &&
                  rect.left >= 0 &&
-                 rect.bottom <= $(window).height() &&
-                 rect.right <= $(window).width()
-                 //rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && //* or $(window).height()
-                 //rect.right <= (window.innerWidth || document.documentElement.clientWidth) //* or $(window).width()
+                 rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && //* or $(window).height()
+                 rect.right <= (window.innerWidth || document.documentElement.clientWidth) //* or $(window).width()
              );
          }
      });
