@@ -170,7 +170,7 @@ class Post {
 							$this->calculateTrend(ucfirst($value));
 					}
 
-							}
+				}
 
 			}
 		}
@@ -186,7 +186,7 @@ class Post {
 				//if(mysqli_num_rows($query) == 0) {
 				if($num_rows == 0) {
 					$insert_query = $this->spdo->prepare('INSERT INTO trends(title,hits) VALUES(?, ?)');
-					$insert_query->execute([$term, "1"]);
+					$insert_query->execute([$term, '1']);
 					///$insert_query = mysqli_query($this->con, "INSERT INTO trends(title,hits) VALUES('$term','1')");
 				} else {
 					$insert_query = $this->spdo->prepare('UPDATE trends SET hits = ? WHERE title = ?');
@@ -388,16 +388,14 @@ class Post {
 	    $userLoggedIn = $this->user_obj->getUsername();
 
 	    if($page == 1)
-	      $start = 0;
+			$start = 0;
 	    else
-	      $start = ($page - 1) * limit;
+			$start = ($page - 1) * $limit;
 
 	    $str = "";
-			$data_query = $this->spdo->prepare('SELECT * FROM posts WHERE deleted = ? and ((added_by = ? AND user_to = ?) OR user_to = ?) ORDER BY id DESC');
-			$data_query->execute(["no", $profileUser, "none", $profileUser]);
-			$num_rows_qry = $this->spdo->prepare('SELECT COUNT(*) FROM posts WHERE deleted = ? and ((added_by = ? AND user_to = ?) OR user_to = ?) ORDER BY id DESC');
-			$num_rows_qry->execute(["no", $profileUser, "none", $profileUser]);
-			$num_rows = $num_rows_qry->fetchColumn();
+		$data_query = $this->spdo->prepare('SELECT * FROM posts WHERE deleted = ? and ((added_by = ? AND user_to = ?) OR user_to = ?) ORDER BY id DESC');
+		$data_query->execute(['no', $profileUser, 'none', $profileUser]);
+		$num_rows = $data_query->rowCount();
 	    ///$data_query = mysqli_query($this->con, "SELECT * FROM posts WHERE deleted='no' AND ((added_by='$profileUser' AND user_to='none') OR user_to='$profileUser') ORDER BY id DESC");
 
 	    if($num_rows > 0) {
@@ -407,41 +405,49 @@ class Post {
 
 
 	        while($row = $data_query->fetch())  { ///mysqli_fetch_array($data_query)
-	          $id = $row['id'];
-	          $body = $row['body'];
-	          $added_by = $row['added_by'];
-	          $date_time = $row['date_added'];
-						$imagePath = $row['image'];
+				$id = $row['id'];
+				$body = $row['body'];
+				$added_by = $row['added_by'];
+				$date_time = $row['date_added'];
+				$imagePath = $row['image'];
 
-						if($num_iterations++ < $start)
-							continue;
+				if($num_iterations++ < $start)
+					continue;
 
-						//Once 10 posts have been loaded, break
-						if($count > $limit) {
-							break;
-						}
-						else {
-							$count++;
-						}
+				//Once 10 posts have been loaded, break
+				if($count > $limit) {
+					break;
+				}
+				else {
+					$count++;
+				}
 
-	          // Delete Post Button
-	          if($userLoggedIn == $added_by)
-	            $delete_button = "<button class='btn btn-danger close' id='post$id'><i class='typcn typcn-delete icon' style='font-size: 24px; margin: 5px;'></i></button>";
-	          else
-	            $delete_button = "";
+				//Prepare user_to string so  it can included even if not posted
+				if($row['user_to'] == "none") {
+					$user_to = "";
+				}
+				else {
+					$user_to_obj = new User($row['user_to'], $this->spdo);
+					$user_to_name = $user_to_obj->getDisplayName();
+					$user_to = "to <a href=" . $row['user_to'] . ">" . $row['user_to'] . "</a>";
+				}
 
-						$user_details_query = $this->spdo->prepare('SELECT displayname, avatar FROM users WHERE username = ?');
-						$user_details_query->execute([$added_by]);
-						$user_row = $user_details_query->fetch();
-	          ///$user_details_query = mysqli_query($this->con, "SELECT displayname, avatar FROM users WHERE username='$added_by'");
-	          ///$user_row = mysqli_fetch_array($user_details_query);
-	          $displayname = $user_row['displayname'];
-	          $avatar = $user_row['avatar'];
+				// Delete Post Button
+				if($userLoggedIn == $added_by)
+				$delete_button = "<button class='btn btn-danger close' id='post$id'><i class='typcn typcn-delete icon' style='font-size: 24px; margin: 5px;'></i></button>";
+				else
+				$delete_button = "";
+
+				$user_details_query = $this->spdo->prepare('SELECT displayname, avatar FROM users WHERE username = ?');
+				$user_details_query->execute([$added_by]);
+				$user_row = $user_details_query->fetch();
+				///$user_details_query = mysqli_query($this->con, "SELECT displayname, avatar FROM users WHERE username='$added_by'");
+				///$user_row = mysqli_fetch_array($user_details_query);
+				$displayname = $user_row['displayname'];
+				$avatar = $user_row['avatar'];
 
 	          	?>
-
 		          <script>
-
 		          function toggle<?php echo $id; ?>() {
 
 		             var element = document.getElementById("toggleComment<?php echo $id; ?>");
@@ -451,31 +457,29 @@ class Post {
 		             else
 		                 element.style.display = "block";
 		          }
-
 		          </script>
+	          	<?php
 
-	          <?php
+				//Check how many comments
+				$comments_check = $this->spdo->prepare('SELECT COUNT(*) FROM comments WHERE post_id = ?');
+				$comments_check->execute([$id]);
+				$comments_check_num = $comments_check->fetchColumn();
+				///$comments_check = mysqli_query($this->con, "SELECT * FROM comments WHERE post_id='$id'");
+				///$comments_check_num = mysqli_num_rows($comments_check);
 
-						//Check how many comments
-					 	$comments_check = $this->spdo->prepare('SELECT COUNT(*) FROM comments WHERE post_id = ?');
-					 	$comments_check->execute([$id]);
-					 	$comments_check_num = $comments_check->fetchColumn();
-					 	///$comments_check = mysqli_query($this->con, "SELECT * FROM comments WHERE post_id='$id'");
-					 	///$comments_check_num = mysqli_num_rows($comments_check);
-
-	          //Timeframe
-						$time_message = $this->datetime($date_time);
-
+	          	//Timeframe
+				$time_message = $this->datetime($date_time);
 
 
-						if($imagePath != "") {
-							$imageDiv = "<div class='card-img'>
-															<img src='$imagePath' class='post_image'>
-														</div>";
-						}
-						else {
-							$imageDiv = "";
-						}
+
+				if($imagePath != "") {
+					$imageDiv = "<div class='card-img'>
+									<img src='$imagePath' class='post_image'>
+								</div>";
+				}
+				else {
+					$imageDiv = "";
+				}
 
 	          $str .= "<div class='status_post'>
 	                    <div class='card'>
@@ -503,7 +507,6 @@ class Post {
 	                  </p>
 	                  ";
 	            ?>
-
 	            <script>
 	            // Delete Post Modal Box
 	            $(document).ready(function () {
@@ -529,13 +532,14 @@ class Post {
 	            </script>
 
 	            <?php
-						}
+				}
 
-				if($count > $limit)
-		      $str .= "<input type='hidden' class='nextPage' value='" . ($page + 1) . "'>
-		                <input type='hidden' class='noMorePosts' value='false'>";
-		    else
-		      $str .= "<input type='hidden' class='noMorePosts' value='true'><p style='text-align: center;'> No more posts to show! </p>";
+				if($count > $limit) {
+					$str .= "<input type='hidden' class='nextPage' value='" . ($page + 1) . "'>
+								<input type='hidden' class='noMorePosts' value='false'>";
+				} else {
+					$str .= "<input type='hidden' class='noMorePosts' value='true'><p style='text-align: center;'> No more posts to show! </p>";
+				}
 		  }
 		    echo $str;
 		  }
