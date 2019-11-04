@@ -22,17 +22,18 @@
 
 </ul>
 
-<div class="tab-content" id="myTabContent">
-    <div role="tabpanel" class="tab-pane fade show active" id="site_stats" aria-labelledby="site_stats">
-      <div class="article">
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
-          <strong>Welcome, {{ userLoggedIn }}</strong><br />
+    <div class="tab-content" id="myTabContent">
+        <div role="tabpanel" class="tab-pane fade show active" id="site_stats" aria-labelledby="site_stats">
+          <div class="article">
 
+              <strong>Welcome, {{ userLoggedIn }}</strong><br />
 
-      </div>
+          </div>
     </div>
 
-<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
     <div role="tabpanel" class="tab-pane fade" id="new_post" aria-labelledby="new_post">
         <div class="article">
@@ -73,7 +74,7 @@
         </div>
     </div>
 
-<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
     <div role="tabpanel" class="tab-pane fade" id="manage_users" aria-labelledby="manage_users">
       <div class="article">
@@ -81,13 +82,109 @@
       </div>
     </div>
 
-<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
     <div role="tabpanel" class="tab-pane fade" id="manage_quests" aria-labelledby="manage_quests">
-        <br>
+        <div class="nav nav-pills" id="stores_sublist" role="tablist" aria-orientation="vertical">
+          <a class="nav-link active" data-toggle="pill" href="#q-home" role="tab" aria-controls="quest_home" aria-selected="true">New Quest</a>
+          <a class="nav-link" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="edit_items" aria-selected="false">New Page</a>
+          <a class="nav-link" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="money_supply" aria-selected="false">Money Supply</a>
+        </div>
+
+        <div class="tab-content" id="stores_subcontent">
+            <div class="tab-pane fade show active" id="q-home" role="tabpanel" aria-labelledby="quest_home">
+              <div class="article"> <h4>Create New Quest</h4>
+
+              <form class="post_form" action="/above/" method="POST" autocomplete="off" enctype="multipart/form-data">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">Title</span>
+                    </div>
+                    <input type="text" name="title" class="form-control" aria-label="Name" aria-describedby="basic-addon1" required>
+                  </div>
+
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Contents</span>
+                    </div>
+                    <textarea name="contents" class="form-control" aria-label="With textarea" required></textarea>
+                  </div>
+
+                  <div class="input-group mb-3">
+                    <div class="custom-file">
+                      <input type="file" name="item-icon" class="custom-file-input" id="newIconImage">
+                      <label class="custom-file-label" for="newIconImage">Quest Media</label>
+                    </div>
+                    <div class="input-group-append">
+                      <span class="input-group-text" id="">Upload</span>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-post btn-lg btn-block" name="new_quest" id="new_quest" value="POST">Submit New Item</button>
+              </form>
+
+
+              </div>
+            </div>
+
+            <!-- //////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+          <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="edit_items">
+              <div class="article"><h4>New Quest Page</h4>
+
+                <form class="post_form" action="/above/" method="POST" autocomplete="off" enctype="multipart/form-data">
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Title</span>
+                      </div>
+                      <input type="text" name="title" class="form-control" aria-label="Name" aria-describedby="basic-addon1" required>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Quest ID</span>
+                      </div>
+                      <select name="item-type" class="form-control" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                      </select>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Contents</span>
+                      </div>
+                      <textarea name="contents" class="form-control" aria-label="With textarea" required></textarea>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <div class="custom-file">
+                        <input type="file" name="item-icon" class="custom-file-input" id="newIconImage">
+                        <label class="custom-file-label" for="newIconImage">Quest Media</label>
+                      </div>
+                      <div class="input-group-append">
+                        <span class="input-group-text" id="">Upload</span>
+                      </div>
+                    </div>
+
+
+
+                  <button type="submit" class="btn btn-post btn-lg btn-block" name="new_quest_page" id="new_quest_page" value="POST">Submit New Page</button>
+
+                </form>
+
+              </div>
+          </div>
+          <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="money_supply"></div>
+        </div>
+
+
     </div>
 
-<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
     <div role="tabpanel" class="tab-pane fade" id="manage_stores" aria-labelledby="manage_stores">
 
@@ -226,9 +323,5 @@
 {% block side %}
 
 
-
-{% endblock %}
-
-{% block advertisement %}
 
 {% endblock %}
