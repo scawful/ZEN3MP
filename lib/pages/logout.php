@@ -1,4 +1,5 @@
 <?php
+$s = session_id();
 if(isset($_GET['s']) == session_id()) {
 
     session_start();
@@ -12,8 +13,6 @@ if(isset($_GET['s']) == session_id()) {
     header("Location: ../../index.php");
 
 } else {
-    echo 'No';
+    echo 'Nice try, but you can click <a href="?logout&s=' . $s . '">here</a> to logout.';
 }
-
-
 ?>
