@@ -1,5 +1,5 @@
 {% extends "base.twig" %}
-{% block title %}World{% endblock %}
+{% block title %} {% endblock %}
 
 {% block main %}
 
@@ -15,13 +15,26 @@
         </div>
     </div>
     {% else %}
-        {% if p_id == 0 %}
+        {% if p_id != 0 %}
             {{ quest.loadPage(p_id) }}
-        {% else %}
-            {{ quest.loadQuestHome(q_id) }}
+        {% elseif p_id == 0 %}
+            {{ quest.showQuestHome(q_id) }}
         {% endif %}
     {% endif %}
 
+
+{% endblock %}
+
+{% block profile %}
+<div class="titleBar">Character</div>
+    <div class="article">
+        {{ character.getCharacterName }} <br />
+        Level: {{ character.getCharacterLevel }} <br />
+        Class: {{ character.getCharacterClass }} <br />
+        Race: {{ character.getCharacterRace }} <br />
+            {{ character.dispCharacterStats }}
+            {{ character.listCharacterAttributes }}
+    </div>
 
 {% endblock %}
 
