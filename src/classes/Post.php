@@ -31,7 +31,7 @@ class Post {
 
 		//Insert notification
 		if($user_to != 'none') {
-				$notification = new Notification($connect_social, $added_by, $spdo);
+				$notification = new Notification($added_by, $spdo);
 				$notification->insertNotification($returned_id, $user_to, "profile_post");
 		}
 
@@ -101,7 +101,7 @@ class Post {
 
 				//Insert notification
 				if($user_to != 'none') {
-						$notification = new Notification($connect_social, $added_by, $spdo);
+						$notification = new Notification($added_by, $spdo);
 						$notification->insertNotification($returned_id, $user_to, "profile_post");
 				}
 
