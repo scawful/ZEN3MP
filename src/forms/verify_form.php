@@ -96,18 +96,14 @@ if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['key']) && !e
       $newCharQuery->execute([$newCharName, $newCharClass, $newCharRace, $healthStat, $manaStat, $fatigueStat]);
       $characterId = $rpdo->lastInsertId();
 
-      $newCharLinkQuery = mysqli_query($connect_rpg, "INSERT INTO user_character VALUES (0, $user_id, $characterId)");
+      $newCharLinkQuery = $rpdo->prepare('INSERT INTO user_character VALUES (0, ?, ?)');
+      $newCharLinkQuery->execute([$user_id, $characterId]);
 
-      $newCharAtrbQuery = mysqli_query($connect_rpg, "INSERT INTO character_attribute (character_id, attribute_id, value)
-                                                      VALUES ($characterId, 1, $strengthAtrb),
-                                                      ($characterId, 2, $intelligenceAtrb),
-                                                      ($characterId, 3, $willpowerAtrb),
-                                                      ($characterId, 4, $agilityAtrb),
-                                                      ($characterId, 5, $speedAtrb),
-                                                      ($characterId, 6, $enduranceAtrb),
-                                                      ($characterId, 7, $personalityAtrb),
-                                                      ($characterId, 8, $wisdomAtrb),
-                                                      ($characterId, 9, $luckAtrb)");
+      $newCharAtrbQuery = $rpdo->prepare('INSERT INTO character_attribute (character_id, attribute_id, value)
+                                                      VALUES (?, 1, ?), (?, 2, ?), (?, 3, ?), (?, 4, ?),
+                                                      (?, 5, ?), (?, 6, ?), (?, 7, ?), (?, 8, ?), (?, 9, ?)');
+      $newCharAtrbQuery->execute([$characterId, $strengthAtrb, $characterId, $intelligenceAtrb, $characterId, $willpowerAtrb, $characterId, $agilityAtrb, $characterId, $speedAtrb, $characterId, $enduranceAtrb, $characterId, $personalityAtrb, $characterId, $wisdomAtrb, $characterId, $luckAtrb]);
+
       $new_verify_hash = md5(rand(0,1000));
 
       $update_user_query = mysqli_query($connect_social, "UPDATE users SET verify_hash='$new_verify_hash', verify_user='yes', user_closed='no' WHERE username='$username'");
@@ -185,22 +181,17 @@ if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['key']) && !e
               break;
       }
 
-      $newCharQuery = mysqli_query($connect_rpg, "INSERT INTO rpg_character VALUES (0, 1, '$newCharName', '$newCharClass', '$newCharRace', 1, $healthStat, $manaStat, $fatigueStat, 0, 100, 1)");
+      $newCharQuery = $rpdo->prepare('INSERT INTO rpg_character VALUES (0, 1, ?, ?, ?, 1, ?, ?, ?, 0, 100, 1)');
+      $newCharQuery->execute([$newCharName, $newCharClass, $newCharRace, $healthStat, $manaStat, $fatigueStat]);
+      $characterId = $rpdo->lastInsertId();
 
-      $characterId = mysqli_insert_id($connect_rpg);
+      $newCharLinkQuery = $rpdo->prepare('INSERT INTO user_character VALUES (0, ?, ?)');
+      $newCharLinkQuery->execute([$user_id, $characterId]);
 
-      $newCharLinkQuery = mysqli_query($connect_rpg, "INSERT INTO user_character VALUES (0, $user_id, $characterId)");
-
-      $newCharAtrbQuery = mysqli_query($connect_rpg, "INSERT INTO character_attribute (character_id, attribute_id, value)
-                                                      VALUES ($characterId, 1, $strengthAtrb),
-                                                      ($characterId, 2, $intelligenceAtrb),
-                                                      ($characterId, 3, $willpowerAtrb),
-                                                      ($characterId, 4, $agilityAtrb),
-                                                      ($characterId, 5, $speedAtrb),
-                                                      ($characterId, 6, $enduranceAtrb),
-                                                      ($characterId, 7, $personalityAtrb),
-                                                      ($characterId, 8, $wisdomAtrb),
-                                                      ($characterId, 9, $luckAtrb)");
+      $newCharAtrbQuery = $rpdo->prepare('INSERT INTO character_attribute (character_id, attribute_id, value)
+                                                      VALUES (?, 1, ?), (?, 2, ?), (?, 3, ?), (?, 4, ?),
+                                                      (?, 5, ?), (?, 6, ?), (?, 7, ?), (?, 8, ?), (?, 9, ?)');
+      $newCharAtrbQuery->execute([$characterId, $strengthAtrb, $characterId, $intelligenceAtrb, $characterId, $willpowerAtrb, $characterId, $agilityAtrb, $characterId, $speedAtrb, $characterId, $enduranceAtrb, $characterId, $personalityAtrb, $characterId, $wisdomAtrb, $characterId, $luckAtrb]);
 
       $new_verify_hash = md5(rand(0,1000));
 
@@ -279,22 +270,17 @@ if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['key']) && !e
               break;
       }
 
-      $newCharQuery = mysqli_query($connect_rpg, "INSERT INTO rpg_character VALUES (0, 1, '$newCharName', '$newCharClass', '$newCharRace', 1, $healthStat, $manaStat, $fatigueStat, 0, 100, 1)");
+      $newCharQuery = $rpdo->prepare('INSERT INTO rpg_character VALUES (0, 1, ?, ?, ?, 1, ?, ?, ?, 0, 100, 1)');
+      $newCharQuery->execute([$newCharName, $newCharClass, $newCharRace, $healthStat, $manaStat, $fatigueStat]);
+      $characterId = $rpdo->lastInsertId();
 
-      $characterId = mysqli_insert_id($connect_rpg);
+      $newCharLinkQuery = $rpdo->prepare('INSERT INTO user_character VALUES (0, ?, ?)');
+      $newCharLinkQuery->execute([$user_id, $characterId]);
 
-      $newCharLinkQuery = mysqli_query($connect_rpg, "INSERT INTO user_character VALUES (0, $user_id, $characterId)");
-
-      $newCharAtrbQuery = mysqli_query($connect_rpg, "INSERT INTO character_attribute (character_id, attribute_id, value)
-                                                      VALUES ($characterId, 1, $strengthAtrb),
-                                                      ($characterId, 2, $intelligenceAtrb),
-                                                      ($characterId, 3, $willpowerAtrb),
-                                                      ($characterId, 4, $agilityAtrb),
-                                                      ($characterId, 5, $speedAtrb),
-                                                      ($characterId, 6, $enduranceAtrb),
-                                                      ($characterId, 7, $personalityAtrb),
-                                                      ($characterId, 8, $wisdomAtrb),
-                                                      ($characterId, 9, $luckAtrb)");
+      $newCharAtrbQuery = $rpdo->prepare('INSERT INTO character_attribute (character_id, attribute_id, value)
+                                                      VALUES (?, 1, ?), (?, 2, ?), (?, 3, ?), (?, 4, ?),
+                                                      (?, 5, ?), (?, 6, ?), (?, 7, ?), (?, 8, ?), (?, 9, ?)');
+      $newCharAtrbQuery->execute([$characterId, $strengthAtrb, $characterId, $intelligenceAtrb, $characterId, $willpowerAtrb, $characterId, $agilityAtrb, $characterId, $speedAtrb, $characterId, $enduranceAtrb, $characterId, $personalityAtrb, $characterId, $wisdomAtrb, $characterId, $luckAtrb]);
 
       $new_verify_hash = md5(rand(0,1000));
 
