@@ -1,19 +1,4 @@
 <?php
-// THIS IS GARBAGE I KNOW
-if(isset($_SESSION['username']))
-{
-    $userLoggedIn = $_SESSION['username'];
-    $stmt = $spdo->prepare('SELECT * FROM users WHERE username = ?');
-    $stmt->execute([$userLoggedIn]);
-    $user = $stmt->fetch();
-    $num_friends = (substr_count($user['friend_list'], ",")) - 1;
-    $login_flag = 1;
-} else {
-    // header("Location: index.php");
-    $userLoggedIn = "Guest";
-    $login_flag = 0;
-}
-
 if(isset($_GET['q']))
     $quest_id = $_GET['q'];
 else
@@ -35,7 +20,6 @@ $inventory = new Inventory($connect_social, $connect_rpg, $userLoggedIn, $spdo);
 $quest_obj = new Quest($userLoggedIn, $rpdo, $spdo);
 $messages = new Message($connect_social, $userLoggedIn, $spdo);
 $notifications = new Notification($userLoggedIn, $spdo);
-$utils = new Utils();
 
 $style = $user_obj->getUserStyle();
 $session_id = session_id();

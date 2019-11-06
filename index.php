@@ -14,8 +14,10 @@ use Twig\Loader\FilesystemLoader;
 $loader = new FilesystemLoader(__DIR__ . '/templates');
 $twig = new Environment($loader);
 
-include("src/globals.php");
+$utils = new Utils();
+
 include("src/auth.php");
+include("src/globals.php");
 
 include("src/forms/timeline_post_form.php");
 include("src/forms/register_form.php");
@@ -58,7 +60,7 @@ switch (True) {
         include ('lib/pages/logout.php');
         break;
     default:
-        if(isset($_SESSION['username'])) {
+        if($isLoggedIn == true) {
             echo $twig->render('home.twig');
         } else {
             echo $twig->render('login.twig');
