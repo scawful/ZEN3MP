@@ -1,13 +1,45 @@
 {% extends "base.twig" %}
 {% block title %}Inbox{% endblock %}
 
-{% block profile %}
-<div class="titleBar">Support</div>
-  <div class="article">
-
+{% block side %}
+<div class="titleBar">Messages</div>
+<div class="column list-group">
+  {{ messages.getConvos | raw }}
+  <div style="text-align: center; margin-top: 10px;">
+    <a href="?inbox&u=new"><button class="btn btn-primary">New Message</button></a>
   </div>
 {% endblock %}
 
 {% block main %}
+
+    {% if u_to != "new" %}
+        <div class="article">
+            <h4> You and <a href='{{ u_to }}'>{{ u_to }}</a></h4><hr><br />
+            <di vclass='loaded_messages' id='scroll_messages'>
+                {{ messages.getMessages(u_to) | raw }}
+            </div>
+    {% endif %}
+
+    {% if u_to == "new" %}
+        Select the friend you would like to message. <br><br>
+        To: <input type='text' onkeyup='getUser(this.value, "{{ userLoggedIn }}")' name='q' placeholder='Name' autocomplete='off' id='search_text_input'></input>
+        <div class='results'></div>
+    {% else %}
+    <div class='input-group'>
+      <textarea class='form-control' name='message_body' aria-label='With textarea'></textarea>
+      <div class='input-group-append'>
+        <button type='submit' name='post_message' class='btn btn-outline-secondary' id='message_submit' type='button'>Send</button>
+      </div>
+    </div>
+    <br>
+    <button type="button" class="btn btn-danger btn-lg btn-block">Challenge to a battle!</button>
+          <button type="button" class="btn btn-info btn-lg btn-block">Offer to trade.</button>
+    {% endif %}
+    <script>
+
+      var div = document.getElementById("scroll_messages");
+      div.scrollTop = div.scrollHeight;
+
+    </script>
 
 {% endblock %}

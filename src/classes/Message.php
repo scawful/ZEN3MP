@@ -17,18 +17,14 @@ class Message extends Utils {
   public function getMostRecentUser() {
     $userLoggedIn = $this->user_obj->getUsername();
 
-    //$query = mysqli_query($this->con, "SELECT user_to, user_from FROM messages WHERE user_to='$userLoggedIn' OR user_from='$userLoggedIn' ORDER by id DESC LIMIT 1");
+	$stmt = $this->spdo->prepare('SELECT user_to, user_from FROM messages WHERE user_to = ? OR user_from = ? ORDER by id DESC LIMIT 1');
+	$stmt->execute([$userLoggedIn, $userLoggedIn]);
+	$row_count = $stmt->rowCount();
 
-		$stmt = $this->spdo->prepare('SELECT user_to, user_from FROM messages WHERE user_to = ? OR user_from = ? ORDER by id DESC LIMIT 1');
-		$stmt->execute([$userLoggedIn, $userLoggedIn]);
-		$row_count = $stmt->rowCount();
-
-    //if(mysqli_num_rows($query) == 0)
-		if($row_count == 0)
+	if($row_count == 0)
         return false;
 
-    //$row = mysqli_fetch_array($query);
-		$row = $stmt->fetch();
+	$row = $stmt->fetch();
     $user_to = $row['user_to'];
     $user_from = $row['user_from'];
 
@@ -41,10 +37,9 @@ class Message extends Utils {
   public function sendMessage($user_to, $body, $date) {
 
       if($body != "") {
-          $userLoggedIn = $this->user_obj->getUsername();
-          //$query = mysqli_query($this->con, "INSERT INTO messages VALUES(0, '$user_to', '$userLoggedIn', '$body', '$date', 'no', 'no', 'no')");
-					$stmt = $this->spdo->prepare('INSERT INTO messages VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
-					$stmt->execute([$user_to, $userLoggedIn, $body, $date, "no", "no", "no"]);
+        $userLoggedIn = $this->user_obj->getUsername();
+		$stmt = $this->spdo->prepare('INSERT INTO messages VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
+		$stmt->execute([$user_to, $userLoggedIn, $body, $date, "no", "no", "no"]);
       }
 
   }
@@ -53,24 +48,19 @@ class Message extends Utils {
     $userLoggedIn = $this->user_obj->getUsername();
     $data = "";
 
-    //$query = mysqli_query($this->con, "UPDATE messages SET opened='yes' WHERE user_to='$userLoggedIn' AND user_from='$otherUser'");
-
 		$stmt = $this->spdo->prepare('UPDATE messages SET opened = ? WHERE user_to = ? AND user_from = ?');
 		$stmt->execute(["yes", $userLoggedIn, $otherUser]);
-
-    //$get_messages_query = mysqli_query($this->con, "SELECT * FROM messages WHERE (user_to='$userLoggedIn' AND user_from='$otherUser') OR (user_from='$userLoggedIn' AND user_to='$otherUser')");
 
 		$getMsgStmt = $this->spdo->prepare('SELECT * FROM messages WHERE (user_to = ? AND user_from = ?) OR (user_from = ? AND user_to = ?)');
 		$getMsgStmt->execute([$userLoggedIn, $otherUser, $userLoggedIn, $otherUser]);
 
-    //while($row = mysqli_fetch_array($get_messages_query)) {
 		while($row = $getMsgStmt->fetch()) {
-        $user_to = $row['user_to'];
-        $user_from = $row['user_from'];
-        $body = $row['body'];
+	        $user_to = $row['user_to'];
+	        $user_from = $row['user_from'];
+	        $body = $row['body'];
 
-        $div_top = ($user_to == $userLoggedIn) ? "<div class='message card' id='one'>" : "<div class='message card' id='two'>";
-        $data = $data . $div_top . $body . "</div><br><br>";
+	        $div_top = ($user_to == $userLoggedIn) ? "<div class='message card' id='one'>" : "<div class='message card' id='two'>";
+	        $data = $data . $div_top . $body . "</div><br><br>";
     }
     return $data;
   }
@@ -78,78 +68,14 @@ class Message extends Utils {
   public function getLatestMessages($userLoggedIn, $username) {
       $details_array = array();
 
-      //$query = mysqli_query($this->con, "SELECT body, user_to, date from messages WHERE (user_to='$userLoggedIn' AND user_from='$username') OR (user_to='$username' AND user_from='$userLoggedIn') ORDER BY id DESC LIMIT 1");
+		$stmt = $this->spdo->prepare('SELECT body, user_to, date FROM messages WHERE (user_to = ? AND user_from = ?) OR (user_to = ? AND user_from = ?) ORDER BY id DESC LIMIT 1');
+		$stmt->execute([$userLoggedIn, $username, $username, $userLoggedIn]);
+		$row = $stmt->fetch();
 
-			$stmt = $this->spdo->prepare('SELECT body, user_to, date FROM messages WHERE (user_to = ? AND user_from = ?) OR (user_to = ? AND user_from = ?) ORDER BY id DESC LIMIT 1');
-			$stmt->execute([$userLoggedIn, $username, $username, $userLoggedIn]);
-			$row = $stmt->fetch();
-
-      //$row = mysqli_fetch_array($query);
       $sent_by = ($row['user_to'] == $userLoggedIn) ? "They said: " : "You said: ";
 
 	  $date_time = $row['date']; // Time of post
 	  $time_message = $this->datetime($date_time);
-
-      // //Timeframe
-      // $date_time_now = date("Y-m-d H:i:s");
-      // $start_date = new DateTime($row['date']); // Time of post
-      // $end_date = new DateTime($date_time_now); // current time
-      // $interval = $start_date->diff($end_date);
-      // if($interval->y >= 1) {
-      //   if($interval == 1)
-      //     $time_message = $interval->y . " year ago"; // 1 year ago
-      //   else
-      //     $time_message = $interval->y . " years ago"; // 1+ year ago
-      // }
-      // else if ($interval-> m >= 1) {
-      //   if($interval->d == 0) {
-      //     $days = " ago";
-      //   }
-      //   else if($interval->d == 1) {
-      //     $days = $interval->d . " day ago";
-      //   }
-      //   else {
-      //     $days = $interval->d . " days ago";
-      //   }
-	  //
-      //   if($interval->m == 1){
-      //     $time_message = $interval->m . " month " . $days;
-      //   } else {
-      //     $time_message = $interval->m . " months " . $days;
-      //   }
-      // }
-      // else if($interval->d >= 1) {
-      //   if($interval->d == 1) {
-      //     $time_message = "Yesterday";
-      //   }
-      //   else {
-      //     $time_message = $interval->d . " days ago";
-      //   }
-      // }
-      // else if($interval->h >= 1) {
-      //   if($interval->h == 1) {
-      //     $time_message = $interval->h . " hour ago";
-      //   }
-      //   else {
-      //     $time_message = $interval->h . " hours ago";
-      //   }
-      // }
-      // else if($interval->i >= 1) {
-      //   if($interval->i == 1) {
-      //     $time_message = $interval->i . " minute ago";
-      //   }
-      //   else {
-      //     $time_message = $interval->i . " minutes ago";
-      //   }
-      // }
-      // else {
-      //   if($interval->s < 30) {
-      //     $time_message = "Just now";
-      //   }
-      //   else {
-      //     $time_message = $interval->s . " seconds ago";
-      //   }
-      // }
 
       array_push($details_array, $sent_by);
       array_push($details_array, $row['body']);
@@ -210,9 +136,9 @@ class Message extends Utils {
 		$convos = array();
 
 		if($page == 1)
-				$start = 0;
+			$start = 0;
 		else
-				$start = ($page - 1) * $limit;
+			$start = ($page - 1) * $limit;
 
 		$set_viewed_query = mysqli_query($this->con, "UPDATE messages SET viewed='yes' WHERE user_to='$userLoggedIn'");
 
@@ -232,10 +158,10 @@ class Message extends Utils {
 		foreach($convos as $username) {
 
 				if($num_iterations++ < $start)
-						continue;
+					continue;
 
 				if($count > $limit)
-						break;
+					break;
 				else {
 					$count++;
 				}
@@ -269,7 +195,7 @@ class Message extends Utils {
 
 		//if posts were loaded
 		if($count > $limit)
-				$return_string .= "<input type='hidden' class='nextPageDropDownData' value='" . ($page + 1) . "'><input type='hidden' class='noMoreDropDownData' value='false'>";
+			$return_string .= "<input type='hidden' class='nextPageDropDownData' value='" . ($page + 1) . "'><input type='hidden' class='noMoreDropDownData' value='false'>";
 		else {
 			$return_string .= "<input type='hidden' class='noMoreDropDownData' value='true'> <p style='text-align: center; margin: 3px;'>No more messages to load.</p>";
 		}

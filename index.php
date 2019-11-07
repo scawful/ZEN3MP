@@ -46,6 +46,12 @@ switch (True) {
         else
             echo $twig->render('login.twig');
         break;
+    case isset($_GET['inbox']):
+        if($isLoggedIn == true)
+            echo $twig->render('messages.twig');
+        else
+            echo $twig->render('login.twig');
+        break;
     case isset($_GET['privacy']):
         echo $twig->render('privacy.twig');
         break;
