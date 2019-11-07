@@ -109,11 +109,11 @@
                         Mutual Friends: {{ user_obj.getMutualFriends(username) }} <br />
                     {% endif %}
 
-                    {% if user_obj.isFriend(username) %}
+                    {% if user.isFriend(username) %}
                         <input type="submit" name="remove_friend" class="btn btn-danger" value="Remove Friend"><br>
-                    {% elseif user_obj.didReceiveRequest(username) %}
+                    {% elseif user.didReceiveRequest(username) %}
                         <input type="submit" name="respond_request" class="btn-warning" value="Respond to Request"><br>
-                    {% elseif user_obj.didSendRequest(username) %}
+                    {% elseif user.didSendRequest(username) %}
                         <input type="submit" name="" class="btn btn-default" value="Request Sent."><br>
                     {% else %}
                         <input type="submit" name="add_friend" class="btn btn-success" value="Add Friend."><br>
