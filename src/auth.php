@@ -51,6 +51,8 @@ else if (! empty($_COOKIE["user_login"]) && ! empty($_COOKIE["random_password"])
     // Else, mark the token as expired and clear cookies
     if (!empty($userToken["id"]) && $isPasswordVerified && $isSelectorVerified && $isExpiryDateVerified) {
         $isLoggedIn = true;
+        $userLoggedIn = $_COOKIE["user_login"];
+        $login_flag = 1;
     } else {
         if(!empty($userToken["id"])) {
             $user_auth->markExpired($userToken["id"]);

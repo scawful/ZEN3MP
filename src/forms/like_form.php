@@ -5,12 +5,27 @@ error_reporting(E_ALL);
 require "../config.php";
 include ("../classes/User.php");
 include ("../classes/Post.php");
+include ("../classes/Character.php");
+include ("../classes/Message.php");
 include ("../classes/Notification.php");
+include ("../classes/Inventory.php");
+include ("../classes/Quest.php");
 
-if (isset($_SESSION['username']))
-	$userLoggedIn = $_SESSION['username'];
-else
-	header("Location: index.php");
+require '../../vendor/autoload.php';
+
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+
+$loader = new FilesystemLoader('../../templates');
+$twig = new Environment($loader);
+
+// if (isset($_SESSION['username']))
+// 	$userLoggedIn = $_SESSION['username'];
+// else
+// 	header("Location: index.php");
+
+include ("../auth.php");
+include ("../globals.php");
 
 $user_obj = new User($userLoggedIn, $spdo);
 $style = $user_obj->getUserStyle();
@@ -20,7 +35,7 @@ $style = $user_obj->getUserStyle();
     <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/src/font/typicons.min.css" />
     <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/zen3mp.css" />
     <?php
-    if(isset($_SESSION['username'])) {
+    if(isset($_COOKIE['user_login'])) {
         echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/' . $style . '.css" />';
       } else {
         echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/purpleStyle.css" />';

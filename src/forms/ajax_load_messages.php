@@ -15,6 +15,7 @@ use Twig\Loader\FilesystemLoader;
 $loader = new FilesystemLoader('../../templates');
 $twig = new Environment($loader);
 
+include ("../auth.php");
 include ("../globals.php");
 
 $limit = 7; // Number of messages to be loaded per call

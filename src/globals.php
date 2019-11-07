@@ -38,4 +38,5 @@ $twig->addGlobal('i_id', $item_id);
 $twig->addGlobal('inventory', $inventory);
 $twig->addGlobal('session', $_SESSION);
 $twig->addGlobal('session_id', $session_id);
+$twig->addGlobal('error_array', $error_array);
 ?>

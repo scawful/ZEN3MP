@@ -16,14 +16,12 @@ $twig = new Environment($loader);
 
 $utils = new Utils();
 
-include("src/auth.php");
-include("src/globals.php");
-
-include("src/forms/timeline_post_form.php");
 include("src/forms/register_form.php");
 include("src/forms/login_form.php");
+include("src/forms/timeline_post_form.php");
 
-$twig->addGlobal('error_array', $error_array);
+include("src/auth.php");
+include("src/globals.php");
 
 switch (True) {
     case isset($_GET['news']):
@@ -46,6 +44,9 @@ switch (True) {
         break;
     case isset($_GET['rules']):
         echo $twig->render('rules.twig');
+        break;
+    case isset($_GET['requests']):
+        echo $twig->render('requests.twig');
         break;
     case isset($_GET['verify']):
         echo $twig->render('verify.twig');
