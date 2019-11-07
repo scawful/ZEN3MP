@@ -34,10 +34,17 @@ switch (True) {
         echo $twig->render('users.twig');
         break;
     case isset($_GET['store']):
-        echo $twig->render('store.twig');
+        if($isLoggedIn == true) {
+            echo $twig->render('store.twig');
+        } else {
+            echo $twig->render('login.twig');
+        }
         break;
     case isset($_GET['world']):
-        echo $twig->render('world.twig');
+        if($isLoggedIn == true)
+            echo $twig->render('world.twig');
+        else
+            echo $twig->render('login.twig');
         break;
     case isset($_GET['privacy']):
         echo $twig->render('privacy.twig');
@@ -46,7 +53,10 @@ switch (True) {
         echo $twig->render('rules.twig');
         break;
     case isset($_GET['requests']):
-        echo $twig->render('requests.twig');
+        if($isLoggedIn == true)
+            echo $twig->render('requests.twig');
+        else
+            echo $twig->render('login.twig');
         break;
     case isset($_GET['verify']):
         echo $twig->render('verify.twig');

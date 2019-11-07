@@ -549,100 +549,90 @@ class Post {
 
 	public function loadNewsPosts($data, $limit) {
 
-					$page = $data['page'];
-					$userLoggedIn = $this->user_obj->getUsername();
+		$page = $data['page'];
+		$userLoggedIn = $this->user_obj->getUsername();
 
-					if($page == 1)
-						$start = 0;
-					else
-						$start = ($page - 1) * $limit;
-
-
-					$str = ""; //String to return
-					$stmt = $this->spdo->prepare('SELECT * FROM news_posts ORDER BY id DESC');
-					$stmt->execute();
-
-					$stmt2 = $this->spdo->query('SELECT COUNT(*) FROM news_posts ORDER BY id DESC');
-					$num_rows = $stmt->fetchColumn();
-
-					///$data_query = mysqli_query($this->con, "SELECT * FROM news_posts ORDER BY id DESC");
-
-			    if($num_rows > 0) {
-
-			        $num_iterations = 0;  //Number of results checked (not necessaryily posted)
-			        $count = 1;
+		if($page == 1)
+			$start = 0;
+		else
+			$start = ($page - 1) * $limit;
 
 
-			        while($row = $stmt->fetch())  {
-			        	$id = $row['id'];
-						$title = $row['title'];
-			          	$body = $row['body'];
-			          	$added_by = $row['added_by'];
-			          	$date_time = $row['date_added'];
+		$str = ""; //String to return
+		$stmt = $this->spdo->prepare('SELECT * FROM news_posts ORDER BY id DESC');
+		$stmt->execute();
+
+		$stmt2 = $this->spdo->query('SELECT COUNT(*) FROM news_posts ORDER BY id DESC');
+		$num_rows = $stmt->fetchColumn();
+
+	    if($num_rows > 0) {
+
+	        $num_iterations = 0;  //Number of results checked (not necessaryily posted)
+	        $count = 1;
 
 
-								$user_logged_obj = new User($userLoggedIn, $this->spdo);
-								if($user_logged_obj->isFriend($added_by)){
+	        while($row = $stmt->fetch())  {
+	        	$id = $row['id'];
+				$title = $row['title'];
+	          	$body = $row['body'];
+	          	$added_by = $row['added_by'];
+	          	$date_time = $row['date_added'];
 
-									if($num_iterations++ < $start)
-										continue;
 
-								//Once 10 posts have been loaded, break
-								if($count > $limit) {
-									break;
-								}
-								else {
-									$count++;
-								}
+				$user_logged_obj = new User($userLoggedIn, $this->spdo);
+				if($user_logged_obj->isFriend($added_by)){
 
-			            // Delete Post Button
-			          if($userLoggedIn == $added_by)
-			            $delete_button = "<button class='btn btn-danger close' id='post$id'><i class='typcn typcn-delete icon' style='font-size: 24px; margin: 5px;'></i></button>";
-			          else
-			            $delete_button = "";
+					if($num_iterations++ < $start)
+						continue;
 
-						$user_details_query = $this->spdo->prepare('SELECT displayname, avatar FROM users WHERE username = ?');
-						$user_details_query->execute([$added_by]);
-						$user_row = $user_details_query->fetch();
-			          $displayname = $user_row['displayname'];
-			          $avatar = $user_row['avatar'];
+				//Once 10 posts have been loaded, break
+				if($count > $limit) {
+					break;
+				}
+				else {
+					$count++;
+				}
 
-			          //Timeframe
-			          $date_time_now = date("Y-m-d H:i:s");
-			          $start_date = new DateTime($date_time); // Time of post
-			          $end_date = new DateTime($date_time_now); // current time
+				// Delete Post Button
+				if($userLoggedIn == $added_by)
+					$delete_button = "<button class='btn btn-danger close' id='post$id'><i class='typcn typcn-delete icon' style='font-size: 24px; margin: 5px;'></i></button>";
+				else
+					$delete_button = "";
 
-								if($imagePath != "") {
-									$imageDiv = "<div class='card-img'>
-																	<img src='$imagePath' class='post_image'>
-																</div>";
-								}
-								else {
-									$imageDiv = "";
-								}
+				$user_details_query = $this->spdo->prepare('SELECT displayname, avatar FROM users WHERE username = ?');
+				$user_details_query->execute([$added_by]);
+				$user_row = $user_details_query->fetch();
+	          	$displayname = $user_row['displayname'];
+	          	$avatar = $user_row['avatar'];
 
-								$str .= "<div class='post'>
-														<a href='$added_by'>
-														<img src='$avatar' width='50' class=avatar title='$added_by'>
-														</a>
-														<div class='feed-post-header'><strong>$title</strong></div>
-	  													<div class='postTime'>posted $date_time by <a href='/$added_by'>$added_by</a></div>
-													<p class='card-text'>$body</p>
-												</div>
-												";
+	          	//Timeframe
+	        	$date_time_now = date("Y-m-d H:i:s");
+	        	$start_date = new DateTime($date_time); // Time of post
+	        	$end_date = new DateTime($date_time_now); // current time
 
-			            }
 
-								} //End while loop
+				$str .= "<div class='post'>
+										<a href='$added_by'>
+										<img src='$avatar' width='50' class=avatar title='$added_by'>
+										</a>
+										<div class='feed-post-header'><strong>$title</strong></div>
+											<div class='postTime'>posted $date_time by <a href='/$added_by'>$added_by</a></div>
+									<p class='card-text'>$body</p>
+								</div>
+								";
 
-								if($count > $limit)
-									$str .= "<input type='hidden' class='nextPage' value='" . ($page + 1) . "'>
-												<input type='hidden' class='noMorePosts' value='false'>";
-								else
-									$str .= "<input type='hidden' class='noMorePosts' value='true'><p style='text-align: center;'> No more posts to show! </p>";
-							}
+		            }
 
-							echo $str;
+			} //End while loop
+
+			if($count > $limit)
+				$str .= "<input type='hidden' class='nextPage' value='" . ($page + 1) . "'>
+							<input type='hidden' class='noMorePosts' value='false'>";
+			else
+				$str .= "<input type='hidden' class='noMorePosts' value='true'><p style='text-align: center;'> No more posts to show! </p>";
+		}
+
+		echo $str;
 
 	}
 

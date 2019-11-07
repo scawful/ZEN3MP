@@ -37,6 +37,7 @@ $twig->addGlobal('p_id', $page_id);
 $twig->addGlobal('i_id', $item_id);
 $twig->addGlobal('inventory', $inventory);
 $twig->addGlobal('session', $_SESSION);
+$twig->addGlobal('Z3MP_POST', $_POST);
 $twig->addGlobal('session_id', $session_id);
 $twig->addGlobal('error_array', $error_array);
 ?>
