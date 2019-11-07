@@ -7,14 +7,16 @@ include ("../../src/classes/User.php");
 include ("../../src/classes/Post.php");
 include ("../../src/classes/Notification.php");
 
-if (isset($_SESSION['username'])) {
-  $userLoggedIn = $_SESSION['username'];
+include ("../../src/auth.php");
+
+if ($isLoggedIn == True) {
   $user_details_query = mysqli_query($connect_social, "SELECT * FROM users WHERE username='$userLoggedIn'");
   $user = mysqli_fetch_array($user_details_query);
 }
 else {
   	header("Location: index.php");
 }
+
 $user_obj = new User($userLoggedIn, $spdo);
 $style = $user_obj->getUserStyle();
 ?>
