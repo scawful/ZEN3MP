@@ -1,5 +1,8 @@
 <?php
+namespace zen3mp;
+
 require("src/config.php");
+include("src/classes/Utils.php");
 include("src/classes/User.php");
 include("src/classes/Post.php");
 include("src/classes/Character.php");
