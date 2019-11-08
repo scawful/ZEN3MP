@@ -1,4 +1,5 @@
-<?php 
+<?php
+namespace zen3mp;
 $message_obj = new Message($connect_social, $userLoggedIn, $spdo);
 
 if(isset($_GET['u']))

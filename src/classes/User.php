@@ -1,4 +1,6 @@
 <?php
+namespace zen3mp;
+
 class User {
 	private $user;
 	private $spdo;
@@ -47,6 +49,11 @@ class User {
 		$stmt->execute([$this->getUsername()]);
 		$num_rows = $stmt->fetchColumn();
 		return $num_rows;
+	}
+
+	public function getNumberOfFriends() {
+	    $num_friends = (substr_count($this->user['friend_list'], ",")) - 1;
+		return $num_friends;
 	}
 
 	public function isClosed() {

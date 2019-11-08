@@ -1,4 +1,5 @@
 <?php
+namespace zen3mp;
 include ("../config.php");
 include ("../classes/User.php");
 include ("../classes/Post.php");

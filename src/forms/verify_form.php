@@ -1,4 +1,5 @@
 <?php
+namespace zen3mp;
 // Stat variables
 $healthStat = $glob_base_char_hp;
 $manaStat = $glob_base_char_mana;

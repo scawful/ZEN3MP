@@ -1,4 +1,7 @@
 <?php
+namespace zen3mp;
+use \Datetime;
+
 class Post {
 		private $user_obj;
 		private $connect_social;

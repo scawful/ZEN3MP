@@ -1,4 +1,6 @@
 <?php
+namespace zen3mp;
+
 class Quest {
 
 	private $user_obj;

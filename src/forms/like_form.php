@@ -1,8 +1,9 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+namespace zen3mp;
+use zen3mp\Utils as Utils;
+
 require "../config.php";
+include ("../classes/Utils.php");
 include ("../classes/User.php");
 include ("../classes/Post.php");
 include ("../classes/Character.php");

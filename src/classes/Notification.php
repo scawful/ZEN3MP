@@ -1,4 +1,7 @@
 <?php
+namespace zen3mp;
+use \DateTime;
+
 class Notification {
 	private $user_obj;
 	private $spdo;
@@ -6,6 +9,7 @@ class Notification {
 	public function __construct($user, $spdo){
 		$this->user_obj = new User($user, $spdo);
 		$this->spdo = $spdo;
+		$this->utils = new Utils();
 	}
 
   public function getUnreadNumber() {
@@ -71,7 +75,7 @@ class Notification {
 		        // $user_data = mysqli_fetch_array($user_data_query);
 
 		        //Timeframe
-		        $time_message = $this->datetime($date_time);
+		        $time_message = $this->utils->datetime($date_time);
 
 
         		$opened = $row['opened'];

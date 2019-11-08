@@ -1,4 +1,6 @@
 <?php
+namespace zen3mp;
+
 class Character {
 	private $user_obj;
 	private $connect_social;

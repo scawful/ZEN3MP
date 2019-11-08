@@ -1,9 +1,8 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-include("Utils.php");
-class Message extends Utils {
+namespace zen3mp;
+use \DateTime;
+
+class Message {
 	private $user_obj;
 	private $connect_social;
 	private $spdo;
@@ -12,6 +11,7 @@ class Message extends Utils {
 		$this->con = $connect_social;
 		$this->user_obj = new User($user, $spdo);
 		$this->spdo = $spdo;
+		$this->utils = new Utils();
 	}
 
   public function getMostRecentUser() {
@@ -75,7 +75,7 @@ class Message extends Utils {
       $sent_by = ($row['user_to'] == $userLoggedIn) ? "They said: " : "You said: ";
 
 	  $date_time = $row['date']; // Time of post
-	  $time_message = $this->datetime($date_time);
+	  $time_message = $this->utils->datetime($date_time);
 
       array_push($details_array, $sent_by);
       array_push($details_array, $row['body']);

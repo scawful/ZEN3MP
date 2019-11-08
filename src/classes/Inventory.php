@@ -1,4 +1,6 @@
 <?php
+namespace zen3mp;
+
 class Inventory {
 
 	private $user_obj;

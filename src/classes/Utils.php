@@ -1,4 +1,7 @@
 <?php
+namespace zen3mp;
+use \DateTime;
+
 class Utils {
 
     // Authentication Code from phppot.com by vincy@phppot.com

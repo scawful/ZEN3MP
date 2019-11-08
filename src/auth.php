@@ -1,4 +1,6 @@
 <?php
+namespace zen3mp;
+
 // Get Current date, time
 $current_time = time();
 $current_date = date("Y-m-d H:i:s", $current_time);

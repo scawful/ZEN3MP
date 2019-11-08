@@ -1,4 +1,6 @@
 <?php
+namespace zen3mp;
+use zen3mp\Post as Post;
 // Main Timeline Post
 if(isset($_POST['post']))
 {

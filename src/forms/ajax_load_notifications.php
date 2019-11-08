@@ -1,5 +1,9 @@
 <?php
+namespace zen3mp;
+use zen3mp\Utils as Utils;
+
 include ("../config.php");
+include ("../classes/Utils.php");
 include ("../classes/User.php");
 include ("../classes/Notification.php");
 

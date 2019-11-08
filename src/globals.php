@@ -1,4 +1,6 @@
 <?php
+namespace zen3mp;
+
 $user_obj = new User($userLoggedIn, $spdo);
 $character = new Character($userLoggedIn, $spdo, $rpdo);
 $inventory = new Inventory($connect_social, $connect_rpg, $userLoggedIn, $spdo);
@@ -20,6 +22,12 @@ if (!empty($_GET['item']) && (intval($_GET['item']) == $_GET['item']))
     $item_id = $_GET['item'];
 else
     $item_id = 0;
+
+if(isset($_GET['id']))
+  $post_id = $_GET['id'];
+else
+  $post_id = 0;
+
 
 if(isset($_GET['u']))
     $user_to = $_GET['u'];
