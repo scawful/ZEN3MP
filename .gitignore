@@ -1,3 +1,6 @@
 docs/*
+vendor/*
+personal/*
 ads.txt
 config.php
+
