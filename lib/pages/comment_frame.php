@@ -1,7 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+namespace zen3mp;
+use \DateTime;
 require "../../src/config.php";
 include ("../../src/classes/User.php");
 include ("../../src/classes/Post.php");
@@ -23,7 +22,7 @@ $style = $user_obj->getUserStyle();
 <html>
   <head>
     <?php
-    if(isset($_SESSION['username'])) {
+    if($isLoggedIn == True) {
         echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/' . $style . '.css" />';
       } else {
         echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/purpleStyle.css" />';

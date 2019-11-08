@@ -1,47 +1,32 @@
 <?php
-include("lib/header.php");
+namespace zen3mp;
+use zen3mp\Utils as Utils;
 
-if(isset($_GET['id'])) {
-  $id = $_GET['id'];
-}
-else {
-  $id = 0;
-}
+require('src/config.php');
+include("src/classes/Utils.php");
+include("src/classes/User.php");
+include("src/classes/Post.php");
+include("src/classes/Character.php");
+include("src/classes/Message.php");
+include("src/classes/Notification.php");
+include("src/classes/Inventory.php");
+include("src/classes/Quest.php");
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+
+$loader = new FilesystemLoader(__DIR__ . '/templates');
+$twig = new Environment($loader);
+
+include("src/auth.php");
+include("src/globals.php");
+
+$post = new Post($connect_social, $userLoggedIn, $spdo);
+
+$twig->addGlobal('post', $post);
+$twig->addGlobal('post_id', $post_id);
+
+echo $twig->render('post.twig');
 ?>
-<div id="mainBox" class="boxes">
-  <div class="titleBar">Displaying Post</div>
-  <br />
-  <div class="posts_area">
-
-    <?php
-        $post = new Post($connect_social, $userLoggedIn, $spdo);
-        $post->getSinglePost($id);
-    ?>
-  </div>
-
-</div>
-
-<div id="profileBox" class="boxes">
-   <div class="column">
-     <?php
-     if(isset($_SESSION['username'])) {
-        echo "<img class=avatar src=" . $user['avatar'] . ">";
-        echo "<strong>" . $user['username'] . "</strong>";
-        echo "<br>Rank: " . $user['user_title'];
-        echo "<br>Posts: " . $user['num_posts'];
-        echo "<br>Likes: " . $user['num_likes'];
-        echo "<br>Friends: " . $num_friends . "";
-
-      } else {
-        
-      }
-     ?>
-   </div>
-</div>
-
-
-
-  <div id="sideBox" class="boxes">
-
-  </div>
-<?php include("lib/footer.php"); ?>
