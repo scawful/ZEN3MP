@@ -10,7 +10,6 @@ include("src/classes/Message.php");
 include("src/classes/Notification.php");
 include("src/classes/Inventory.php");
 include("src/classes/Quest.php");
-include("src/forms/settings_form.php");
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -22,6 +21,7 @@ $twig = new Environment($loader);
 
 include("src/auth.php");
 include("src/globals.php");
+include("src/forms/settings_form.php");
 
 if(isset($_GET['profile_username'])) {
   $username = $_GET['profile_username'];
