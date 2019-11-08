@@ -52,7 +52,7 @@ else {
             echo "<a href='search.php?q=" . $query . "&type=name'>Names</a>, <a href='search.php?q=" . $query . "&type=post'>Posts</a><hr>";
 
             while($row = mysqli_fetch_array($usersReturned)) {
-                $user_obj = new User($user_obj->getUsername(), $spdo);
+                //$user_obj = new User($user_obj->getUsername(), $spdo);
 
                 $button = "";
                 $mutual_friends = "";
