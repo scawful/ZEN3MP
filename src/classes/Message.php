@@ -45,8 +45,8 @@ class Message {
   }
 
   public function getMessages($otherUser) {
-    $userLoggedIn = $this->user_obj->getUsername();
-    $data = "";
+	    $userLoggedIn = $this->user_obj->getUsername();
+	    $data = "";
 
 		$stmt = $this->spdo->prepare('UPDATE messages SET opened = ? WHERE user_to = ? AND user_from = ?');
 		$stmt->execute(["yes", $userLoggedIn, $otherUser]);
@@ -66,22 +66,22 @@ class Message {
   }
 
   public function getLatestMessages($userLoggedIn, $username) {
-      $details_array = array();
+		$details_array = array();
 
 		$stmt = $this->spdo->prepare('SELECT body, user_to, date FROM messages WHERE (user_to = ? AND user_from = ?) OR (user_to = ? AND user_from = ?) ORDER BY id DESC LIMIT 1');
 		$stmt->execute([$userLoggedIn, $username, $username, $userLoggedIn]);
 		$row = $stmt->fetch();
 
-      $sent_by = ($row['user_to'] == $userLoggedIn) ? "They said: " : "You said: ";
+		$sent_by = ($row['user_to'] == $userLoggedIn) ? "They said: " : "You said: ";
 
-	  $date_time = $row['date']; // Time of post
-	  $time_message = $this->utils->datetime($date_time);
+		$date_time = $row['date']; // Time of post
+		$time_message = $this->utils->datetime($date_time);
 
-      array_push($details_array, $sent_by);
-      array_push($details_array, $row['body']);
-      array_push($details_array, $time_message);
+		array_push($details_array, $sent_by);
+		array_push($details_array, $row['body']);
+		array_push($details_array, $time_message);
 
-      return $details_array;
+		return $details_array;
 
   }
 

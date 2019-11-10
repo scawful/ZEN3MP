@@ -56,39 +56,39 @@ class Notification {
 
 		while($row = $stmt->fetch()) {
 
-				if($num_iterations++ < $start)
-					continue;
+			if($num_iterations++ < $start)
+				continue;
 
-				if($count > $limit) {
-					break;
-				} else {
-					$count++;
-				}
+			if($count > $limit) {
+				break;
+			} else {
+				$count++;
+			}
 
-        		$user_from = $row['user_from'];
-				$date_time = $row['datetime'];
+    		$user_from = $row['user_from'];
+			$date_time = $row['datetime'];
 
-				$user_data_query = $this->spdo->prepare('SELECT * FROM users WHERE username = ?');
-				$user_data_query->execute([$user_from]);
-				$user_data = $user_data_query->fetch();
-		        // $user_data_query = mysqli_query($this->con, "SELECT * FROM users WHERE username='$user_from'");
-		        // $user_data = mysqli_fetch_array($user_data_query);
+			$user_data_query = $this->spdo->prepare('SELECT * FROM users WHERE username = ?');
+			$user_data_query->execute([$user_from]);
+			$user_data = $user_data_query->fetch();
+	        // $user_data_query = mysqli_query($this->con, "SELECT * FROM users WHERE username='$user_from'");
+	        // $user_data = mysqli_fetch_array($user_data_query);
 
-		        //Timeframe
-		        $time_message = $this->utils->datetime($date_time);
+	        //Timeframe
+	        $time_message = $this->datetime($date_time);
 
 
-        		$opened = $row['opened'];
-				$style = ($row['opened'] == 'no') ? "background-color: #374925;" : "";
+    		$opened = $row['opened'];
+			$style = ($row['opened'] == 'no') ? "background-color: #374925;" : "";
 
-				$return_string .= " <a href='" . $row['link'] . "' class='list-group-item list-group-item-action flex-column align-items-start'>
-														<div class='user_found_messages' style='" . $style . "'>
-                            <div class='d-flex justify-content-between'>
-                            <span class='mb-1'>
-														      <img src='" . $user_data['avatar'] . "' class='list-group-avatar'>
-                                  </span></div>
-                            <p class='timestamp_smaller' id='grey'>" . $time_message . "</p>" . $row['message'] . "
-                            </a></div>";
+			$return_string .= " <a href='" . $row['link'] . "' class='list-group-item list-group-item-action flex-column align-items-start'>
+													<div class='user_found_messages' style='" . $style . "'>
+                        <div class='d-flex justify-content-between'>
+                        <span class='mb-1'>
+													      <img src='" . $user_data['avatar'] . "' class='list-group-avatar'>
+                              </span></div>
+                        <p class='timestamp_smaller' id='grey'>" . $time_message . "</p>" . $row['message'] . "
+                        </a></div>";
 		}
 
 		//if posts were loaded
@@ -146,7 +146,7 @@ class Notification {
 			else
 				$time_message = $interval->y . " years ago"; // 1+ year ago
 		}
-		else if ($interval-> m >= 1) {
+		else if ($interval->m >= 1) {
 			if($interval->d == 0) {
 				$days = " ago";
 			}
