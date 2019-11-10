@@ -566,7 +566,7 @@ class Post {
 		$stmt->execute();
 
 		$stmt2 = $this->spdo->query('SELECT COUNT(*) FROM news_posts ORDER BY id DESC');
-		$num_rows = $stmt->fetchColumn();
+		$num_rows = $stmt2->fetchColumn();
 
 	    if($num_rows > 0) {
 
@@ -610,9 +610,6 @@ class Post {
 
 	          	//Timeframe
 	        	$date_time_now = date("Y-m-d H:i:s");
-	        	$start_date = new DateTime($date_time); // Time of post
-	        	$end_date = new DateTime($date_time_now); // current time
-
 
 				$str .= "<div class='post'>
 										<a href='$added_by'>
