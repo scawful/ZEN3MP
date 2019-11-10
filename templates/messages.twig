@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block main %}
-
+    <form class="" action="" method="POST">
     {% if u_to != "new" %}
         <div class="article">
             <h4> You and <a href='{{ u_to }}'>{{ u_to }}</a></h4><hr><br />
@@ -35,6 +35,7 @@
     <button type="button" class="btn btn-danger btn-lg btn-block">Challenge to a battle!</button>
           <button type="button" class="btn btn-info btn-lg btn-block">Offer to trade.</button>
     {% endif %}
+    </form>
     <script>
 
       var div = document.getElementById("scroll_messages");

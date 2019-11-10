@@ -25,6 +25,8 @@ include("src/globals.php");
 include("src/forms/register_form.php");
 include("src/forms/login_form.php");
 include("src/forms/timeline_post_form.php");
+include("src/forms/message_post_form.php");
+
 
 switch (True) {
     case isset($_GET['news']):
