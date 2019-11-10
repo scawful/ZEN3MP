@@ -37,9 +37,9 @@ $style = $user_obj->getUserStyle();
     <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/zen3mp.css" />
     <?php
     if($isLoggedIn == True) {
-        echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/' . $style . '.css" />';
+        echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/themes/' . $style . '.css" />';
       } else {
-        echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/purpleStyle.css" />';
+        echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/themes/purpleStyle.css" />';
       }
     ?>
     <style>
