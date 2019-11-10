@@ -126,10 +126,10 @@ class Notification {
             break;
     }
 
-	    $link = "post.php?id=" . $post_id;
-	    // $insert_query = mysqli_query($this->con, "INSERT INTO notifications VALUES(0, '$user_to', '$userLoggedIn', '$message', '$link', '$date_time', 'no', 'no')");
-		$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
-		$stmt->execute([$user_to, $userLoggedIn, $message, $link, $date_time, "no", "no"]);
+    $link = "post.php?id=" . $post_id;
+    // $insert_query = mysqli_query($this->con, "INSERT INTO notifications VALUES(0, '$user_to', '$userLoggedIn', '$message', '$link', '$date_time', 'no', 'no')");
+	$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
+	$stmt->execute([$user_to, $userLoggedIn, $message, $link, $date_time, "no", "no"]);
   }
 
 	private function datetime($date_time) {
