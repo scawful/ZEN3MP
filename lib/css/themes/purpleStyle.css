@@ -122,7 +122,26 @@ a:hover	{		color: #fff;	text-decoration:	underline;	}
   *background-color: #372a43;
   border-color: #372a43;
 }
+.btn-secondary {
+    background-color: #cb7785;
+    border-color: #cb7785;
+}
+.btn-secondary:hover {
+    color: #fff;
+    background-color: #bd5363;
+    border-color: #bd5363;
+}
+.btn-info {
+  color: #fff;
+  background-color: #65a5c4;
+  border-color: #65a5c4;
+}
 
+.btn-info:hover {
+  color: #fff;
+  background-color: #448eb2;
+  border-color: #448eb2;
+}
 
 /* Login */
 

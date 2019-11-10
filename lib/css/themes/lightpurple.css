@@ -167,12 +167,12 @@ a:hover	{		color: #fff;	text-decoration:	underline;	}
 }
 
 .login input[type="submit"] {
-  background-color: #21162E;
+    background-color: #21162E;
 	color: white;
 }
 
 .register input[type="submit"] {
-  background-color: #21162E;
+    background-color: #21162E;
 	color: white;
 }
 
