@@ -5,7 +5,7 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" href="#site_stats" aria-controls="site_stats" data-toggle="tab" aria-selected="true">Site Statistics</a>
+    <a class="nav-link active" href="#home" aria-controls="home" data-toggle="tab" aria-selected="true">Home</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="#manage_quests" aria-controls="manage_quests" data-toggle="tab" aria-selected="true">Quests</a>
@@ -25,7 +25,7 @@
 <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
     <div class="tab-content" id="myTabContent">
-        <div role="tabpanel" class="tab-pane fade show active" id="site_stats" aria-labelledby="site_stats">
+        <div role="tabpanel" class="tab-pane fade show active" id="home" aria-labelledby="home">
           <div class="article">
 
               <strong>Welcome, {{ userLoggedIn }}</strong><br />
@@ -85,6 +85,7 @@
 <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
     <div role="tabpanel" class="tab-pane fade" id="manage_quests" aria-labelledby="manage_quests">
+        <hr>
         <div class="nav nav-pills" id="stores_sublist" role="tablist" aria-orientation="vertical">
           <a class="nav-link active" data-toggle="pill" href="#q-home" role="tab" aria-controls="quest_home" aria-selected="true">New Quest</a>
           <a class="nav-link" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="edit_items" aria-selected="false">New Page</a>
@@ -169,8 +170,6 @@
                         <span class="input-group-text" id="">Upload</span>
                       </div>
                     </div>
-
-
 
                   <button type="submit" class="btn btn-post btn-lg btn-block" name="new_quest_page" id="new_quest_page" value="POST">Submit New Page</button>
 
@@ -322,6 +321,6 @@
 
 {% block side %}
 
-
+    <div class="titleBar">Site Statistics</div>
 
 {% endblock %}

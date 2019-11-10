@@ -39,9 +39,16 @@
 {% endblock %}
 
 {% block side %}
-<div class="titleBar">Activity</div>
-    <div class="article">
-      <p>Active Quests: 0</p>
-      <p>Players Online: N/A</p>
-    </div>
+    {% if q_id == 0 %}
+    <div class="titleBar">Activity</div>
+        <div class="article">
+          <p>Active Quests: 0</p>
+          <p>Players Online: N/A</p>
+        </div>
+    {% else %}
+    <div class="titleBar">Location</div>
+        <div class="article">
+            <br />
+        </div>
+    {% endif %}
 {% endblock %}
