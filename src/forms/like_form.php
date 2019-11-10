@@ -36,7 +36,7 @@ $style = $user_obj->getUserStyle();
     <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/src/font/typicons.min.css" />
     <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/zen3mp.css" />
     <?php
-    if(isset($_COOKIE['user_login'])) {
+    if($isLoggedIn == True) {
         echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/' . $style . '.css" />';
       } else {
         echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/purpleStyle.css" />';
