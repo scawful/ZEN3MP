@@ -3,10 +3,11 @@ namespace zen3mp;
 include ("../config.php");
 include ("../classes/User.php");
 include ("../classes/Post.php");
+include ("../auth.php");
 
 $limit = 10; // Number of posts to be loaded per call $_REQUEST['userLoggedIn']
-$user = "Secret";
+//$user = "Secret";
 
-$posts = new Post($connect_social, $user, $spdo);
+$posts = new Post($connect_social, $userLoggedIn, $spdo);
 $posts->loadNewsPosts($_REQUEST, $limit);
 ?>
