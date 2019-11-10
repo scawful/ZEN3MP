@@ -50,6 +50,9 @@
         {% if "IncorrectCredentials" in error_array %}
             Email or password was incorrect<br>
         {% endif %}
+        {% if "UserNotExist" in error_array %}
+            This username does not exist<br>
+        {% endif %}
         {% if "UserNotVerified" in error_array %}
             Your account has not been verified!<br>
             <input class='btn btn-primary' type='submit' name='resend' Value='Resend Verification Email'><br>
@@ -123,7 +126,7 @@
             <br><span style='color: #14C800;'>You're all set! Wait for the email to complete the registration process. </span><br>
         {% endif %}
         </form>
-        
+
         <div class='dropdown-divider'></div>
         <a class='dropdown-item' href='#' id='signin' class='signin'>Already have an account? Sign in here!</a>
 

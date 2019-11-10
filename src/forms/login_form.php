@@ -67,7 +67,8 @@ if(isset($_POST['login_button'])) {
 
 
 		} else {
-		echo "This user does not exist"; //email entered does not match any in DB
+			array_push($error_array, "UserNotExist");
+			// echo "This user does not exist"; //email entered does not match any in DB
 	}
 
 }
