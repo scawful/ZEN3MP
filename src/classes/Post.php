@@ -4,11 +4,9 @@ use \Datetime;
 
 class Post {
 		private $user_obj;
-		private $connect_social;
 		private $spdo;
 
-	public function __construct($connect_social, $user, $spdo){
-			$this->con = $connect_social;
+	public function __construct($user, $spdo){
 			$this->user_obj = new User($user, $spdo);
 			$this->spdo = $spdo;
 	}
@@ -29,9 +27,6 @@ class Post {
 		$stmt->execute([" ", $added_by, $user_to, $date_added, "no", "no", "0", $imageName]);
 		$returned_id = $this->spdo->lastInsertId();
 
-		//$query = mysqli_query($this->con, "INSERT INTO posts VALUES(0, ' ', '$added_by', '$user_to', '$date_added', 'no', 'no', '0', '$imageName')");
-		//$returned_id = mysqli_insert_id($this->con);
-
 		//Insert notification
 		if($user_to != 'none') {
 				$notification = new Notification($added_by, $spdo);
@@ -43,7 +38,6 @@ class Post {
 		$num_posts++;
 		$update_query = $this->spdo->prepare('UPDATE users SET num_posts = ? WHERE username = ?');
 		$update_query->execute([$num_posts, $added_by]);
-		//$update_query = mysqli_query($this->con, "UPDATE users SET num_posts='$num_posts' WHERE username='$added_by'");
 
 	}
 
@@ -54,8 +48,6 @@ class Post {
 
 		$stmt = $this->spdo->prepare('INSERT INTO news_posts VALUES(0, ?, ?, ?, ?, ?)');
 		$stmt->execute([$title, $body, $added_by, $date_added, "0"]);
-		//$query = mysqli_query($this->con, "INSERT INTO news_posts VALUES(0, '$title', '$body', '$added_by', '$date_added', '0')");
-		//$returned_id = mysqli_insert_id($this->con);
 
 	}
 
@@ -99,8 +91,6 @@ class Post {
 				$stmt = $this->spdo->prepare('INSERT INTO posts VALUES(0, ?, ?, ?, ?, ?, ?, ?, ? )');
 				$stmt->execute([$body, $added_by, $user_to, $date_added, "no", "no", "0", $imageName]);
 				$returned_id = $this->spdo->lastInsertId();
-				///$query = mysqli_query($this->con, "INSERT INTO posts VALUES(0, '$body', '$added_by', '$user_to', '$date_added', 'no', 'no', '0', '$imageName')");
-				///$returned_id = mysqli_insert_id($this->con);
 
 				//Insert notification
 				if($user_to != 'none') {
@@ -113,7 +103,6 @@ class Post {
 				$num_posts++;
 				$update_query = $this->spdo->prepare('UPDATE users SET num_posts = ? WHERE username = ?');
 				$update_query->execute([$num_posts, $added_by]);
-				///$update_query = mysqli_query($this->con, "UPDATE users SET num_posts='$num_posts' WHERE username='$added_by'");
 
 				$stopWords = "a about above across after again against all almost alone along already
 				 also although always among am an and another any anybody anyone anything anywhere are
@@ -184,17 +173,13 @@ class Post {
 				$stmt = $this->spdo->prepare('SELECT * FROM trends WHERE title = ?');
 				$stmt->execute([$term]);
 				$num_rows = $stmt->fetchColumn();
-				//$query = mysqli_query($this->con, "SELECT * FROM trends WHERE title='$term'");
 
-				//if(mysqli_num_rows($query) == 0) {
 				if($num_rows == 0) {
 					$insert_query = $this->spdo->prepare('INSERT INTO trends(title,hits) VALUES(?, ?)');
 					$insert_query->execute([$term, '1']);
-					///$insert_query = mysqli_query($this->con, "INSERT INTO trends(title,hits) VALUES('$term','1')");
 				} else {
 					$insert_query = $this->spdo->prepare('UPDATE trends SET hits = ? WHERE title = ?');
 					$insert_query->execute([hits+1, $term]);
-					///$insert_query = mysqli_query($this->con, "UPDATE trends SET hits=hits+1 WHERE title='$term'");
 				}
 		}
 
@@ -218,9 +203,8 @@ class Post {
 			$num_query = $this->spdo->prepare('SELECT COUNT(*) FROM posts WHERE deleted = ?');
       		$num_query->execute(["no"]);
 			$num_rows = $num_query->fetchColumn();
-		  ///$data_query = mysqli_query($this->con, "SELECT * FROM posts WHERE deleted='no' ORDER BY id DESC");
 
-	    if($num_rows > 0) { ///mysqli_num_rows($data_query)
+	    if($num_rows > 0) {
 
 	        $num_iterations = 0;  //Number of results checked (not necessaryily posted)
 	        $count = 1;
@@ -645,8 +629,6 @@ class Post {
 			$opened_query = $this->spdo->prepare('UPDATE notifications SET opened = ? WHERE user_to = ? AND link LIKE ? ');
 			$opened_query->execute(["yes", $userLoggedIn, "%=$post_id"]);
 
-			///$opened_query = mysqli_query($this->con, "UPDATE notifications SET opened='yes' WHERE user_to='$userLoggedIn' AND link LIKE '%=$post_id'");
-
 			$str = ""; //String to return
 			$data_query = $this->spdo->prepare('SELECT * FROM posts WHERE deleted = ? AND id = ?');
 			$data_query->execute(["no", $post_id]);
@@ -654,7 +636,6 @@ class Post {
 			$num_rows_qry->execute(["no", $post_id]);
 			$num_rows = $num_rows_qry->fetchColumn();
 
-			///$data_query = mysqli_query($this->con, "SELECT * FROM posts WHERE deleted='no' AND id='$post_id'");
 
 	    if($num_rows > 0) {
 
@@ -722,8 +703,8 @@ class Post {
 					 	$comments_check->execute([$id]);
 					 	$comments_check_num = $comments_check->fetchColumn();
 
-	          //Timeframe
-	          $time_message = $this->datetime($date_time);
+			          //Timeframe
+			          $time_message = $this->datetime($date_time);
 
 						if($imagePath != "") {
 							$imageDiv = "<div class='card-img'>
@@ -790,7 +771,7 @@ class Post {
 								echo "<p>You cannot see this post you are not friends with this user.</p>";
 								return;
 						} */
-	  		}
+	  			}
 				else {
 					echo "<p>No post found. If you clicked a link, it may be broken.</p>";
 					return;

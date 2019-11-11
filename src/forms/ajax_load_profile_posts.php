@@ -6,6 +6,6 @@ include ("../classes/Post.php");
 
 $limit = 10; // Number of posts to be loaded per call
 
-$posts = new Post($connect_social, $_REQUEST['userLoggedIn'], $spdo);
+$posts = new Post($_REQUEST['userLoggedIn'], $spdo);
 $posts->loadProfilePosts($_REQUEST, $limit);
 ?>

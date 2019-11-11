@@ -8,6 +8,6 @@ include ("../auth.php");
 $limit = 10; // Number of posts to be loaded per call $_REQUEST['userLoggedIn']
 //$user = "Secret";
 
-$posts = new Post($connect_social, $userLoggedIn, $spdo);
+$posts = new Post($userLoggedIn, $spdo);
 $posts->loadNewsPosts($_REQUEST, $limit);
 ?>

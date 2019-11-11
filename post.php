@@ -3,14 +3,7 @@ namespace zen3mp;
 use zen3mp\Utils as Utils;
 
 require('src/config.php');
-include("src/classes/Utils.php");
-include("src/classes/User.php");
-include("src/classes/Post.php");
-include("src/classes/Character.php");
-include("src/classes/Message.php");
-include("src/classes/Notification.php");
-include("src/classes/Inventory.php");
-include("src/classes/Quest.php");
+require('src/incl.php');
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -23,7 +16,7 @@ $twig = new Environment($loader);
 include("src/auth.php");
 include("src/globals.php");
 
-$post = new Post($connect_social, $userLoggedIn, $spdo);
+$post = new Post($userLoggedIn, $spdo);
 
 $twig->addGlobal('post', $post);
 $twig->addGlobal('post_id', $post_id);
