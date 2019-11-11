@@ -1,0 +1,10 @@
+<?php
+include("src/classes/Utils.php");
+include("src/classes/User.php");
+include("src/classes/Post.php");
+include("src/classes/Character.php");
+include("src/classes/Message.php");
+include("src/classes/Notification.php");
+include("src/classes/Inventory.php");
+include("src/classes/Quest.php");
+?>
