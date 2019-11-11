@@ -68,6 +68,9 @@ a:hover	{		color: #fff;	text-decoration:	underline;	}
   background-color:#7653bd;
   border-color: #000 #000 #000 none;
 }
+.nav-pills .nav-link.active {
+    background-color: #5E4297;
+}
 
 /* Posts */
 .titleBar {
