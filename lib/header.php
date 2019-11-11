@@ -85,10 +85,10 @@ if(isset($_POST['post']))
 
 }
 $character = new Character($userLoggedIn, $spdo, $rpdo);
-$inventory = new Inventory($connect_social, $connect_rpg, $userLoggedIn, $spdo);
+$inventory = new Inventory($userLoggedIn, $spdo, $rpdo);
 $quest_obj = new Quest($userLoggedIn, $rpdo, $spdo);
 //unread messages
-$messages = new Message($connect_social, $userLoggedIn, $spdo);
+$messages = new Message($userLoggedIn, $spdo);
 $num_messages = $messages->getUnreadNumber();
 
 //unread notifications

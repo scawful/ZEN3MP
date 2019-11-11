@@ -4,11 +4,9 @@ use \DateTime;
 
 class Message {
 	private $user_obj;
-	private $connect_social;
 	private $spdo;
 
-	public function __construct($connect_social, $user, $spdo){
-		$this->con = $connect_social;
+	public function __construct($user, $spdo){
 		$this->user_obj = new User($user, $spdo);
 		$this->spdo = $spdo;
 		$this->utils = new Utils();
@@ -90,9 +88,9 @@ class Message {
       $return_string = "";
       $convos = array();
 
-      $query = mysqli_query($this->con, "SELECT user_to, user_from FROM messages WHERE user_to='$userLoggedIn' OR user_from='$userLoggedIn' ORDER BY id DESC");
+	  $query = $this->spdo->query("SELECT user_to, user_from FROM messages WHERE user_to='$userLoggedIn' OR user_from='$userLoggedIn' ORDER BY id DESC");
 
-      while($row = mysqli_fetch_array($query)) {
+      while($row = $query->fetch()) {
           $user_to_push = ($row['user_to'] != $userLoggedIn) ? $row['user_to'] : $row['user_from'];
 
           if(!in_array($user_to_push, $convos)) {
@@ -140,11 +138,11 @@ class Message {
 		else
 			$start = ($page - 1) * $limit;
 
-		$set_viewed_query = mysqli_query($this->con, "UPDATE messages SET viewed='yes' WHERE user_to='$userLoggedIn'");
+		$set_viewed_query = $this->spdo->query("UPDATE messages SET viewed='yes' WHERE user_to='$userLoggedIn'");
 
-		$query = mysqli_query($this->con, "SELECT user_to, user_from FROM messages WHERE user_to='$userLoggedIn' OR user_from='$userLoggedIn' ORDER BY id DESC");
+		$query = $this->spdo->query("SELECT user_to, user_from FROM messages WHERE user_to='$userLoggedIn' OR user_from='$userLoggedIn' ORDER BY id DESC");
 
-		while($row = mysqli_fetch_array($query)) {
+		while($row = $query->fetch()) {
 				$user_to_push = ($row['user_to'] != $userLoggedIn) ? $row['user_to'] : $row['user_from'];
 
 				if(!in_array($user_to_push, $convos)) {
@@ -166,8 +164,8 @@ class Message {
 					$count++;
 				}
 
-				$is_unread_query = mysqli_query($this->con, "SELECT opened FROM messages WHERE user_to='$userLoggedIn' AND user_from='$username' ORDER BY id DESC");
-				$row = mysqli_fetch_array($is_unread_query);
+				$in_unread_query = $this->spdo->query("SELECT opened FROM messages WHERE user_to='$userLoggedIn' AND user_from='$username' ORDER BY id DESC");
+				$row = $in_unread_query->fetch();
 				$style = ($row['opened'] == 'no') ? "background-color: #374925;" : "";
 
 				$user_found_obj = new User($username, $this->spdo);
@@ -178,19 +176,17 @@ class Message {
 				$split = $split[0] . $dots;
 
 				$return_string .= " <a href='/?inbox&u=$username' class='list-group-item list-group-item-action flex-column align-items-start'>
-														<div class='user_found_messages' style='" . $style . "'>
-														<img src='" . $user_found_obj->getAvatar() . "' class='list-group-avatar'>
+										<div class='user_found_messages' style='" . $style . "'>
+										<img src='" . $user_found_obj->getAvatar() . "' class='list-group-avatar'>
 
-														<div class='d-flex justify-content-between'>
-														<span class='mb-1'>
+										<div class='d-flex justify-content-between'>
+										<span class='mb-1'>
 
-														<small class='text-muted'>
-														To: " . $user_found_obj->getDisplayName() . "</span>
-														" . $latest_message_details[2] . "</small></div>
-														<p id='grey' style='margin: 0;'>" . $latest_message_details[0] . $split . "</p>
-														</div></a>
-
-														";
+										<small class='text-muted'>
+										To: " . $user_found_obj->getDisplayName() . "</span>
+										" . $latest_message_details[2] . "</small></div>
+										<p id='grey' style='margin: 0;'>" . $latest_message_details[0] . $split . "</p>
+										</div></a>";
 		}
 
 		//if posts were loaded
@@ -206,8 +202,9 @@ class Message {
 
 	public function getUnreadNumber() {
 		$userLoggedIn = $this->user_obj->getUsername();
-		$query = mysqli_query($this->con, "SELECT * FROM messages WHERE viewed='no' AND user_to='$userLoggedIn'");
-		return mysqli_num_rows($query);
+		$stmt = $this->spdo->query("SELECT COUNT(*) FROM messages WHERE viewed='no' AND user_to='$userLoggedIn'");
+		$num_rows = $stmt->fetchColumn();
+		return $num_rows;
 	}
 
 }

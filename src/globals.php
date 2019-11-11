@@ -3,9 +3,9 @@ namespace zen3mp;
 
 $user_obj = new User($userLoggedIn, $spdo);
 $character = new Character($userLoggedIn, $spdo, $rpdo);
-$inventory = new Inventory($connect_social, $connect_rpg, $userLoggedIn, $spdo);
+$inventory = new Inventory($userLoggedIn, $spdo, $rpdo);
 $quest_obj = new Quest($userLoggedIn, $rpdo, $spdo);
-$messages = new Message($connect_social, $userLoggedIn, $spdo);
+$messages = new Message($userLoggedIn, $spdo);
 $notifications = new Notification($userLoggedIn, $spdo);
 
 if(isset($_GET['q']))

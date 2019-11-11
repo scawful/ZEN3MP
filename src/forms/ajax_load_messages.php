@@ -24,6 +24,6 @@ include ("../globals.php");
 
 $limit = 7; // Number of messages to be loaded per call
 
-$message = new Message($connect_social, $userLoggedIn, $spdo);
+$message = new Message($userLoggedIn, $spdo);
 echo $message->getConvosDropdown($_REQUEST, $limit);
 ?>

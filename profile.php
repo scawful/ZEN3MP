@@ -51,7 +51,7 @@ if(isset($_POST['post_message'])) {
         </script>";
 }
 
-$message_obj = new Message($connect_social, $userLoggedIn, $spdo);
+$message_obj = new Message($userLoggedIn, $spdo);
 $profile_user_obj = new User($username, $spdo);
 $user_obj = new User($userLoggedIn, $spdo);
 $character_obj = new Character($username, $spdo, $rpdo);

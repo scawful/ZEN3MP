@@ -1,6 +1,6 @@
 <?php
 namespace zen3mp;
-$message_obj = new Message($connect_social, $userLoggedIn, $spdo);
+$message_obj = new Message($userLoggedIn, $spdo);
 
 if(isset($_POST['post_message'])) {
 

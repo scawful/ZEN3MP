@@ -6,8 +6,8 @@ include ("../classes/Post.php");
 include ("../auth.php");
 
 $limit = 10; // Number of posts to be loaded per call $_REQUEST['userLoggedIn']
-//$user = "Secret";
+$user = "Secret";
 
-$posts = new Post($userLoggedIn, $spdo);
+$posts = new Post($user, $spdo);
 $posts->loadNewsPosts($_REQUEST, $limit);
 ?>
