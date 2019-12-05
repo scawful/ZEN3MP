@@ -12,19 +12,19 @@ class Notification {
 		$this->utils = new Utils();
 	}
 
-  public function getUnreadNumber() {
-    	$userLoggedIn = $this->user_obj->getUsername();
+	public function getUnreadNumber() {
+		$userLoggedIn = $this->user_obj->getUsername();
 		$stmt = $this->spdo->prepare('SELECT COUNT(*) FROM notifications WHERE viewed = ? AND user_to = ?');
 		$stmt->execute(["no", $userLoggedIn]);
 		$num_unread = $stmt->fetchColumn();
 		//$query = mysqli_query($this->con, "SELECT * FROM notifications WHERE viewed='no' AND user_to='$userLoggedIn'");
 		//return mysqli_num_rows($query);
 		return $num_unread;
-  }
+	}
 
-  public function getNotifications($data, $limit) {
+	public function getNotifications($data, $limit) {
 
-    	$page = $data['page'];
+		$page = $data['page'];
 		$userLoggedIn = $this->user_obj->getUsername();
 		$return_string = "";
 
@@ -65,7 +65,7 @@ class Notification {
 				$count++;
 			}
 
-    		$user_from = $row['user_from'];
+			$user_from = $row['user_from'];
 			$date_time = $row['datetime'];
 
 			$user_data_query = $this->spdo->prepare('SELECT * FROM users WHERE username = ?');
@@ -78,17 +78,17 @@ class Notification {
 	        $time_message = $this->datetime($date_time);
 
 
-    		$opened = $row['opened'];
+			$opened = $row['opened'];
 			$style = ($row['opened'] == 'no') ? "background-color: #374925;" : "";
 
 			$return_string .= " <a href='" . $row['link'] . "' class='list-group-item list-group-item-action flex-column align-items-start'>
 													<div class='user_found_messages' style='" . $style . "'>
-                        <div class='d-flex justify-content-between'>
-                        <span class='mb-1'>
+	                    <div class='d-flex justify-content-between'>
+	                    <span class='mb-1'>
 													      <img src='" . $user_data['avatar'] . "' class='list-group-avatar'>
-                              </span></div>
-                        <p class='timestamp_smaller' id='grey'>" . $time_message . "</p>" . $row['message'] . "
-                        </a></div>";
+	                          </span></div>
+	                    <p class='timestamp_smaller' id='grey'>" . $time_message . "</p>" . $row['message'] . "
+	                    </a></div>";
 		}
 
 		//if posts were loaded
@@ -100,37 +100,36 @@ class Notification {
 
 		return $return_string;
 
-  }
+	}
 
-  public function insertNotification($post_id, $user_to, $type) {
-    $userLoggedIn = $this->user_obj->getUsername();
-    $userLoggedInDisplayName = $this->user_obj->getDisplayName();
+	public function insertNotification($post_id, $user_to, $type) {
+		$userLoggedIn = $this->user_obj->getUsername();
+		$userLoggedInDisplayName = $this->user_obj->getDisplayName();
 
-    $date_time = date("Y-m-d H:i:s");
+		$date_time = date("Y-m-d H:i:s");
 
-    switch($type) {
-        case 'comment':
-            $message = $userLoggedInDisplayName . " commented on your post";
-            break;
-        case 'like':
-            $message = $userLoggedInDisplayName . " liked your post";
-            break;
-        case 'profile_post':
-            $message = $userLoggedInDisplayName . " posted on your profile";
-            break;
-        case 'profile_comment':
-            $message = $userLoggedInDisplayName . " commented on your profile post";
-            break;
-        case 'comment_non_owner':
-            $message = $userLoggedInDisplayName . " commented on a post you commented on";
-            break;
-    }
+		switch($type) {
+		    case 'comment':
+		        $message = $userLoggedInDisplayName . " commented on your post";
+		        break;
+		    case 'like':
+		        $message = $userLoggedInDisplayName . " liked your post";
+		        break;
+		    case 'profile_post':
+		        $message = $userLoggedInDisplayName . " posted on your profile";
+		        break;
+		    case 'profile_comment':
+		        $message = $userLoggedInDisplayName . " commented on your profile post";
+		        break;
+		    case 'comment_non_owner':
+		        $message = $userLoggedInDisplayName . " commented on a post you commented on";
+		        break;
+		}
 
-    $link = "post.php?id=" . $post_id;
-    // $insert_query = mysqli_query($this->con, "INSERT INTO notifications VALUES(0, '$user_to', '$userLoggedIn', '$message', '$link', '$date_time', 'no', 'no')");
-	$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
-	$stmt->execute([$user_to, $userLoggedIn, $message, $link, $date_time, "no", "no"]);
-  }
+		$link = "post.php?id=" . $post_id;
+		$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
+		$stmt->execute([$user_to, $userLoggedIn, $message, $link, $date_time, "no", "no"]);
+	}
 
 	private function datetime($date_time) {
 

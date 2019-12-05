@@ -12,37 +12,38 @@ class Message {
 		$this->utils = new Utils();
 	}
 
-  public function getMostRecentUser() {
-    $userLoggedIn = $this->user_obj->getUsername();
+	public function getMostRecentUser() {
+		$userLoggedIn = $this->user_obj->getUsername();
 
-	$stmt = $this->spdo->prepare('SELECT user_to, user_from FROM messages WHERE user_to = ? OR user_from = ? ORDER by id DESC LIMIT 1');
-	$stmt->execute([$userLoggedIn, $userLoggedIn]);
-	$row_count = $stmt->rowCount();
+		$stmt = $this->spdo->prepare('SELECT user_to, user_from FROM messages WHERE user_to = ? OR user_from = ? ORDER by id DESC LIMIT 1');
+		$stmt->execute([$userLoggedIn, $userLoggedIn]);
+		$row_count = $stmt->rowCount();
 
-	if($row_count == 0)
-        return false;
+		if($row_count == 0)
+		    return false;
 
-	$row = $stmt->fetch();
-    $user_to = $row['user_to'];
-    $user_from = $row['user_from'];
+		$row = $stmt->fetch();
+		$user_to = $row['user_to'];
+		$user_from = $row['user_from'];
 
-    if($user_to != $userLoggedIn)
-        return $user_to;
-    else
-        return $user_from;
-  }
+		if($user_to != $userLoggedIn)
+		    return $user_to;
+		else
+		    return $user_from;
+	}
 
-  public function sendMessage($user_to, $body, $date) {
+	public function sendMessage($user_to, $body, $date) {
 
-      if($body != "") {
-        $userLoggedIn = $this->user_obj->getUsername();
+		if($body != "") {
+		$userLoggedIn = $this->user_obj->getUsername();
 		$stmt = $this->spdo->prepare('INSERT INTO messages VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
 		$stmt->execute([$user_to, $userLoggedIn, $body, $date, "no", "no", "no"]);
-      }
+		}
 
-  }
+	}
 
-  public function getMessages($otherUser) {
+	public function getMessages($otherUser) {
+
 	    $userLoggedIn = $this->user_obj->getUsername();
 	    $data = "";
 
@@ -59,11 +60,11 @@ class Message {
 
 	        $div_top = ($user_to == $userLoggedIn) ? "<div class='message card' id='one'>" : "<div class='message card' id='two'>";
 	        $data = $data . $div_top . $body . "</div><br><br>";
-    }
-    return $data;
-  }
+		}
+		return $data;
+	}
 
-  public function getLatestMessages($userLoggedIn, $username) {
+	public function getLatestMessages($userLoggedIn, $username) {
 		$details_array = array();
 
 		$stmt = $this->spdo->prepare('SELECT body, user_to, date FROM messages WHERE (user_to = ? AND user_from = ?) OR (user_to = ? AND user_from = ?) ORDER BY id DESC LIMIT 1');
@@ -81,50 +82,50 @@ class Message {
 
 		return $details_array;
 
-  }
+	}
 
-  public function getConvos() {
-      $userLoggedIn = $this->user_obj->getUsername();
-      $return_string = "";
-      $convos = array();
+	public function getConvos() {
+		$userLoggedIn = $this->user_obj->getUsername();
+		$return_string = "";
+		$convos = array();
 
-	  $query = $this->spdo->query("SELECT user_to, user_from FROM messages WHERE user_to='$userLoggedIn' OR user_from='$userLoggedIn' ORDER BY id DESC");
+		$query = $this->spdo->query("SELECT user_to, user_from FROM messages WHERE user_to='$userLoggedIn' OR user_from='$userLoggedIn' ORDER BY id DESC");
 
-      while($row = $query->fetch()) {
-          $user_to_push = ($row['user_to'] != $userLoggedIn) ? $row['user_to'] : $row['user_from'];
+		while($row = $query->fetch()) {
+		  $user_to_push = ($row['user_to'] != $userLoggedIn) ? $row['user_to'] : $row['user_from'];
 
-          if(!in_array($user_to_push, $convos)) {
-              array_push($convos, $user_to_push);
-          }
-      }
+		  if(!in_array($user_to_push, $convos)) {
+		      array_push($convos, $user_to_push);
+		  }
+		}
 
-      foreach($convos as $username) {
-          $user_found_obj = new User($username, $this->spdo);
-          $latest_message_details = $this->getLatestMessages($userLoggedIn, $username);
+		foreach($convos as $username) {
+		  $user_found_obj = new User($username, $this->spdo);
+		  $latest_message_details = $this->getLatestMessages($userLoggedIn, $username);
 
-          $dots = (strlen($latest_message_details[1]) >= 12) ? "..." : "";
-          $split = str_split($latest_message_details[1], 12);
-          $split = $split[0] . $dots;
+		  $dots = (strlen($latest_message_details[1]) >= 12) ? "..." : "";
+		  $split = str_split($latest_message_details[1], 12);
+		  $split = $split[0] . $dots;
 
-          $return_string .= "<a href='?inbox&u=$username' class='list-group-item list-group-item-action flex-column align-items-start'>
-                              <div class='user_found_messages'>
-                              <img src='" . $user_found_obj->getAvatar() . "' class='list-group-avatar'>
+		  $return_string .= "<a href='?inbox&u=$username' class='list-group-item list-group-item-action flex-column align-items-start'>
+		                      <div class='user_found_messages'>
+		                      <img src='" . $user_found_obj->getAvatar() . "' class='list-group-avatar'>
 
 
-                              <div class='d-flex w-100 justify-content-between'>
-                              <span class='mb-1'>
+		                      <div class='d-flex w-100 justify-content-between'>
+		                      <span class='mb-1'>
 
-                              <small class='text-muted'>
-                              To: " . $user_found_obj->getDisplayName() . "</span>
-                              " . $latest_message_details[2] . "</small></div>
-                              <p id='grey' style='margin: 0;'>" . $latest_message_details[0] . $split . "</p>
-                              </div></a>
+		                      <small class='text-muted'>
+		                      To: " . $user_found_obj->getDisplayName() . "</span>
+		                      " . $latest_message_details[2] . "</small></div>
+		                      <p id='grey' style='margin: 0;'>" . $latest_message_details[0] . $split . "</p>
+		                      </div></a>
 
-                              ";
-      }
-      return $return_string;
+		                      ";
+		}
+		return $return_string;
 
-  }
+	}
 
   public function getConvosDropdown($data, $limit) {
 
