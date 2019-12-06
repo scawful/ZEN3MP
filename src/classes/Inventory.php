@@ -29,19 +29,19 @@ class Inventory {
 	    $str = "";
 
 	    while($row = $store_items->fetch()) {
-	      $id = $row['id'];
-	      $type = $row['type_id'];
-	      $name = $row['name'];
-	      $desc = $row['desc'];
-	      $price = $row['price'];
-	      $equip_zone = $row['equip_zone'];
+			$id = $row['id'];
+			$type = $row['type_id'];
+			$name = $row['name'];
+			$desc = $row['desc'];
+			$price = $row['price'];
+			$equip_zone = $row['equip_zone'];
 
-	      $str .= "<tr>
-	                <th scope='row'><a href='?store&item=$id'>$name</a></th>
-	                <td>$desc</td>
-	                <td>$price</td>
-	                <td><a href='?buy=$id'>Buy</a> | <a href='?sell=$id'>Sell</a></td>
-	              </tr>";
+			$str .= "<tr>
+					<th scope='row'><a href='?store&item=$id'>$name</a></th>
+					<td>$desc</td>
+					<td>$price</td>
+					<td><a href='?buy=$id'>Buy</a> | <a href='?sell=$id'>Sell</a></td>
+					</tr>";
 	    }
 	    echo $str;
 
@@ -76,13 +76,13 @@ class Inventory {
 		}
 
 	    $str .= "<div class='card'>
-								<div class='card-header'>$name</div>
-									$icon_div
-									<div class='card-body'>Price: $price<br />
-									Required Level: $lvl<br />
-									Description: $desc <br />
-								</div>
-							</div>";
+					<div class='card-header'>$name</div>
+						$icon_div
+						<div class='card-body'>Price: $price<br />
+						Required Level: $lvl<br />
+						Description: $desc <br />
+					</div>
+				</div>";
 	    echo $str;
 
 

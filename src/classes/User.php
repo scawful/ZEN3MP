@@ -41,7 +41,7 @@ class User {
 	}
 
 	public function getFriendList() {
-	return $this->user['friend_list'];
+		return $this->user['friend_list'];
 	}
 
 	public function getNumberOfFriendRequests() {
@@ -69,7 +69,7 @@ class User {
 	}
 
 	public function isFriend($username_to_check) {
-	$usernameComma = "," . $username_to_check . ",";
+		$usernameComma = "," . $username_to_check . ",";
 
 		if(strstr($this->user['friend_list'], $usernameComma) || $username_to_check == $this->user['username']) {
 		  return true;
@@ -168,15 +168,15 @@ class User {
 
 		foreach ($stmt as $row) {
 
-		  $word = $row['title'];
-		  $word_dot = strlen($word) >= 14 ? "..." : "";
+			$word = $row['title'];
+			$word_dot = strlen($word) >= 14 ? "..." : "";
 
-		  $trimmed_word = str_split($word, 14);
-		  $trimmed_word = $trimmed_word[0];
+			$trimmed_word = str_split($word, 14);
+			$trimmed_word = $trimmed_word[0];
 
-		  echo "<li class='trending-list-group-item'>";
-		  echo $trimmed_word . $word_dot;
-		  echo "</li><br>";
+			echo "<li class='trending-list-group-item'>";
+			echo $trimmed_word . $word_dot;
+			echo "</li><br>";
 
 		}
 	}
@@ -217,7 +217,6 @@ class User {
 		} else {
 			echo "";
 		}
-
 	}
 
 	public function getUserAboutDetails() {

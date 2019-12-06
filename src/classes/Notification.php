@@ -36,7 +36,6 @@ class Notification {
 
 		$set_viewed = $this->spdo->prepare('UPDATE notifications SET viewed = ? WHERE user_to = ?');
 		$set_viewed->execute(["yes", $userLoggedIn]);
-		//$set_viewed_query = mysqli_query($this->con, "UPDATE notifications SET viewed='yes' WHERE user_to='$userLoggedIn'");
 
 		$stmt = $this->spdo->prepare('SELECT * FROM notifications WHERE user_to = ? ORDER BY id DESC');
 		$stmt->execute([$userLoggedIn]);
@@ -44,7 +43,6 @@ class Notification {
 		$stmt2 = $this->spdo->prepare('SELECT COUNT(*) FROM notifications WHERE user_to = ? ORDER BY id DESC');
 		$stmt2->execute([$userLoggedIn]);
 		$num_rows = $stmt->fetchColumn();
-		//$query = mysqli_query($this->con, "SELECT * FROM notifications WHERE user_to='$userLoggedIn' ORDER BY id DESC");
 
 	    if($num_rows == 0) {
 	      echo "You have no notifications.";
@@ -71,8 +69,6 @@ class Notification {
 			$user_data_query = $this->spdo->prepare('SELECT * FROM users WHERE username = ?');
 			$user_data_query->execute([$user_from]);
 			$user_data = $user_data_query->fetch();
-	        // $user_data_query = mysqli_query($this->con, "SELECT * FROM users WHERE username='$user_from'");
-	        // $user_data = mysqli_fetch_array($user_data_query);
 
 	        //Timeframe
 	        $time_message = $this->datetime($date_time);
@@ -82,11 +78,11 @@ class Notification {
 			$style = ($row['opened'] == 'no') ? "background-color: #374925;" : "";
 
 			$return_string .= " <a href='" . $row['link'] . "' class='list-group-item list-group-item-action flex-column align-items-start'>
-													<div class='user_found_messages' style='" . $style . "'>
+								<div class='user_found_messages' style='" . $style . "'>
 	                    <div class='d-flex justify-content-between'>
 	                    <span class='mb-1'>
-													      <img src='" . $user_data['avatar'] . "' class='list-group-avatar'>
-	                          </span></div>
+								<img src='" . $user_data['avatar'] . "' class='list-group-avatar'>
+						</span></div>
 	                    <p class='timestamp_smaller' id='grey'>" . $time_message . "</p>" . $row['message'] . "
 	                    </a></div>";
 		}

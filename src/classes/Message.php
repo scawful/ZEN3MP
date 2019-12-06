@@ -127,7 +127,7 @@ class Message {
 
 	}
 
-  public function getConvosDropdown($data, $limit) {
+	public function getConvosDropdown($data, $limit) {
 
 		$page = $data['page'];
 		$userLoggedIn = $this->user_obj->getUsername();
@@ -144,11 +144,11 @@ class Message {
 		$query = $this->spdo->query("SELECT user_to, user_from FROM messages WHERE user_to='$userLoggedIn' OR user_from='$userLoggedIn' ORDER BY id DESC");
 
 		while($row = $query->fetch()) {
-				$user_to_push = ($row['user_to'] != $userLoggedIn) ? $row['user_to'] : $row['user_from'];
+			$user_to_push = ($row['user_to'] != $userLoggedIn) ? $row['user_to'] : $row['user_from'];
 
-				if(!in_array($user_to_push, $convos)) {
-						array_push($convos, $user_to_push);
-				}
+			if(!in_array($user_to_push, $convos)) {
+					array_push($convos, $user_to_push);
+			}
 		}
 
 		$num_iterations = 0; // num messages checked
@@ -156,38 +156,38 @@ class Message {
 
 		foreach($convos as $username) {
 
-				if($num_iterations++ < $start)
-					continue;
+			if($num_iterations++ < $start)
+				continue;
 
-				if($count > $limit)
-					break;
-				else {
-					$count++;
-				}
+			if($count > $limit)
+				break;
+			else {
+				$count++;
+			}
 
-				$in_unread_query = $this->spdo->query("SELECT opened FROM messages WHERE user_to='$userLoggedIn' AND user_from='$username' ORDER BY id DESC");
-				$row = $in_unread_query->fetch();
-				$style = ($row['opened'] == 'no') ? "background-color: #374925;" : "";
+			$in_unread_query = $this->spdo->query("SELECT opened FROM messages WHERE user_to='$userLoggedIn' AND user_from='$username' ORDER BY id DESC");
+			$row = $in_unread_query->fetch();
+			$style = ($row['opened'] == 'no') ? "background-color: #374925;" : "";
 
-				$user_found_obj = new User($username, $this->spdo);
-				$latest_message_details = $this->getLatestMessages($userLoggedIn, $username);
+			$user_found_obj = new User($username, $this->spdo);
+			$latest_message_details = $this->getLatestMessages($userLoggedIn, $username);
 
-				$dots = (strlen($latest_message_details[1]) >= 12) ? "..." : "";
-				$split = str_split($latest_message_details[1], 12);
-				$split = $split[0] . $dots;
+			$dots = (strlen($latest_message_details[1]) >= 12) ? "..." : "";
+			$split = str_split($latest_message_details[1], 12);
+			$split = $split[0] . $dots;
 
-				$return_string .= " <a href='/?inbox&u=$username' class='list-group-item list-group-item-action flex-column align-items-start'>
-										<div class='user_found_messages' style='" . $style . "'>
-										<img src='" . $user_found_obj->getAvatar() . "' class='list-group-avatar'>
+			$return_string .= " <a href='/?inbox&u=$username' class='list-group-item list-group-item-action flex-column align-items-start'>
+									<div class='user_found_messages' style='" . $style . "'>
+									<img src='" . $user_found_obj->getAvatar() . "' class='list-group-avatar'>
 
-										<div class='d-flex justify-content-between'>
-										<span class='mb-1'>
+									<div class='d-flex justify-content-between'>
+									<span class='mb-1'>
 
-										<small class='text-muted'>
-										To: " . $user_found_obj->getDisplayName() . "</span>
-										" . $latest_message_details[2] . "</small></div>
-										<p id='grey' style='margin: 0;'>" . $latest_message_details[0] . $split . "</p>
-										</div></a>";
+									<small class='text-muted'>
+									To: " . $user_found_obj->getDisplayName() . "</span>
+									" . $latest_message_details[2] . "</small></div>
+									<p id='grey' style='margin: 0;'>" . $latest_message_details[0] . $split . "</p>
+									</div></a>";
 		}
 
 		//if posts were loaded
