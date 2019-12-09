@@ -5,8 +5,10 @@ require "../config.php";
 		$post_id = $_GET['post_id'];
 
 	if(isset($_POST['result'])) {
-		if($_POST['result'] == 'true')
-			$query = mysqli_query($connect_social, "UPDATE posts SET deleted='yes' WHERE id='$post_id'");
+		if($_POST['result'] == 'true') {
+			$stmt = $spdo->prepare('UPDATE posts SET deleted = ? WHERE id = ?');
+			$stmt->execute(["yes", $post_id]);
+		}
 	}
 
 ?>

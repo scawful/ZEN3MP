@@ -18,15 +18,15 @@ $names = explode(" ", $query);
 if(strpos($query, "_") !== false) {
     $usersReturned = $spdo->query("SELECT * FROM users WHERE username LIKE '$query%' AND user_closed='no' LIMIT 8");
     //$usersReturned = mysqli_query($connect_social, "SELECT * FROM users WHERE username LIKE '$query%' AND user_closed='no' LIMIT 8");
-  }
-  else if(count($names) == 2) {
+}
+else if(count($names) == 2) {
     $usersReturned = $spdo->query("SELECT * FROM users WHERE (username LIKE '%$names[0]%') AND user_closed='no' LIMIT 8");
     //$usersReturned = mysqli_query($connect_social, "SELECT * FROM users WHERE (username LIKE '%$names[0]%') AND user_closed='no' LIMIT 8");
-  }
-  else {
+}
+else {
     $usersReturned = $spdo->query("SELECT * FROM users WHERE (username LIKE '%$names[0]%') AND user_closed='no' LIMIT 8");
     //$usersReturned = mysqli_query($connect_social, "SELECT * FROM users WHERE (username LIKE '%$names[0]%') AND user_closed='no' LIMIT 8");
-  }
+}
 
 if($query != "") {
     while($row = $usersReturned->fetch(PDO::FETCH_ASSOC)) {
