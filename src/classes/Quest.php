@@ -81,57 +81,67 @@ class Quest {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-  public function loadPage($page_id) {
+	public function loadPage($page_id) {
 
-    $stmt = $this->rpdo->prepare('SELECT * FROM quest_pages WHERE p_id = ?');
-    $stmt->execute([$page_id]);
-    $page = $stmt->fetch();
+		$stmt = $this->rpdo->prepare('SELECT * FROM quest_pages WHERE p_id = ?');
+		$stmt->execute([$page_id]);
+		$page = $stmt->fetch();
 
-    $title = $page['title'];
-    $body = $page['body'];
-    $media = $page['media'];
-	$quest = $page['q_id'];
-	$prevpage = $page_id - 1;
-	$nextpage = $page_id + 1;
+		$title = $page['title'];
+		$body = $page['body'];
+		$media = $page['media'];
+		$quest = $page['q_id'];
+		$prevpage = $page_id - 1;
+		$nextpage = $page_id + 1;
 
-	if($page_id == 1) {
-		$leftmsg = "Return Home";
-	} else {
-		$leftmsg = "Previous Page";
+		if($page_id == 1) {
+			$leftmsg = "Return Home";
+		} else {
+			$leftmsg = "Previous Page";
+		}
+
+		echo "<div class='card'>
+				<div class='card-header'>$title</div>
+				<img class='card-img-top' src='$media'>
+				<div class='card-body'>
+					<p class='card-text'>$body</p>
+					<div class='d-flex justify-content-between d-inline'>
+					<div class='float-left'>
+					<a href='?world&q=$quest&p=$prevpage' class='btn btn-primary'>
+						<i class='typcn typcn-arrow-left-thick icon'></i> $leftmsg
+					</a>
+					</div>
+
+						<a href='' class='btn btn-primary'>
+							<i class='typcn typcn-bookmark icon'></i> Save / Load
+						</a>
+						<a href='' class='btn btn-primary'>
+							<i class='typcn typcn-archive icon'></i> Logs
+						</a>
+						<a href='' class='btn btn-primary'>
+							<i class='typcn typcn-document-text icon'></i> Author's Note
+						</a>
+
+					<div class='float-right'>
+					<a href='?world&q=$quest&p=$nextpage' class='btn btn-primary'>
+						Next Page <i class='typcn typcn-arrow-right-thick icon'></i>
+					</a>
+					</div>
+					</div>
+				</div>
+			</div>
+			";
 	}
 
-    echo "<div class='card'>
-            <div class='card-header'>$title</div>
-            <img class='card-img-top' src='$media'>
-            <div class='card-body'>
-              	<p class='card-text'>$body</p>
-				<div class='d-flex justify-content-between d-inline'>
-	            <div class='float-left'>
-	            <a href='?world&q=$quest&p=$prevpage' class='btn btn-primary'>
-					<i class='typcn typcn-arrow-left-thick icon'></i> $leftmsg
-				</a>
-	            </div>
+////////////////////////////////////////////////////////////////////////////////////////////
 
-					<a href='' class='btn btn-primary'>
-						<i class='typcn typcn-bookmark icon'></i> Save / Load
-					</a>
-					<a href='' class='btn btn-primary'>
-						<i class='typcn typcn-archive icon'></i> Logs
-					</a>
-					<a href='' class='btn btn-primary'>
-						<i class='typcn typcn-document-text icon'></i> Author's Note
-					</a>
+  	public function addQuestCategory($title, $description, $lvreq, $category) {
+		  
+		$stmt = $this->rpdo->prepare('INSERT INTO quests VALUES(0, ?, ?, ?, ?, ?)');
+		$stmt->execute([$title, $description, $lvreq, 'yes', $category]);
+		
 
-				<div class='float-right'>
-				<a href='?world&q=$quest&p=$nextpage' class='btn btn-primary'>
-					Next Page <i class='typcn typcn-arrow-right-thick icon'></i>
-				</a>
-				</div>
-				</div>
-            </div>
-          </div>
-          ";
-  }
+	}
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
