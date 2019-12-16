@@ -1,0 +1,51 @@
+{% extends "base.twig" %}
+{% block title %} Above {% endblock %}
+
+{% block main %}
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" href="#home" aria-controls="home" data-toggle="tab" aria-selected="true">Home</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="?newpost">Posts</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="?quests">Quests</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="?items">Stores</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="?users">Users</a>
+  </li>
+
+</ul>
+
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+    <div class="tab-content" id="myTabContent">
+        <div role="tabpanel" class="tab-pane fade show active" id="home" aria-labelledby="home">
+          <div class="article">
+
+              <strong>Welcome, {{ userLoggedIn }}</strong><br />
+
+          </div>
+    </div>
+
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+    <div role="tabpanel" class="tab-pane fade" id="manage_stores" aria-labelledby="manage_stores">
+      
+    </div>
+    </div>
+
+{% endblock %}
+
+{% block side %}
+
+    <div class="titleBar">Site Statistics</div>
+
+{% endblock %}

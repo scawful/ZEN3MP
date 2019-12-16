@@ -1,0 +1,43 @@
+{% extends "base.twig" %}
+{% block title %} New Post {% endblock %}
+
+{% block main %}
+
+        <div class="article">
+          <p>This area will be used as a way for admins and moderators to post new updates on the <a href="/?news">news section</a>. Date is automatically filled in.
+          <br />
+          <form class="post_form" action="/above/" method="POST" autocomplete="off">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+              </div>
+              <input type="text" class="form-control" name="added_by" aria-label="Username" aria-describedby="basic-addon1" value="{{ userLoggedIn }}" readonly>
+            </div>
+            <div class="form-group">
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option>Site News</option>
+                <option>Discussion Thread</option>
+                <option>IO Article</option>
+                <option>Legacy Content</option>
+                <option>Global Announcement</option>
+              </select>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+              </div>
+              <input type="text" class="form-control" name="post_title" id="post_title" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Content</span>
+              </div>
+              <textarea class="form-control" name="post_text" id="post_text" aria-label="With textarea"></textarea>
+            </div>
+            <br />
+            <button type="submit" class="btn btn-post btn-lg btn-block" name="news_post" id="post_button" value="POST">Submit News Post</button>
+          </form>
+
+        </div>
+
+{% endblock %}
