@@ -4,8 +4,27 @@
 {% block main %}
     <div class="titleBar">Item Store</div>
 
+    {% if buy_id != 0 and confirm == 0 %}
+        <div class="article">
+            Confirm Purchase of {{ inventory.getItemName(buy_id) }} for {{ inventory.getItemCost(i_id) }}?
+            <a href='?store&buy={{buy_id}}&confirm=1'><button type='button' class='btn btn-primary'>Confirm</button></a>
+        </div>
+    {% elseif confirm == 1 %}
+        {{ inventory.buyItem(buy_id) }}
+        Redirecting to store hub. 
+            <script>
+            var timer = setTimeout(function() {
+                window.location='https://zeniea.com/?store'
+            }, 3000);
+    </script>
+    {% else %}
+        <br />
+    {% endif %}
+
     {% if i_id == 0 %}
     <br>
+
+
     <ul class="nav nav-tabs">
       <li class="nav-item">
         <a class="nav-link active" href="#general" aria-controls="general" data-toggle="tab" aria-selected="true">General</a>
@@ -21,7 +40,8 @@
       </li>
     </ul>
 
-    <div class="tab-content" id="myTabContent">
+
+    <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade show active" id="general" aria-labelledby="general">
           <table class="table">
             <thead>
@@ -29,6 +49,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
                 <th scope="col">Price</th>
+                <th scope="col">Owned</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -44,6 +65,7 @@
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">Price</th>
+            <th scope="col">Owned</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -60,6 +82,7 @@
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">Price</th>
+            <th scope="col">Owned</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -76,6 +99,7 @@
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">Price</th>
+            <th scope="col">Owned</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -87,12 +111,12 @@
   </div>
   </div>
 
-  {% else %}
-    <div class="article">
-      <a href='?store'><button type='button' class='btn btn-secondary'>Return</button></a><br><br>
-      {{ inventory.getItemInfo(i_id) }}
-    </div>
-  {% endif %}
+    {% else %}
+        <div class="article">
+            <a href='?store'><button type='button' class='btn btn-secondary'>Return</button></a><br><br>
+            {{ inventory.getItemInfo(i_id) }}
+        </div>  
+    {% endif %}
 
  {% endblock %}
 
@@ -100,7 +124,7 @@
  <div class="titleBar">Economy</div>
    <div class="article">
      {{ character.getAllCharacterMoney() }}
-     {{ inventory.getInventoryValue() }}
+     Total Stores Value: {{ inventory.getInventoryValue() }} <br />
    </div>
 
  {% endblock %}

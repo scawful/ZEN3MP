@@ -17,8 +17,33 @@
             <br />Posts: {{ user.numPosts }}
             <br />Likes: {{ user.numLikes }}
             <br />Friends: {{ user.getNumberOfFriends }}
-        <br /><br />
+        <br />
+        
+        <strong>Character</strong>
+        <hr style="margin: 0px;">
+        <ul style="padding: 0px;">
+            <li>Name:  {{ character.getCharacterName }} </li>
+            <li>Level: {{ character.getCharacterLevel }}</li>
+            <li>Gold: {{ character.getCharacterMoney }}</li>
+          
+        </ul>
+
+        <strong>Explore</strong>
+        <hr style="margin: 0px;">
+        <ul style="padding: 0px;">
+            <li>Newest User: </li>
+            <li>Newest Item: </li>
+            <li>Latest Quest: </li>
+
+        </ul>
+
+        <strong>Top Friends</strong>
+        <hr style="margin: 0px;">
+        <ul style="padding: 0px;">
+        </ul>
+
         </div>
+
       {% else %}
 
       {% endif %}
