@@ -19,6 +19,6 @@ $twig = new Environment($loader);
 include("src/globals.php");
 include("src/forms/verify_form.php");
 
-echo $twig->render('char_sheet.twig');
+echo $twig->render('rpg/char_sheet.twig');
 
 ?>

@@ -72,6 +72,6 @@ $twig->addGlobal('num_friends', $prof_num_friends);
 $twig->addGlobal('user', $user_obj);
 $twig->addGlobal('user_about', $user_about);
 
-echo $twig->render('profile.twig');
+echo $twig->render('social/profile.twig');
 
 ?>

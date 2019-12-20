@@ -3,7 +3,7 @@ namespace zen3mp;
 
 $user_obj = new User($userLoggedIn, $spdo);
 $character = new Character($userLoggedIn, $spdo, $rpdo);
-$inventory = new Inventory($userLoggedIn, $spdo, $rpdo);
+$inventory = new Inventory($userLoggedIn, $character, $spdo, $rpdo);
 $quest_obj = new Quest($userLoggedIn, $rpdo, $spdo);
 $messages = new Message($userLoggedIn, $spdo);
 $notifications = new Notification($userLoggedIn, $spdo);
@@ -24,9 +24,19 @@ else
     $item_id = 0;
 
 if(isset($_GET['id']))
-  $post_id = $_GET['id'];
+    $post_id = $_GET['id'];
 else
-  $post_id = 0;
+    $post_id = 0;
+
+if(isset($_GET['buy']))
+    $buy_id = $_GET['buy'];
+else
+    $buy_id = 0;
+
+if(isset($_GET['confirm']))
+    $confirm = $_GET['confirm'];
+else
+    $confirm = 0;
 
 
 if(isset($_GET['u']))
@@ -52,6 +62,8 @@ $twig->addGlobal('q_id', $quest_id);
 $twig->addGlobal('p_id', $page_id);
 $twig->addGlobal('i_id', $item_id);
 $twig->addGlobal('u_to', $user_to);
+$twig->addGlobal('buy_id', $buy_id);
+$twig->addGlobal('confirm', $confirm);
 $twig->addGlobal('inventory', $inventory);
 $twig->addGlobal('session', $_SESSION);
 $twig->addGlobal('Z3MP_POST', $_POST);

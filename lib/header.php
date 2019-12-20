@@ -85,7 +85,7 @@ if(isset($_POST['post']))
 
 }
 $character = new Character($userLoggedIn, $spdo, $rpdo);
-$inventory = new Inventory($userLoggedIn, $spdo, $rpdo);
+$inventory = new Inventory($userLoggedIn, $character, $spdo, $rpdo);
 $quest_obj = new Quest($userLoggedIn, $rpdo, $spdo);
 //unread messages
 $messages = new Message($userLoggedIn, $spdo);

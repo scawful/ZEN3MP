@@ -21,42 +21,42 @@ include("src/forms/message_post_form.php");
 
 switch (True) {
     case isset($_GET['news']):
-        echo $twig->render('news.twig');
+        echo $twig->render('info/news.twig');
         break;
     case isset($_GET['board']):
-        echo $twig->render('board.twig');
+        echo $twig->render('social/board.twig');
         break;
     case isset($_GET['users']):
-        echo $twig->render('users.twig');
+        echo $twig->render('social/users.twig');
         break;
     case isset($_GET['store']):
         if($isLoggedIn == true) {
-            echo $twig->render('store.twig');
+            echo $twig->render('rpg/store.twig');
         } else {
             echo $twig->render('login.twig');
         }
         break;
     case isset($_GET['world']):
         if($isLoggedIn == true)
-            echo $twig->render('world.twig');
+            echo $twig->render('rpg/world.twig');
         else
             echo $twig->render('login.twig');
         break;
     case isset($_GET['inbox']):
         if($isLoggedIn == true)
-            echo $twig->render('messages.twig');
+            echo $twig->render('social/messages.twig');
         else
             echo $twig->render('login.twig');
         break;
     case isset($_GET['privacy']):
-        echo $twig->render('privacy.twig');
+        echo $twig->render('info/privacy.twig');
         break;
     case isset($_GET['rules']):
-        echo $twig->render('rules.twig');
+        echo $twig->render('info/rules.twig');
         break;
     case isset($_GET['requests']):
         if($isLoggedIn == true)
-            echo $twig->render('requests.twig');
+            echo $twig->render('social/requests.twig');
         else
             echo $twig->render('login.twig');
         break;
@@ -64,17 +64,17 @@ switch (True) {
         echo $twig->render('verify.twig');
         break;
     case isset($_GET['zelda']):
-        echo $twig->render('zelda.twig');
+        echo $twig->render('info/zelda.twig');
         break;
     case isset($_GET['faq']):
-        echo $twig->render('faq.twig');
+        echo $twig->render('info/faq.twig');
         break;
     case isset($_GET['logout']):
         include ('lib/pages/logout.php');
         break;
     default:
         if($isLoggedIn == true) {
-            echo $twig->render('home.twig');
+            echo $twig->render('social/home.twig');
         } else {
             echo $twig->render('login.twig');
         }
