@@ -149,6 +149,16 @@ a:hover	{		color: #fff;	text-decoration:	underline;	}
   border-color: #448eb2;
 }
 
+.badge-primary {
+  color: #fff;
+  background-color: #53368d;
+}
+
+a.badge-primary:hover, a.badge-primary:focus {
+  color: #fff;
+  background-color: #482f7b;
+}
+
 /* Login */
 
 .login_box {
