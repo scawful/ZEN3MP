@@ -2,31 +2,83 @@
 namespace zen3mp;
 
 class Inventory {
-
-	private $user_obj;
+	private $user;
   	private $item_obj;
 	private $spdo;
 	private $rpdo;
+	private $character;
 
-	public function __construct($user_obj, $spdo, $rpdo) {
+	public function __construct($user, $character, $spdo, $rpdo) {
 		$this->rpdo = $rpdo;
 		$this->spdo = $spdo;
-		$this->user_obj = new User($user_obj, $spdo);
+		$this->user_obj = new User($user, $spdo);
+		$this->character_obj = $character;
 
 		$stmt = $this->rpdo->prepare('SELECT * FROM items WHERE active = ?');
 		$stmt->execute(["yes"]);
-		$this->all_items = $stmt->fetch();
+		$this->all_items = $stmt->fetchAll();
 
-		$userLoggedIn = $this->user_obj->getUsername();
-		$user_id = $this->user_obj->getUserID();
+		$this->user_id = $this->user_obj->getUserID();
+	}
+
+	public function getItemName($id) 
+	{
+		$id > 0 ? $id -= 1 : $id;
+		return $this->all_items[$id]["name"];	
+	}
+
+	public function getItemDesc($id) {
+		$id > 0 ? $id -= 1 : $id;
+		return $this->all_items[$id]["desc"];	
+	}
+
+	public function getItemCost($id) {
+		$id > 0 ? $id -= 1 : $id;
+		return $this->all_items[$id]["price"];	
+    }
+    
+    public function getCharacterInventoryAmount($item_id) 
+    {
+        $stmt = $this->rpdo->prepare('SELECT * FROM character_item WHERE character_id = ? AND item_id = ? LIMIT 1');
+        $stmt->execute([$this->character_obj->getCharacterID(), $item_id]);
+        $row = $stmt->fetch();
+        $amount = $row['amount'];
+        return $amount;
+    }
+
+    public function buyItem($item_id) 
+    {
+        $amount = $this->getCharacterInventoryAmount($item_id);
+
+        $item_cost = $this->getItemCost($item_id);
+        $character_gold = $this->character_obj->getCharacterMoney();
+
+        if ($character_gold >= $item_cost) {
+
+            if ($amount > 0) {
+                $amount++;
+                $stmt = $this->rpdo->prepare('UPDATE character_item SET amount = ? WHERE character_id = ? AND item_id = ?');
+                $stmt->execute([$amount, $this->character_obj->getCharacterID(), $item_id]); 
+            } else {
+                $stmt = $this->rpdo->prepare('INSERT INTO character_item VALUES (0, ?, ?, ?)');
+                $stmt->execute([$this->character_obj->getCharacterID(), $item_id, 1]);
+            }
+                    
+            $updated_gold = $character_gold - $item_cost;
+            $this->character_obj->setCharacterMoney($updated_gold);
+
+        } else {
+            echo "Not enough gold for purchase!";
+        }
+
 
 	}
 
-	public function listItems($store_type){
+	public function listItems($store_type) {
 
 		$store_items = $this->rpdo->prepare('SELECT * FROM items WHERE active = ? AND type_id = ?');
 		$store_items->execute(["yes", $store_type]);
-	    $str = "";
+        $str = "";
 
 	    while($row = $store_items->fetch()) {
 			$id = $row['id'];
@@ -34,23 +86,26 @@ class Inventory {
 			$name = $row['name'];
 			$desc = $row['desc'];
 			$price = $row['price'];
-			$equip_zone = $row['equip_zone'];
+            $equip_zone = $row['equip_zone'];
+            $amount = $this->getCharacterInventoryAmount($id);
+            $amount > 0 ? $amount : $amount = 0;
 
 			$str .= "<tr>
-					<th scope='row'><a href='?store&item=$id'>$name</a></th>
-					<td>$desc</td>
-					<td>$price</td>
-					<td><a href='?buy=$id'>Buy</a> | <a href='?sell=$id'>Sell</a></td>
+						<th scope='row'><a href='?store&item=$id'>$name</a></th>
+						<td>$desc</td>
+                        <td>$price</td>
+                        <td>$amount</td>
+                        <td><a href='?store&buy=$id'>Buy</a></td>
 					</tr>";
 	    }
 	    echo $str;
 
 	}
 
-	public function getInventoryValue(){
+	public function getInventoryValue() {
 		$stmt = $this->rpdo->query("SELECT SUM(price) AS value_inv FROM items");
 		$sum = $stmt->fetchColumn();
-		echo "Total Stores Value: " . $sum . "<br />";
+		return $sum;
 	}
 
 	public function getitemInfo($item_id){
@@ -69,7 +124,7 @@ class Inventory {
 		$lvl = $row['required_level'];
 		$icon = $row['icon'];
 
-		if($icon == "N/A"){
+		if($icon == "N/A") {
 			$icon_div = "";
 		} else {
 			$icon_div = "<img class='card-img-top' src='$icon'>";
@@ -93,10 +148,11 @@ class Inventory {
 		$date_added = date("Y-m-d H:i:s");
 		$new_item_query = $this->rpdo->prepare('INSERT INTO items VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$new_item_query->execute([$type, $name, $desc, $icon, $gold, $lvl, $equip_zone, "yes", $date_added, $added_by]);
+
 		$item_id = $this->rpdo->lastInsertId();
 		$item_atrb_query = $this->rpdo->prepare('INSERT INTO item_attribute (item_id, attribute_id, value)
 													VALUES (?, 1, ?), (?, 2, ?), (?, 3, ?), (?, 4, ?),
-														(?, 5, ?),(?, 7, ?), (?, 8, ?), (?, 9, ?)');
+															(?, 5, ?),(?, 7, ?), (?, 8, ?), (?, 9, ?)');
 		$item_atrb_query->execute([$item_id, $str, $item_id, $int, $item_id, $wpr, $item_id, $agt, $item_id, $spd, $item_id, $end, $item_id, $per, $item_id, $wsd, $item_id, $lck]);
 
 	}
@@ -109,8 +165,9 @@ class Inventory {
 		$character_item_query = $this->rpdo->query("SELECT * FROM character_item WHERE character_id='$character_id'");
 		$str = "";
 
-		while($row2 = $character_item_query->fetch()) {
-			$item_id = $row2['item_id'];
+		while ($row2 = $character_item_query->fetch()) {
+            $item_id = $row2['item_id'];
+            $amount = $row2['amount'];
 			$item_info_query = $this->rpdo->query("SELECT * FROM items WHERE id='$item_id'");
 			$row3 = $item_info_query->fetch();
 			$name = $row3['name'];
@@ -121,11 +178,9 @@ class Inventory {
 			$icon = $row3['icon'];
 
 			$str .= "<div class='card' style='width: 25%; margin: 5px;'>
-								<div class='card-header'>$name</div>
-								<div class='card-body'>$desc</div>
-
-							</div>
-							";
+						<div class='card-header'>$name <div class='float-right'>$amount</div></div>
+						<div class='card-body'>$desc</div>
+					</div>";
 			//$player_chara = mysqli_query($this->rpgcon, "SELECT * FROM rpg_character WHERE character_id='$character_id'");
 
 		}

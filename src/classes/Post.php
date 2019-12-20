@@ -177,7 +177,7 @@ class Post {
 				$insert_query->execute([$term, '1']);
 			} else {
 				$insert_query = $this->spdo->prepare('UPDATE trends SET hits = ? WHERE title = ?');
-				$insert_query->execute([hits+1, $term]);
+				$insert_query->execute([hits + 1, $term]);
 			}
 		}
 
