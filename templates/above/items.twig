@@ -3,7 +3,28 @@
 
 {% block main %}
 
-<div class="nav nav-pills" id="stores_sublist" role="tablist" aria-orientation="vertical">
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" href="/above/">Home</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="?newpost">Posts</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="?quests">Quests</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="?items">Stores</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="?users">Users</a>
+  </li>
+
+</ul>
+
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+      <div class="nav nav-pills" id="stores_sublist" role="tablist" aria-orientation="vertical">
         <a class="nav-link active" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="new_items" aria-selected="true">New Item</a>
         <a class="nav-link" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="edit_items" aria-selected="false">Edit Items</a>
         <a class="nav-link" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="money_supply" aria-selected="false">Money Supply</a>
@@ -125,8 +146,8 @@
 
           </div>
           </div>
-            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="edit_items"></div>
-            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="money_supply"></div>
+            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="edit_items">dsad</div>
+            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="money_supply">test</div>
         </div>
 
 {% endblock %}

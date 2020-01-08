@@ -157,7 +157,36 @@ class Quest {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+    public function getNumQuestpages()
+    {
+        $stmt = $this->rpdo->prepare('SELECT COUNT(*) FROM quest_pages');
+        $stmt->execute();
+        $pages = $stmt->fetchColumn();
+        return $pages;
+    }
 
+    public function getQuestPageTitle($id)
+    {
+        $stmt = $this->rpdo->prepare('SELECT title FROM quest_pages WHERE id = ?');
+        $stmt->execute([$id]);
+        $title = $stmt->fetchColumn();
+        return $title;
+    }
 
+    public function getQuestPageBody($id)
+    {
+        $stmt = $this->rpdo->prepare('SELECT body FROM quest_pages WHERE id = ?');
+        $stmt->execute([$id]);
+        $body = $stmt->fetchColumn();
+        return $body;
+    }
+
+    public function getQuestPageMedia($id)
+    {
+        $stmt = $this->rpdo->prepare('SELECT media FROM quest_pages WHERE id = ?');
+        $stmt->execute([$id]);
+        $media = $stmt->fetchColumn();
+        return $media;
+    }
 }
 ?>
