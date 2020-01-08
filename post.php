@@ -21,5 +21,5 @@ $post = new Post($userLoggedIn, $spdo);
 $twig->addGlobal('post', $post);
 $twig->addGlobal('post_id', $post_id);
 
-echo $twig->render('post.twig');
+echo $twig->render('social/post.twig');
 ?>
