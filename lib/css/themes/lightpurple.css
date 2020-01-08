@@ -60,7 +60,7 @@ a:hover	{		color: #fff;	text-decoration:	underline;	}
   background-color: #a28ad2;
 }
 .nav-tabs .nav-link {
-  /* background-color: #372549; */
+  background-color: #a28ad2;
 }
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {

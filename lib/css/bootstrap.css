@@ -4092,7 +4092,6 @@ input[type="button"].btn-block {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   color: #fff;
-  /* background-color:#21162E; */
   border-color: #000 #000 #000 none;
 }
 
@@ -4108,8 +4107,7 @@ input[type="button"].btn-block {
 
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
-  color: #fff;
-  /* background-color: #6a488d; */
+    
 }
 
 .nav-fill .nav-item {

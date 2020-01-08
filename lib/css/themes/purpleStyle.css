@@ -60,13 +60,18 @@ a:hover	{		color: #fff;	text-decoration:	underline;	}
   background-color: #4b3a5b;
 }
 .nav-tabs .nav-link {
-  /* background-color: #372549; */
+    background-color: #372549;
 }
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   color: #fff;
-  background-color:#372549;
+  background-color:#21162E;
   border-color: #000 #000 #000 none;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background-color:#21162E;
 }
 
 /* Posts */
