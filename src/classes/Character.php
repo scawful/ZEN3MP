@@ -20,9 +20,13 @@ class Character {
 
 	    $user_character_id = $user_character_id_array['character_id'];
 
-		$char_details_query = $this->rpdo->prepare('SELECT * FROM rpg_character WHERE character_id = ?');
-		$char_details_query->execute([$user_character_id]);
-		$this->character = $char_details_query->fetch();
+		$char_details = $this->rpdo->prepare('SELECT * FROM rpg_character WHERE character_id = ?');
+		$char_details->execute([$user_character_id]);
+        $this->character = $char_details->fetch();
+
+        $char_atrb = $this->rpdo->prepare('SELECT * FROM character_attribute WHERE character_id = ?');
+        $char_atrb->execute([$user_character_id]);
+        $this->character_atrb = $char_atrb->fetch();
 	}
 
 	public function getCharacterID() {
@@ -59,6 +63,10 @@ class Character {
 
 	public function getCharacterClass() {
 		return $this->character['class'];
+    }
+
+    public function getCharacterLuck() {
+        return $this->character_atrb['luck'];
     }
     
     public function setCharacterMoney($amount) {

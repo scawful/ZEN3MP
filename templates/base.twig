@@ -31,8 +31,8 @@
         <strong>Explore</strong>
         <hr style="margin: 0px;">
         <ul style="padding: 0px;">
-            <li>Newest User: </li>
-            <li>Newest Item: </li>
+            <li>Newest User: <a href="https://zeniea.com/{{user.getNewestUserUN}}">{{ user.getNewestUserDN }}</a></li>
+            <li>Newest Item: <a href="https://zeniea.com/?store&item={{inventory.getNewestItemID}}">{{ inventory.getItemName(inventory.getNewestItemID) }}</a></li>
             <li>Latest Quest: </li>
 
         </ul>

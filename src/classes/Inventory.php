@@ -36,6 +36,13 @@ class Inventory {
 		$id > 0 ? $id -= 1 : $id;
 		return $this->all_items[$id]["price"];	
     }
+
+    public function getNewestItemID() {
+        $stmt = $this->rpdo->prepare('SELECT id FROM items ORDER BY date_added DESC');
+        $stmt->execute();
+        $item = $stmt->fetchColumn();
+        return $item;
+    }
     
     public function getCharacterInventoryAmount($item_id) 
     {

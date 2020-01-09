@@ -54,7 +54,21 @@ class User {
 	public function getNumberOfFriends() {
 	    $num_friends = (substr_count($this->user['friend_list'], ",")) - 1;
 		return $num_friends;
-	}
+    }
+    
+    public function getNewestUserUN() {
+        $stmt = $this->spdo->prepare('SELECT username FROM users WHERE verify_user = ? ORDER BY signup_date DESC ');
+        $stmt->execute(["yes"]);
+        $user = $stmt->fetchColumn();
+        return $user;
+    }
+
+    public function getNewestUserDN() {
+        $stmt = $this->spdo->prepare('SELECT username FROM users WHERE verify_user = ? ORDER BY signup_date DESC ');
+        $stmt->execute(["yes"]);
+        $user = $stmt->fetchColumn();
+        return $user;
+    }
 
 	public function isClosed() {
 		$username = $this->user['username'];

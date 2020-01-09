@@ -28,7 +28,9 @@
           <input type="file" class="custom-file-input" id="customFile" name="fileToUpload">
         </div>
       </form>
-
+        {% if "GoldAdded" in notif_array[0] %}
+            <br />{{ notif_array[1] }} gold rewarded for post!
+        {% endif %}
     </div>
 
   <div class="posts_area"></div>
