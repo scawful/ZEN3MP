@@ -37,7 +37,7 @@ if(isset($_POST['post']))
 	}
 
     if($uploadOk) {
-        $post = new Post($userLoggedIn, $spdo);
+        $post = new Post($userLoggedIn, $spdo, $rpdo);
         $newPostBody = (!isset($_POST['post_text']) || empty($_POST['post_text'])) ? "" : $_POST['post_text'];
         if($newPostBody != "") {
           $post->submitPost($newPostBody, 'none', $imageName);

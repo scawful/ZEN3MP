@@ -68,5 +68,6 @@ $twig->addGlobal('inventory', $inventory);
 $twig->addGlobal('session', $_SESSION);
 $twig->addGlobal('Z3MP_POST', $_POST);
 $twig->addGlobal('session_id', $session_id);
+$twig->addGlobal('notif_array', $notif_array);
 $twig->addGlobal('error_array', $error_array);
 ?>

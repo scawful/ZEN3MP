@@ -4,11 +4,15 @@ use \Datetime;
 
 class Post {
 		private $user_obj;
-		private $spdo;
+        private $spdo;
+        private $rpdo;
 
-	public function __construct($user, $spdo){
-		$this->user_obj = new User($user, $spdo);
-		$this->spdo = $spdo;
+	public function __construct($user, $spdo, $rpdo){
+        $this->user_obj = new User($user, $spdo);
+        $this->username = $this->user_obj->getUsername();
+        $this->spdo = $spdo;
+        $this->rpdo = $rpdo;
+        
 	}
 
 	public function submitPhoto($user_to, $imageName) {
@@ -83,7 +87,16 @@ class Post {
 			//If user is on own profile, user_to is 'none'
 			if($user_to == $added_by) {
 				$user_to = "none";
-			}
+            }
+            
+            // calculate gold for post
+            $character = new Character($this->username,  $this->spdo, $this->rpdo);
+            $char_luck = $character->getCharacterLuck();
+            $randkey = rand(4, 8);
+            $textbuffer = ceil(strlen($body) / $randkey);
+            $gold = 10;
+            array_push($notif_array[Message], "Gold Added");
+            array_push($notif_array[Gold], $gold);
 
 			//insert post
 			$stmt = $this->spdo->prepare('INSERT INTO posts VALUES(0, ?, ?, ?, ?, ?, ?, ?, ? )');

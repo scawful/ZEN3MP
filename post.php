@@ -16,7 +16,7 @@ $twig = new Environment($loader);
 include("src/auth.php");
 include("src/globals.php");
 
-$post = new Post($userLoggedIn, $spdo);
+$post = new Post($userLoggedIn, $spdo, $rpdo);
 
 $twig->addGlobal('post', $post);
 $twig->addGlobal('post_id', $post_id);
