@@ -139,7 +139,6 @@ class Quest {
 		  
 		$stmt = $this->rpdo->prepare('INSERT INTO quests VALUES(0, ?, ?, ?, ?, ?)');
 		$stmt->execute([$title, $description, $lvreq, 'yes', $category]);
-		
 
 	}
 
@@ -165,6 +164,22 @@ class Quest {
         return $pages;
     }
 
+    public function getNumQuests()
+    {
+        $stmt = $this->rpdo->prepare('SELECT COUNT(*) FROM quests');
+        $stmt->execute();
+        $quests = $stmt->fetchColumn();
+        return $quests;
+    }
+
+    public function getQuestCategoryTitle($id) 
+    {
+        $stmt = $this->rpdo->prepare('SELECT title FROM quests WHERE id = ?');
+        $stmt->execute([$id]);
+        $title = $stmt->fetchColumn();
+        return $title;
+    }
+
     public function getQuestPageTitle($id)
     {
         $stmt = $this->rpdo->prepare('SELECT title FROM quest_pages WHERE id = ?');
@@ -181,6 +196,19 @@ class Quest {
         return $body;
     }
 
+    public function getQuestPageBodyPreview($id)
+    {
+        $stmt = $this->rpdo->prepare('SELECT body FROM quest_pages WHERE id = ?');
+        $stmt->execute([$id]);
+        $body = $stmt->fetchColumn();
+        $max = 40;
+        if (strlen($body) > $max) {
+            $shorter = substr($body, 0, $max+1);
+            $string = substr($body, 0, strrpos($shorter, ' ')).'...';
+        }
+        return $string;
+    }
+
     public function getQuestPageMedia($id)
     {
         $stmt = $this->rpdo->prepare('SELECT media FROM quest_pages WHERE id = ?');
@@ -188,5 +216,6 @@ class Quest {
         $media = $stmt->fetchColumn();
         return $media;
     }
+
 }
 ?>

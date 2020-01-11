@@ -70,6 +70,13 @@ class User {
         return $user;
     }
 
+    public function getNumActiveUsers() {
+        $stmt = $this->spdo->prepare('SELECT COUNT(*) from users WHERE verify_user = ?');
+        $stmt->execute(["yes"]);
+        $num = $stmt->fetchColumn();
+        return $num;
+    }
+
 	public function isClosed() {
 		$username = $this->user['username'];
 		$stmt = $this->spdo->prepare('SELECT user_closed FROM users WHERE username = ?');

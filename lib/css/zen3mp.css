@@ -225,7 +225,7 @@ ol, ul { list-style: none; }
 	margin-top: 10px;
 	margin-right: 10px;
 	margin-left: 10px;
-  border-top: 2px solid #000;
+    border-top: 2px solid #000;
 }
 .feed-post-header {
 
@@ -299,6 +299,10 @@ ol, ul { list-style: none; }
 
 .widgets {
   font-size: 16px;
+}
+
+.tabbed {
+    margin-left: 10px;
 }
 
 /* Columns */
@@ -501,6 +505,31 @@ ol, ul { list-style: none; }
 
 .register input[type="text"]:hover, input[type="email"]:hover, input[type="password"]:hover {
 
+}
+
+/* Above Admin Panel 
+   ------------------ */
+
+.view_page_container {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px black solid;
+    border-left: 1px black solid;
+}
+
+.view_page_elements {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.view_page_column {
+    padding: 5px;
+    border-right: 1px black solid; 
+    border-bottom: 1px black solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 

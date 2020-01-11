@@ -43,6 +43,13 @@ class Inventory {
         $item = $stmt->fetchColumn();
         return $item;
     }
+
+    public function getNumItems() {
+        $stmt = $this->rpdo->prepare('SELECT COUNT(*) FROM items WHERE active = ?');
+        $stmt->execute(["yes"]);
+        $num = $stmt->fetchColumn();
+        return $num;
+    }
     
     public function getCharacterInventoryAmount($item_id) 
     {

@@ -1,51 +1,60 @@
-{% extends "base.twig" %}
+{% extends "above/above_base.twig" %}
 {% block title %} Above {% endblock %}
 
 {% block main %}
 
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" href="#home">Home</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="?newpost">Posts</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="?quests">Quests</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="?items">Stores</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="?users">Users</a>
-  </li>
+    <div class="article">
+        <h2>Dashboard</h2>
+        <p> <strong>Welcome, {{ userLoggedIn }}</strong>! This is the region above Zeniea where administrative privileges are allowed to reign free.
+            Now remember, with great power comes great responsibility. In this region, only using features that are labeled as stable is recommended
+            for survival of the website. </p>   
 
-</ul>
-
-<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-
-    <div class="tab-content" id="myTabContent">
-        <div role="tabpanel" class="tab-pane fade show active" id="home" aria-labelledby="home">
-          <div class="article">
-
-              <strong>Welcome, {{ userLoggedIn }}</strong><br />
-
-          </div>
+        <div class="tabbed">
+            <p>
+                {{ user.getNumActiveUsers }} active users. <br />
+                {{ quest.getNumQuests}} active quests. <br />
+                {{ inventory.getNumitems }} items for sale.
+            </p>
+        </div>
     </div>
 
-<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+{% endblock %}
 
-<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+{% block profile %}
 
-    <div role="tabpanel" class="tab-pane fade" id="manage_stores" aria-labelledby="manage_stores">
-      
-    </div>
+    <div class="titleBar">Above Tools</div>
+    
+    <div class="article">
+        <strong>Main</strong>
+        <div class="tabbed">
+            - <a href="https://zeniea.com/above/">Dashboard Home</a> <br />
+            - <a href="https://zeniea.com/above/img/">Image Uploader</a>
+        </div>
+        <strong>Posts</strong>
+        <div class="tabbed">
+            - <a href="/above/?newpost">News Update</a>  <br />
+        </div>
+        <strong>Quests</strong>
+        <div class="tabbed">
+            - <a href="/above/?newcategory">New Category</a>  <br />
+            - <a href="/above/?newpage">New Page</a>  <br />
+            - <a href="/above/?viewcategories">View Categories</a>  <br />
+            - <a href="/above/?viewpages">View Pages</a>
+        </div>
+        <strong>Economy</strong>
+        <div class="tabbed">
+            - <a href="/above/?newitem">New Item</a>  <br />
+            - <a href="/above/?viewitems">View Store Inventory</a>  <br />
+            - <a href="/above/?money">Manage Money Supply</a>  <br />
+        </div>
+        
+
     </div>
 
 {% endblock %}
 
 {% block side %}
 
-    <div class="titleBar">Site Statistics</div>
+    <div class="titleBar"></div>
 
 {% endblock %}

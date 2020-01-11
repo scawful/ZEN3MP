@@ -1,0 +1,46 @@
+{% extends "above/above.twig" %}
+{% block title %} Quests {% endblock %}
+
+{% block main %}
+
+    <div class="article">
+        <h2>View Pages</h2>
+        <div class="view_page_container">
+            {% for i in 1..quest.getNumQuestpages %}
+                <div class="view_page_elements">
+                    <div class="view_page_column" style="width: 50px;"><h4>{{ i }}</h4></div>
+                    <div class="view_page_column"><img src="{{ quest.getQuestPageMedia(i) }}" class="avatar"></div>
+                    
+                    <div class="view_page_column w-50"><h5>{{ quest.getQuestPageTitle(i) }}</h5></div>
+                    <div class="view_page_column w-100">
+                        <p>{{ quest.getQuestPageBodyPreview(i) }}</p>
+                    </div>   
+                    <div class="view_page_column">   
+                        <button type="button" class="btn btn-success">Edit</button>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+          
+            {% endfor %} 
+        </div> 
+    </div>
+
+{% endblock %}
+
+    {# <div class="article">
+        <h2>View Pages</h2>
+        <div style="display: flex; flex-direction: row;">
+            {% for i in 1..quest.getNumQuestpages %}
+            <div class="card" style="width: 18rem; margin: 5px;">
+                <span><img src="{{ quest.getQuestPageMedia(i) }}" class="card-img-top"></span>
+                <div class="card-body">
+                    <h5 class="card-title">{{ quest.getQuestPageTitle(i) }}</h5>
+                    <p class="card-text">
+                        {{ quest.getQuestPageBodyPreview(i) }}
+                        <button type="button" class="btn btn-success">Edit</button>
+                    </p>
+                </div>
+            </div>       
+            {% endfor %} 
+        </div>
+    </div> #}

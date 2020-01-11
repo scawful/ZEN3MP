@@ -1,0 +1,52 @@
+{% extends "above/above.twig" %}
+{% block title %} Quests {% endblock %}
+
+{% block main %}
+
+<div class="article"><h2>New Page - Unstable</h2>
+
+    <form class="post_form" action="/above/" method="POST" autocomplete="off" enctype="multipart/form-data">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Title</span>
+            </div>
+            <input type="text" name="title" class="form-control" aria-label="Name" aria-describedby="basic-addon1" required>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Quest ID</span>
+            </div>
+            <select name="item-type" class="form-control" id="exampleFormControlSelect1">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            </select>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+            <span class="input-group-text">Contents</span>
+            </div>
+            <textarea name="contents" class="form-control" aria-label="With textarea" required></textarea>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="custom-file">
+            <input type="file" name="item-icon" class="custom-file-input" id="newIconImage">
+            <label class="custom-file-label" for="newIconImage">Quest Media</label>
+            </div>
+            <div class="input-group-append">
+            <span class="input-group-text" id="">Upload</span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-post btn-lg btn-block" name="new_quest_page" id="new_quest_page" value="POST">Submit New Page</button>
+
+    </form>
+
+    </div>
+
+{% endblock %}

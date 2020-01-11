@@ -1,0 +1,34 @@
+{% extends "above/above.twig" %}
+{% block title %} Image Uploader {% endblock %}
+
+{% block main %}
+
+<div class="article">
+
+    <h4>It just works - <i>Todd Howard</i></h4>
+    <form class="post_form" action="/above/img/" method="POST" autocomplete="off" enctype="multipart/form-data">
+        <div class="input-group">
+            <div class="custom-file">
+                <input type="file" name="new-image" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+            </div>
+        </div>
+
+        <div class="input-group mb-3" style="margin-top: 10px;">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Directory</label>
+            </div>
+            <select name="directory" class="custom-select" id="inputGroupSelect01">
+                <option selected>Choose...</option>
+                <option value="screenshots/">screenshots</option>
+                <option value="uploads/shitposts/">shitposts</option>
+                <option value="uploads/zelda/">zelda</option>
+                <option value="uploads/legacy/">legacy</option>
+            </select>
+        </div>
+
+        <button type="submit" name="new_image" value="POST" class="btn btn-primary btn-lg btn-block">Upload</button>
+
+    </form>
+</div>
+{% endblock %}
