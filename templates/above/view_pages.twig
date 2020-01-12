@@ -11,7 +11,10 @@
                     <div class="view_page_column" style="width: 50px;"><h4>{{ i }}</h4></div>
                     <div class="view_page_column"><img src="{{ quest.getQuestPageMedia(i) }}" class="avatar"></div>
                     
-                    <div class="view_page_column w-50"><h5>{{ quest.getQuestPageTitle(i) }}</h5></div>
+                    <div class="view_page_column w-50">
+                        <h5>{{ quest.getQuestPageTitle(i) }}</h5>
+                        <br />{{ quest.getQuestPageCategoryTitle(i) }}
+                    </div>
                     <div class="view_page_column w-100">
                         <p>{{ quest.getQuestPageBodyPreview(i) }}</p>
                     </div>   
