@@ -1,0 +1,12 @@
+{% extends "base.twig" %}
+{% block title %}Search{% endblock %}
+
+{% block main %}
+
+    <div class="titleBar">Search</div>
+        <div class="article">
+            {{ prompt_string | raw }}
+            {{ search_string | raw }}
+        </div>
+
+{% endblock %}
