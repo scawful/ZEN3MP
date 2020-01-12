@@ -3,9 +3,9 @@ namespace zen3mp;
 use \Datetime;
 
 class Post {
-		private $user_obj;
-        private $spdo;
-        private $rpdo;
+    private $user_obj;
+    private $spdo;
+    private $rpdo;
 
 	public function __construct($user, $spdo, $rpdo){
         $this->user_obj = new User($user, $spdo);
@@ -142,13 +142,14 @@ class Post {
 			 someone something somewhere state states still still such sure t take
 			 taken than that the their them then there therefore these they thing
 			 things think thinks this those though thought thoughts three through
-				thus to today together too took toward turn turned turning turns two
+			 thus to today together too took toward turn turned turning turns two
 			 u under until up upon us use used uses v very w want wanted wanting
 			 wants was way ways we well wells went were what when where whether
 			 which while who whole whose why will with within without work
 			 worked working works would x y year years yet you young younger
-			 youngest your yours z lol haha omg hey ill iframe wonder else like
-			hate sleepy reason for some little yes bye choose nigger penis fuck shit dick piss bitch";
+             youngest your yours z lol haha omg hey ill iframe wonder else like
+             day cool damn 123 1 2 3 4 5 6 7 8 9 10 69 666 420 
+			 hate sleepy reason for some little yes bye choose nigger penis fuck shit dick piss bitch";
 
 			//Convert stop words into array - split at white space
 			$stopWords = preg_split("/[\s,]+/", $stopWords);
@@ -186,12 +187,10 @@ class Post {
 			$num_rows = $stmt->fetchColumn();
 
 			if($num_rows == 0) {
-				$insert_query = $this->spdo->prepare('INSERT INTO trends(title,hits) VALUES(?, ?)');
-				$insert_query->execute([$term, '1']);
+                $insert_query = $this->spdo->query("INSERT INTO trends(title,hits) VALUES('$term','1')");
 			} else {
-				$insert_query = $this->spdo->prepare('UPDATE trends SET hits = ? WHERE title = ?');
-				$insert_query->execute([hits + 1, $term]);
-			}
+                $insert_query = $this->spdo->query("UPDATE trends SET hits=hits+1 WHERE title='$term'");
+            }
 		}
 
 	}
