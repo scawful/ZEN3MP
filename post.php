@@ -2,8 +2,8 @@
 namespace zen3mp;
 use zen3mp\Utils as Utils;
 
-require('src/config.php');
-require('src/incl.php');
+require_once('src/config.php');
+require_once('src/incl.php');
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -13,8 +13,8 @@ use Twig\Loader\FilesystemLoader;
 $loader = new FilesystemLoader(__DIR__ . '/templates');
 $twig = new Environment($loader);
 
-include("src/auth.php");
-include("src/globals.php");
+require_once("src/auth.php");
+require_once("src/globals.php");
 
 $post = new Post($userLoggedIn, $spdo, $rpdo);
 
