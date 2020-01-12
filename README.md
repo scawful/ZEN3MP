@@ -1,8 +1,6 @@
 # ZEN3MP
-### Developed by Scawful in 2019 CE
-
-I finally made my first git repository mom.
-
+### Developed by Scawful in 2019-2020 CE
 
 - Twig
-- Bootstrap 4 (Suck it, haters)
+- Bootstrap 4
+- jQuery (for now)
