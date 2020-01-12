@@ -17,8 +17,6 @@ class Notification {
 		$stmt = $this->spdo->prepare('SELECT COUNT(*) FROM notifications WHERE viewed = ? AND user_to = ?');
 		$stmt->execute(["no", $userLoggedIn]);
 		$num_unread = $stmt->fetchColumn();
-		//$query = mysqli_query($this->con, "SELECT * FROM notifications WHERE viewed='no' AND user_to='$userLoggedIn'");
-		//return mysqli_num_rows($query);
 		return $num_unread;
 	}
 
@@ -42,7 +40,7 @@ class Notification {
 
 		$stmt2 = $this->spdo->prepare('SELECT COUNT(*) FROM notifications WHERE user_to = ? ORDER BY id DESC');
 		$stmt2->execute([$userLoggedIn]);
-		$num_rows = $stmt->fetchColumn();
+		$num_rows = $stmt2->fetchColumn();
 
 	    if($num_rows == 0) {
 	      echo "You have no notifications.";
@@ -79,12 +77,13 @@ class Notification {
 
 			$return_string .= " <a href='" . $row['link'] . "' class='list-group-item list-group-item-action flex-column align-items-start'>
 								<div class='user_found_messages' style='" . $style . "'>
-	                    <div class='d-flex justify-content-between'>
-	                    <span class='mb-1'>
-								<img src='" . $user_data['avatar'] . "' class='list-group-avatar'>
-						</span></div>
-	                    <p class='timestamp_smaller' id='grey'>" . $time_message . "</p>" . $row['message'] . "
-	                    </a></div>";
+                                    <div class='d-flex justify-content-between'>
+                                        <img src='" . $user_data['avatar'] . "' class='list-group-avatar float-left'>
+                                        <small>" . $time_message . "</small>
+                                    </div>
+                                    " . $row['message'] . "
+                                
+                                </div></a>";
 		}
 
 		//if posts were loaded
