@@ -38,16 +38,6 @@ class Quest {
 
 	}
 
-	public function listQuestsAdmin() {
-
-		
-
-
-	}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////
-
 	public function showQuestHome($quest_id) { // load first page of a quest
 
 		$stmt = $this->rpdo->prepare('SELECT * FROM quest_pages WHERE q_id = ?');
@@ -135,14 +125,11 @@ class Quest {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-  	public function addQuestCategory($title, $description, $lvreq, $category) {
-		  
+    public function addQuestCategory($title, $description, $lvreq, $category) 
+    {	  
 		$stmt = $this->rpdo->prepare('INSERT INTO quests VALUES(0, ?, ?, ?, ?, ?)');
 		$stmt->execute([$title, $description, $lvreq, 'yes', $category]);
-
 	}
-
-////////////////////////////////////////////////////////////////////////////////////////////
 
 	public function battleMenu() {
 		echo "<div class='btn-group' role='group' aria-label='Commands'>
@@ -153,8 +140,6 @@ class Quest {
 		        <button type='button' class='btn btn-danger'>Run</button>
 		     </div>";
 	}
-
-////////////////////////////////////////////////////////////////////////////////////////////
 
     public function getNumQuestpages()
     {
@@ -202,7 +187,8 @@ class Quest {
         $stmt->execute([$id]);
         $body = $stmt->fetchColumn();
         $max = 40;
-        if (strlen($body) > $max) {
+        if (strlen($body) > $max) 
+        {
             $shorter = substr($body, 0, $max+1);
             $string = substr($body, 0, strrpos($shorter, ' ')).'...';
         }
@@ -215,6 +201,17 @@ class Quest {
         $stmt->execute([$id]);
         $media = $stmt->fetchColumn();
         return $media;
+    }
+
+    public function getQuestPageCategoryTitle($id)
+    {
+        $stmt = $this->rpdo->prepare('SELECT q_id FROM quest_pages WHERE id = ?');
+		$stmt->execute([$id]);
+        $quest_id = $stmt->fetchColumn();
+        $stmt2 = $this->rpdo->prepare('SELECT title FROM quests WHERE id = ?');
+        $stmt2->execute([$quest_id]);
+        $quest = $stmt2->fetchColumn();
+        return $quest;
     }
 
 }
