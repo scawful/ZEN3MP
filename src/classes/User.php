@@ -171,7 +171,8 @@ class User {
 			}
 		}
 		return $mutualFriends;
-	}
+    }
+
 
 	public function getUserStyle() {
 		$user_id = $this->user['id'];
