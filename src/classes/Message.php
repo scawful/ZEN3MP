@@ -115,7 +115,7 @@ class Message {
 		                      <div class='d-flex w-100 justify-content-between'>
 		                      <span class='mb-1'>
 
-		                      <small class='text-muted'>
+		                      <small>
 		                      To: " . $user_found_obj->getDisplayName() . "</span>
 		                      " . $latest_message_details[2] . "</small></div>
 		                      <p id='grey' style='margin: 0;'>" . $latest_message_details[0] . $split . "</p>
@@ -183,7 +183,7 @@ class Message {
 									<div class='d-flex justify-content-between'>
 									<span class='mb-1'>
 
-									<small class='text-muted'>
+									<small>
 									To: " . $user_found_obj->getDisplayName() . "</span>
 									" . $latest_message_details[2] . "</small></div>
 									<p id='grey' style='margin: 0;'>" . $latest_message_details[0] . $split . "</p>

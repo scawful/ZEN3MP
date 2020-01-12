@@ -23,9 +23,9 @@ $style = $user_obj->getUserStyle();
   <head>
     <?php
     if($isLoggedIn == True) {
-        echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/' . $style . '.css" />';
+        echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/themes/' . $style . '.css" />';
       } else {
-        echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/purpleStyle.css" />';
+        echo '<link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/themes/purpleStyle.css" />';
       }
     ?>
     <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/bootstrap.css" />
@@ -96,13 +96,14 @@ $style = $user_obj->getUserStyle();
       echo "<p>Comment Posted! </p>";
    	}
    	?>
-
+    <div class="comment_form">
     <form action="comment_frame.php?post_id=<?php echo $post_id; ?>" id="comment_form" name="postComment<?php echo $post_id; ?>" method="POST">
-  		<!-- <textarea name="post_body" style="margin: 5px; width: 75%;"></textarea> -->
-      <input type="text" class="form-control" name="post_body" id="post_text" placeholder="Type something here...">
-  		<!-- <input type="submit" name="" value="Post"> -->
-      <button type="submit" name="postComment<?php echo $post_id; ?>" id="post_button" value="POST" class="btn btn-post">POST</button>
-  	</form>
+            <!-- <textarea name="post_body" style="margin: 5px; width: 75%;"></textarea> -->
+        <input type="text" class="form-control comment_form_input" name="post_body" id="post_text" placeholder="Type something here...">
+            <!-- <input type="submit" name="" value="Post"> -->
+        <button type="submit" name="postComment<?php echo $post_id; ?>" id="post_button" value="POST" class="btn btn-post">POST</button>
+        </form>
+    </div>
     <!-- Load comments -->
     <div class="comment_section">
       <div class="card">
