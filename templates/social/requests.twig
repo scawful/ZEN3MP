@@ -4,7 +4,8 @@
 {% block main %}
 
     <div class="article">
-        {{ listRequests }}
+        {{ confirm | raw }}
+        {{ requests | raw }}
     </div>
 
 {% endblock %}
