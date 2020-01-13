@@ -70,9 +70,9 @@
                 <i class="fa fa-search icon btnPurp"></i>
               </div>
           </form>
-        <div class="search_results"></div>
-        <div class="search_results_footer_empty">
-        </div>
+        <div class="search_results">
+        <div class="search_results_footer_empty"></div></div>
+        
       </div>
 
       <div class="profile-options">
@@ -141,7 +141,7 @@
                 pageName = "ajax_load_messages.php";
 
             var ajaxReq = $.ajax({
-              url: "src/forms/" + pageName,
+              url: "https://zeniea.com/src/forms/" + pageName,
               type: "POST",
               data: "page=" + page + "&userLoggedIn=" + userLoggedIn,
               cache:false,
@@ -165,4 +165,4 @@
       });
 
       </script>
-      {% endblock %}
+{% endblock %}
