@@ -118,13 +118,30 @@ class Notification {
 		        break;
 		    case 'comment_non_owner':
 		        $message = $userLoggedInDisplayName . " commented on a post you commented on";
+                break;
+		}
+
+		$link = "post.php?id=" . $post_id;
+		$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
+		$stmt->execute([$user_to, $userLoggedIn, $message, $link, $date_time, "no", "no"]);
+    }
+    
+    public function insertRPGNotification($post_id, $user_to, $type, $gold) {
+        $userLoggedIn = $this->user_obj->getUsername();
+		$userLoggedInDisplayName = $this->user_obj->getDisplayName();
+
+		$date_time = date("Y-m-d H:i:s");
+
+		switch($type) {
+		    case 'gold_added':
+		        $message = $gold . " gold awarded for this post.";
 		        break;
 		}
 
 		$link = "post.php?id=" . $post_id;
 		$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
 		$stmt->execute([$user_to, $userLoggedIn, $message, $link, $date_time, "no", "no"]);
-	}
+    }
 
 	private function datetime($date_time) {
 
