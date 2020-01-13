@@ -11,6 +11,7 @@ include ("../classes/Message.php");
 include ("../classes/Notification.php");
 include ("../classes/Inventory.php");
 include ("../classes/Quest.php");
+include ("../classes/Board.php");
 
 require '../../vendor/autoload.php';
 
