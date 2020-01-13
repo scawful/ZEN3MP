@@ -235,7 +235,7 @@ class User {
 		$rank = $this->user['user_title'];
 		$array = array("Admin", "God");
 		if (in_array($rank, $array)) {
-			echo "<a href='/above/' title='Above'><i class='typcn typcn-cloud-storage icon btnPurp'></i></a>";
+			echo "<a href='/above/' title='Above'><i class='typcn typcn-weather-cloudy icon btnPurp'></i></a>";
 		} else {
 			echo "";
 		}
