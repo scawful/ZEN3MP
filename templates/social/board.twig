@@ -1,47 +1,65 @@
 {% extends "base.twig" %}
-{% block title %}Discussion Board{% endblock %}
+{% block title %} {{ board.getBoardTitle(board_id) }} {% endblock %}
 
 {% block main %}
-<div class="article">
-    <div class="alert alert-primary alert-dismissible fade show" role="alert">
-      <strong>Forum-like message board</strong> No current functionality available.
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+    {{ board.checkForBoard(board_id) }}
+    <div class="article">
+        <div class="d-flex justify-content-between">
+            <span>
+                <h4>{{ board.getBoardDesc(board_id) }}</h4>
+            </span>
+            <span class="float-right">
+            {% if board.checkBoardLocked(board_id) %}
+                <i class="typcn typcn-lock-closed icon h3"></i>
+            {% else %}
+                <a href="?new_topic={{ board_id }}" class="btn btn-primary mb-1">New Topic</a>
+            {% endif %}
+            </span>
+        </div>
+        <div class="small">
+            <span class="float-left">
+                <a href="https://zeniea.com">Zeniea</a> :: 
+                <a href="https://zeniea.com/forum/">Forum</a> :: 
+                {{ board.getBoardTitle(board_id) }}
+            </span>
+            <span class="float-right"><a href="#">Mark All As Read</a></span>
+        </div>
     </div>
-</div>
 
-<div class="card">
-  <h5 class="card-header">Main</h5>
-
-  <div class="card-body">
-    <h5>Oracle of Secrets
-      <div class="float-right">
-        <a href="#" class="btn btn-primary">Open Board</a>
-      </div>
-    </h5>
-    <small>The Legend of Zelda Link to the Past rom hack</small>
-    <hr>
-    <h5>ZEN3MP Development
-      <div class="float-right">
-        <a href="#" class="btn btn-primary">Open Board</a>
-      </div>
-    </h5>
-    <small>Feedback, Suggestions and Bug Reports</small>
-    <hr>
-    <h5>Information Overlords
-      <div class="float-right">
-        <a href="#" class="btn btn-primary">Open Board</a>
-      </div>
-    </h5>
-    <small>Channel discussion and sources</small>
-  </div>
-
-
-</div>
+    <div class="card w-100">
+    <h5 class="card-header">Topics</h5>
+        {% if board.getTopicsByCategory(board_id) %}
+            <div class="card-body">
+            {% set count = board.getTopicsByCategory(board_id) %}
+            {% for i in count..1|reverse  %}
+                <h5><a href="https://zeniea.com/forum/?topic={{i}}">{{ board.getTopicTitle(i) }}</a></h5>
+                    <div>                    
+                        <small> Posted by 
+                        <a href="https://zeniea.com/{{board.getTopicOP(i)}}">
+                            {{ board.getTopicOP(i) }}
+                        </a>
+                        </small>
+                    </div>
+                {{ board.getTopicBody(i) }}
+                <div class="float-right">{{ board.getTopicDate(i) }}</div>
+                <hr>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div class="card-body">
+                <h5>None</h5>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="article d-flex justify-content-between">
+        <span class="small float-right"><a href="#">Prev Page</a></span>
+        Page 1 of 1
+        <span class="small float-right"><a href="#">Next Page</a></span>
+    </div>
 {% endblock %}
 
 {% block side %}
-<div class="titleBar">Statistics</div>
+<div class="titleBar"> </div>
 
 {% endblock %}
