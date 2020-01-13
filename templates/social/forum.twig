@@ -1,0 +1,48 @@
+{% extends "base.twig" %}
+{% block title %}Forum{% endblock %}
+
+{% block main %}
+<div class="article">
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+      <strong>Forum-like message board</strong> Limited functionality available.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+        <div class="small">
+        <span class="float-left">
+            <a href="https://zeniea.com">Zeniea</a> :: 
+            Forum
+        </span>
+        <span class="float-right"><a href="#">Mark All As Read</a></span>
+    </div>
+</div>
+
+<div class="card w-100">
+{% for each in 1..5 %}
+    <h5 class="card-header">{{ board.getCategoryName(each) }}</h5>
+    <div class="card-body">
+    {% for i in 1..11 %}
+        {% if board.getBoardCategory(i) == each %}
+        <h5>
+            <a href="?board={{i}}">{{ board.getBoardTitle(i) }}</a>
+            <div class="float-right">
+                
+            </div>
+        </h5>
+        <small>{{ board.getBoardDesc(i) }}</small>
+        <hr>
+    {% endif %}
+    {% endfor %}
+
+    </div>
+{% endfor %}
+
+</div>
+<br />
+{% endblock %}
+
+{% block side %}
+<div class="titleBar">Forum Settings</div>
+
+{% endblock %}

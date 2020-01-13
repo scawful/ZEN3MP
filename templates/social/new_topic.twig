@@ -1,0 +1,38 @@
+{% extends "base.twig" %}
+{% block title %} New Topic {% endblock %}
+
+{% block main %}
+{{ board.checkForBoard(category) }}
+<div class="article">
+    <div class="small">
+            <span class="float-left mb-2">
+                <a href="https://zeniea.com">Zeniea</a> :: 
+                <a href="https://zeniea.com/forum/">Forum</a> :: 
+                <a href="https://zeniea.com/forum/?board={{ category }}">{{ board.getBoardTitle(category) }}</a> ::
+                New Topic
+            </span>
+        </div>
+    <form class="post_form" action="/forum/" method="POST" autocomplete="off" enctype="multipart/form-data">
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Title</span>
+        </div>
+        <input type="text" class="form-control" name="title">
+        </div>
+
+        <div class="input-group mb-3">
+            <textarea rows="10" class="form-control" aria-label="With textarea" name="body"></textarea>
+        </div>
+
+        <input type="hidden" name="category" value="{{ category }}"> 
+
+        <button class="btn btn-primary" name="new_topic" type="submit" value="POST" >Submit</button>
+    </form>
+
+</div>
+
+{% endblock %}
+
+{% block side %}
+
+{% endblock %}

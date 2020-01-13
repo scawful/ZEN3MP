@@ -1,0 +1,31 @@
+{% extends "base.twig" %}
+{% block title %} Reply to Topic {% endblock %}
+
+{% block main %}
+<div class="article">
+    <div class="small">
+            <span class="float-left mb-2">
+                <a href="https://zeniea.com">Zeniea</a> :: 
+                <a href="https://zeniea.com/forum/">Forum</a> :: 
+                <a href="https://zeniea.com/forum/?board={{ reply_id }}"></a> ::
+                {{ board.getTopicTitle(reply_id) }}
+            </span>
+        </div>
+    <form class="post_form" action="/forum/" method="POST" autocomplete="off" enctype="multipart/form-data">
+
+        <div class="input-group mb-3">
+            <textarea rows="10" class="form-control" aria-label="With textarea" name="reply_body"></textarea>
+        </div>
+
+        <input type="hidden" name="reply_to" value="{{ reply_id }}"> 
+
+        <button class="btn btn-primary" name="reply_topic" type="submit" value="POST" >Submit</button>
+    </form>
+
+</div>
+
+{% endblock %}
+
+{% block side %}
+
+{% endblock %}

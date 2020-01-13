@@ -7,6 +7,7 @@ $inventory = new Inventory($userLoggedIn, $character, $spdo, $rpdo);
 $quest_obj = new Quest($userLoggedIn, $rpdo, $spdo);
 $messages = new Message($userLoggedIn, $spdo);
 $notifications = new Notification($userLoggedIn, $spdo);
+$board_obj = new Board($userLoggedIn, $spdo);
 
 if(isset($_GET['q']))
     $quest_id = $_GET['q'];
@@ -38,7 +39,6 @@ if(isset($_GET['confirm']))
 else
     $confirm = 0;
 
-
 if(isset($_GET['u']))
     $user_to = $_GET['u'];
 else {
@@ -58,6 +58,7 @@ $twig->addGlobal('character', $character);
 $twig->addGlobal('notifications', $notifications);
 $twig->addGlobal('messages', $messages);
 $twig->addGlobal('quest', $quest_obj);
+$twig->addGlobal('board', $board_obj);
 $twig->addGlobal('q_id', $quest_id);
 $twig->addGlobal('p_id', $page_id);
 $twig->addGlobal('i_id', $item_id);
@@ -68,6 +69,5 @@ $twig->addGlobal('inventory', $inventory);
 $twig->addGlobal('session', $_SESSION);
 $twig->addGlobal('Z3MP_POST', $_POST);
 $twig->addGlobal('session_id', $session_id);
-$twig->addGlobal('notif_array', $notif_array);
 $twig->addGlobal('error_array', $error_array);
 ?>

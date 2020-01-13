@@ -1,0 +1,64 @@
+{% extends "base.twig" %}
+{% block title %} View Topic {% endblock %}
+
+{% block main %}
+    <div class="article">
+        <div class="d-flex justify-content-between">
+            <span>
+                <h4>{{ board.getTopicTitle(topic_id) }}</h4>
+            </span>
+            <span class="float-right">
+            {% if board.checkBoardLocked(board_id) %}
+                <i class="typcn typcn-lock-closed icon h3"></i>
+            {% else %}
+                <a href="?reply_topic={{ topic_id }}" class="btn btn-primary mb-1">Reply</a>
+            {% endif %}
+            </span>
+        </div>
+        <div class="small">
+            <span class="float-left">
+                <a href="https://zeniea.com">Zeniea</a> :: 
+                <a href="https://zeniea.com/forum/">Forum</a> :: 
+                <a href="https://zeniea.com/forum/?board={{board.getTopicCategory(topic_id)}}">
+                    {{ board.getBoardTitle(board.getTopicCategory(topic_id)) }}
+                </a> :: 
+                {{ board.getTopicTitle(topic_id) }}
+            </span>
+            <span class="float-right"><a href="#">Mark All As Read</a></span>
+        </div>
+    </div>
+
+    <div class="card w-100">
+    <h5 class="card-header">{{ board.getTopicTitle(topic_id) }} </h5>
+            <div class="card-body">
+            <h5><a href="https://zeniea.com/forum/?topic={{topic_id}}">{{ board.getTopicTitle(topic_id) }}</a></h5>
+                    <div>                    
+                        <small> Posted by 
+                        <a href="https://zeniea.com/{{board.getTopicOP(topic_id)}}">
+                            {{ board.getTopicOP(topic_id) }}
+                        </a>
+                        </small>
+                    </div>
+                {{ board.getTopicBody(topic_id) }}
+                <div class="float-right">{{ board.getTopicDate(topic_id) }}</div>
+            <hr>
+            {% if num_replies > 0 %}
+                <h5>Replies</h5><hr>
+                {% for i in 0..num_replies %}
+                {% set row_id = board.getReplyID(topic_id)[i] %}
+                        <div>                    
+                            <small> Posted by 
+                            <a href="https://zeniea.com/{{ board.getReplyOP(row_id, topic_id)}} ">
+                                {{ board.getReplyOP(row_id, topic_id) }}
+                            </a>
+                            </small>
+                        </div>
+                    {{ board.getReplyBody(row_id, topic_id) }}
+                    <div class="float-right">{{ board.getReplyDate(row_id, topic_id) }}</div>
+                    <hr>
+                {% endfor %}
+            {% endif %}
+            </div>
+    </div>
+
+{% endblock %} 

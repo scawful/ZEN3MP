@@ -1,10 +1,12 @@
 <?php
-include("src/classes/Utils.php");
-include("src/classes/User.php");
-include("src/classes/Post.php");
-include("src/classes/Character.php");
-include("src/classes/Message.php");
-include("src/classes/Notification.php");
-include("src/classes/Inventory.php");
-include("src/classes/Quest.php");
+require_once(__DIR__ . "/classes/Utils.php");
+require_once(__DIR__ . "/classes/ImageUpload.php");
+require_once(__DIR__ . "/classes/User.php");
+require_once(__DIR__ . "/classes/Character.php");
+require_once(__DIR__ . "/classes/Post.php");
+require_once(__DIR__ . "/classes/Message.php");
+require_once(__DIR__ . "/classes/Notification.php");
+require_once(__DIR__ . "/classes/Inventory.php");
+require_once(__DIR__ . "/classes/Quest.php");
+require_once(__DIR__ . "/classes/Board.php");
 ?>
