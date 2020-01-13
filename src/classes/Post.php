@@ -88,25 +88,40 @@ class Post {
 			if($user_to == $added_by) {
 				$user_to = "none";
             }
-            
-            // calculate gold for post
-            $character = new Character($this->username,  $this->spdo, $this->rpdo);
-            $char_luck = $character->getCharacterLuck();
-            $randkey = rand(4, 8);
-            $textbuffer = ceil(strlen($body) / $randkey);
-            $gold = 10;
-            array_push($notif_array[Message], "Gold Added");
-            array_push($notif_array[Gold], $gold);
 
 			//insert post
 			$stmt = $this->spdo->prepare('INSERT INTO posts VALUES(0, ?, ?, ?, ?, ?, ?, ?, ? )');
 			$stmt->execute([$body, $added_by, $user_to, $date_added, "no", "no", "0", $imageName]);
-			$returned_id = $this->spdo->lastInsertId();
+            $returned_id = $this->spdo->lastInsertId();
 
-			//Insert notification
-			if($user_to != 'none') {
-					$notification = new Notification($added_by, $spdo);
-					$notification->insertNotification($returned_id, $user_to, "profile_post");
+            //Insert notification
+            $notification = new Notification($added_by, $this->spdo);
+            
+            // calculate gold for post
+            $character = new Character($this->username, $this->spdo, $this->rpdo);
+            $checkForChar = $character->checkForCharacter();
+            if ($checkForChar === true) { 
+                $char_luck = $character->getCharacterLuck();
+                $string_bytes = strlen($body);
+                if ($string_value < 250)
+                    $randkey = rand(4, 8);
+                else
+                    $randkey = rand(6, 10);
+
+                if ($imageName)
+                    $picture = rand(1, 15);
+                else 
+                    $picture = 0;
+                
+                $string_value = $string_bytes / $randkey;
+                $luck_bonus = pow(($char_luck / $randkey), 2);
+                $gold = ceil($string_value + $luck_bonus + $picture);
+                $character->setCharacterMoney($gold);
+                $notification->insertRPGNotification($returned_id, $added_by, "gold_added", $gold);
+            }
+
+			if ($user_to != 'none') {
+                $notification->insertNotification($returned_id, $user_to, "profile_post");
 			}
 
 			//Update post count for user
@@ -148,7 +163,7 @@ class Post {
 			 which while who whole whose why will with within without work
 			 worked working works would x y year years yet you young younger
              youngest your yours z lol haha omg hey ill iframe wonder else like
-             day cool damn 123 1 2 3 4 5 6 7 8 9 10 69 666 420 
+             day cool damn 123 1 2 3 4 5 6 7 8 9 10 69 666 420 hello hi pls please
 			 hate sleepy reason for some little yes bye choose nigger penis fuck shit dick piss bitch";
 
 			//Convert stop words into array - split at white space
