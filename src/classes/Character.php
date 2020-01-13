@@ -12,10 +12,10 @@ class Character {
 		$this->spdo = $spdo;
 		$this->rpdo = $rpdo;
 
-		$user_id = $this->user_obj->getUserID();
+		$this->user_id = $this->user_obj->getUserID();
 		
 		$stmt = $this->rpdo->prepare('SELECT character_id FROM user_character WHERE user_id = ? LIMIT 1');
-		$stmt->execute([$user_id]);
+		$stmt->execute([$this->user_id]);
 		$user_character_id_array = $stmt->fetch();
 
 	    $user_character_id = $user_character_id_array['character_id'];
@@ -66,11 +66,11 @@ class Character {
     }
 
     public function getCharacterLuck() {
-        return $this->character_atrb['luck'];
+        return $this->character_atrb['attribute_id'][9];
     }
     
     public function setCharacterMoney($amount) {
-        $stmt = $this->rpdo->prepare('UPDATE rpg_character SET money = ? WHERE character_id = ?');
+        $stmt = $this->rpdo->prepare('UPDATE rpg_character SET money = money + ? WHERE character_id = ?');
         $stmt->execute([$amount, $this->getCharacterID()]);
     }
 
@@ -90,7 +90,18 @@ class Character {
 		$row = $stmt->fetch();
 		$sum = $row['sum_money'];
 		echo "Total Character Gold: " . $sum . "<br />";
-	}
+    }
+    
+    public function checkForCharacter() {
+        $stmt = $this->rpdo->prepare('SELECT 1 FROM user_character WHERE user_id = ? LIMIT 1');
+        $stmt->execute([$this->user_id]);
+        $count = $stmt->fetchColumn();
+        if($count == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 
 
