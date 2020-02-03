@@ -18,6 +18,7 @@ include("src/forms/register_form.php");
 include("src/forms/login_form.php");
 include("src/forms/timeline_post_form.php");
 include("src/forms/message_post_form.php");
+include("src/forms/new_character_form.php");
 
 switch (True) {
     case isset($_GET['news']):
@@ -42,6 +43,12 @@ switch (True) {
         else
             echo $twig->render('login.twig');
         break;
+    case isset($_GET['quest']):
+        if($isLoggedIn == true)
+            echo $twig->render('rpg/quest.twig');
+        else
+            echo $twig->render('login.twig');
+        break; 
     case isset($_GET['inbox']):
         if($isLoggedIn == true)
             echo $twig->render('social/messages.twig');
@@ -54,15 +61,15 @@ switch (True) {
     case isset($_GET['rules']):
         echo $twig->render('info/rules.twig');
         break;
-    case isset($_GET['requests']):
+    case isset($_GET['new_character']):
         if($isLoggedIn == true)
-            echo $twig->render('social/requests.twig');
+            echo $twig->render('rpg/char_sheet.twig');
         else
             echo $twig->render('login.twig');
         break;
-    case isset($_GET['verify']):
-        echo $twig->render('verify.twig');
-        break;
+    // case isset($_GET['verify']):
+    //     echo $twig->render('social/verify.twig');
+    //     break;
     case isset($_GET['zelda']):
         echo $twig->render('info/zelda.twig');
         break;
