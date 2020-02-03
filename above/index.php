@@ -7,14 +7,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require('../src/config.php');
-include("../src/classes/Utils.php");
-include("../src/classes/User.php");
-include("../src/classes/Post.php");
-include("../src/classes/Message.php");
-include("../src/classes/Notification.php");
-include("../src/classes/Character.php");
-include("../src/classes/Inventory.php");
-include("../src/classes/Quest.php");
+include("../src/incl.php");
 
 require '../vendor/autoload.php';
 
@@ -29,6 +22,9 @@ include("../src/globals.php");
 include("func.php");
 
 switch (True) {
+    case isset($_GET['twitterpost']):
+        echo $twig->render('above/forms/twitter_post.twig');
+        break;
     case isset($_GET['items']):
         echo $twig->render('above/items.twig');
         break;
@@ -44,11 +40,17 @@ switch (True) {
     case isset($_GET['viewpages']):
         echo $twig->render('above/view_pages.twig');
         break;
+    case isset($_GET['editpage']):
+        echo $twig->render('above/edit_page.twig');
+        break;
     case isset($_GET['viewcategories']):
         echo $twig->render('above/view_category.twig');
         break;
     case isset($_GET['newitem']):
         echo $twig->render('above/new_item.twig');
+        break;
+    case isset($_GET['delete']):
+        echo $twig->render('above/delete.twig');
         break;
     case isset($_GET['users']):
         echo $twig->render('above/users.twig');
