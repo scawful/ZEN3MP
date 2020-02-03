@@ -2,6 +2,7 @@
 namespace zen3mp;
 
 $user_obj = new User($userLoggedIn, $spdo);
+$posts_obj = new Post($userLoggedIn, $spdo, $rpdo);
 $character = new Character($userLoggedIn, $spdo, $rpdo);
 $inventory = new Inventory($userLoggedIn, $character, $spdo, $rpdo);
 $quest_obj = new Quest($userLoggedIn, $rpdo, $spdo);
@@ -59,6 +60,7 @@ $twig->addGlobal('notifications', $notifications);
 $twig->addGlobal('messages', $messages);
 $twig->addGlobal('quest', $quest_obj);
 $twig->addGlobal('board', $board_obj);
+$twig->addGlobal('posts', $posts_obj);
 $twig->addGlobal('q_id', $quest_id);
 $twig->addGlobal('p_id', $page_id);
 $twig->addGlobal('i_id', $item_id);
