@@ -384,6 +384,8 @@ ol, ul { list-style: none; }
 
 #comments .cmmnt .replies { margin-bottom: 7px; }
 
+.comment_form { margin: 5px; }
+.comment_form_input { width: 90%; float: left; }
 
 .comment_like input[type="submit"] {
   border: none;
@@ -595,7 +597,6 @@ ol, ul { list-style: none; }
 }
 .search_result {
   padding: 10px;
-  height: 100px;
 }
 .searchPageFriendButtons {
   float: right;

@@ -33,6 +33,9 @@ a:hover {
 .card {
   background-color: #191E33 !important;
 }
+.btn {
+    color: #fff !important;
+}
 .btn-primary {
   background-color: #192136 !important;
   border: 1px solid #000 !important;
@@ -53,6 +56,21 @@ a:hover {
 .nav-link.active { background-color: #121726 !important; }
 .nav-link:hover {
   color: #fff !important;
+}
+
+/* Layout Redux */
+.columnBase  {
+    color: #fff;
+    border: 1px solid black !important;
+}
+#maincol {
+    background-color:#1A2237;
+}
+#sidecol {
+    background-color:#192136;
+}
+#profcol {
+    background-color:#192136;
 }
 
 .boxes  {
