@@ -1,16 +1,16 @@
 {% extends "above/above.twig" %}
-{% block title %} Quests {% endblock %}
+{% block title %} Edit {% endblock %}
 
 {% block main %}
-
-<div class="article"><h2>New Page - Unstable</h2>
+{% if q_id != 0 %}
+<div class="article"><h2>Edit Page - Unstable</h2>
 
     <form class="post_form" action="/above/" method="POST" autocomplete="off" enctype="multipart/form-data">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1">Title</span>
             </div>
-            <input type="text" name="title" class="form-control" aria-label="Name" aria-describedby="basic-addon1" required>
+            <input type="text" name="title" class="form-control" aria-label="Name" aria-describedby="basic-addon1" value="{{ quest.getQuestPageTitleByCategory(q_id, p_id) }}" required>
         </div>
 
         <div class="input-group mb-3">
@@ -29,19 +29,19 @@
             <div class="input-group-prepend">
             <span class="input-group-text">Contents</span>
             </div>
-            <textarea name="contents" class="form-control" aria-label="With textarea" rows="10" required></textarea>
+            <textarea name="contents" class="form-control" rows="10" required>{{ quest.getQuestPageBodyByCategory(q_id, p_id) }}</textarea>
         </div>
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
             <span class="input-group-text">Author's Note</span>
             </div>
-            <textarea name="authors-note" class="form-control" aria-label="With textarea" rows="5"></textarea>
+            <textarea name="authors-note" class="form-control" aria-label="With textarea" rows="5">{{ quest.getQuestPageNoteByCategory(q_id, p_id) }}</textarea>
         </div>
 
         <div class="input-group mb-3">
             <div class="custom-file">
-            <input type="file" name="new-image" class="custom-file-input" id="newIconImage">
+            <input type="file" name="quest-media" class="custom-file-input" id="newIconImage">
             <label class="custom-file-label" for="newIconImage">Quest Media (782x543) or (800x600)</label>
             </div>
             <div class="input-group-append">
@@ -54,5 +54,5 @@
     </form>
 
     </div>
-
+{% endif %}
 {% endblock %}

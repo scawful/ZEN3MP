@@ -1,0 +1,12 @@
+{% extends "above/above.twig" %}
+{% block title %} Delete {% endblock %}
+
+{% block main %}
+
+    {% if p_id != 0 %}
+        {% if q_id != 0 %}
+            {{ quest.deleteQuestPage(q_id, p_id) }}
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

@@ -17,12 +17,9 @@
               <input type="text" class="form-control" name="added_by" aria-label="Username" aria-describedby="basic-addon1" value="{{ userLoggedIn }}" readonly>
             </div>
             <div class="form-group">
-              <select class="form-control" id="exampleFormControlSelect1">
-                <option>Site News</option>
-                <option>Discussion Thread</option>
-                <option>IO Article</option>
-                <option>Legacy Content</option>
-                <option>Global Announcement</option>
+              <select class="form-control" id="exampleFormControlSelect1" name="category">
+                <option value="news">Site News</option>
+                <option value="io">IO Article</option>
               </select>
             </div>
             <div class="input-group mb-3">

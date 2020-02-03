@@ -5,45 +5,41 @@
 
     <div class="article">
         <h2>View Pages</h2>
+            <small>Deleting any ID lower than the max (latest) does not auto adjust ID (yet!)</small>
+            <select name="quest-category" class="form-control" id="dynamic_select">
+            <option>Select Quest</option>
+            {% for key, i in 1..quest.getNumQuests %}
+                    {% set num = quest.getNumQuestPagesByCategory(i) %}
+                    <option value="?viewpages&q={{i}}">{{ quest.getQuestCategoryTitle(i) }}</option>
+            {% endfor %}
+            </select><br />
+            
         <div class="view_page_container">
-            {% for i in 1..quest.getNumQuestpages %}
+        {% if q_id != 0 %}
+            {# {% for i in 1..quest.getNumQuestpages %} #}
+            {% for p_id in 0..quest.getNumQuestPagesByCategory(q_id) %}
                 <div class="view_page_elements">
-                    <div class="view_page_column" style="width: 50px;"><h4>{{ i }}</h4></div>
-                    <div class="view_page_column"><img src="{{ quest.getQuestPageMedia(i) }}" class="avatar"></div>
+                    <div class="view_page_column" style="width: 50px;"><h4>{{ p_id }}</h4></div>
+                    <div class="view_page_column"><img src="https://zeniea.com/img/quests/pages/{{ quest.getQuestPageMediaByCategory(q_id, p_id) }}" class="avatar"></div>
                     
-                    <div class="view_page_column w-50">
-                        <h5>{{ quest.getQuestPageTitle(i) }}</h5>
-                        <br />{{ quest.getQuestPageCategoryTitle(i) }}
+                    <div class="view_page_column w-75">
+                        <h5>{{ quest.getQuestPageTitleByCategory(q_id, p_id) }}</h5>
+                        <br />{{ quest.getQuestPageDateByCategory(q_id, p_id) }} 
+                            by {{ quest.getQuestPageAuthorByCategory(q_id, p_id) }}
+                        <br />{{ quest.getQuestPageCategoryTitle(q_id) }}
                     </div>
                     <div class="view_page_column w-100">
-                        <p>{{ quest.getQuestPageBodyPreview(i) }}</p>
+                        <p>{{ quest.getQuestPageBodyPreviewByCategory(q_id, p_id) }}</p>
+                        <br />
                     </div>   
                     <div class="view_page_column">   
-                        <button type="button" class="btn btn-success">Edit</button>
-                        <button type="button" class="btn btn-danger">Delete</button>
+                        <a href="https://zeniea.com/above/?editpage&q={{q_id}}&p={{p_id}}" class="btn btn-success mb-1">Edit</a>
+                        <a href="https://zeniea.com/above/?delete&q={{q_id}}&p={{p_id}}" class="btn btn-danger mb-1">Delete</a>
                     </div>
                 </div>
-          
             {% endfor %} 
+        {% endif %}
         </div> 
     </div>
 
 {% endblock %}
-
-    {# <div class="article">
-        <h2>View Pages</h2>
-        <div style="display: flex; flex-direction: row;">
-            {% for i in 1..quest.getNumQuestpages %}
-            <div class="card" style="width: 18rem; margin: 5px;">
-                <span><img src="{{ quest.getQuestPageMedia(i) }}" class="card-img-top"></span>
-                <div class="card-body">
-                    <h5 class="card-title">{{ quest.getQuestPageTitle(i) }}</h5>
-                    <p class="card-text">
-                        {{ quest.getQuestPageBodyPreview(i) }}
-                        <button type="button" class="btn btn-success">Edit</button>
-                    </p>
-                </div>
-            </div>       
-            {% endfor %} 
-        </div>
-    </div> #}

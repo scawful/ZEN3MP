@@ -12,10 +12,13 @@
         <div class="tabbed">
             <p>
                 {{ user.getNumActiveUsers }} active users. <br />
+                {{ board.getNumBoards }} active boards. <br />
                 {{ quest.getNumQuests}} active quests. <br />
-                {{ inventory.getNumitems }} items for sale.
+                {{ inventory.getNumitems }} items for sale. 
             </p>
         </div>
+
+        <img src="https://zeniea.com//img/uploads/legacy/5e19681537db4misery.png" class="w-100">
     </div>
 
 {% endblock %}
@@ -33,19 +36,31 @@
         <strong>Posts</strong>
         <div class="tabbed">
             - <a href="/above/?newpost">News Update</a>  <br />
+            - <a href="https://zeniea.com/above/?twitterpost">Twitter Post</a>
+        </div>
+        <strong>Users</strong>
+        <div class="tabbed">
+            - <a href="/above/">Create Bot</a>  <br />
+            - <a href="/above/">Manage Users</a>  <br />
         </div>
         <strong>Quests</strong>
         <div class="tabbed">
-            - <a href="/above/?newcategory">New Category</a>  <br />
             - <a href="/above/?newpage">New Page</a>  <br />
-            - <a href="/above/?viewcategories">View Categories</a>  <br />
-            - <a href="/above/?viewpages">View Pages</a>
+            - <a href="/above/?viewpages">View Pages</a> <br />
+            - <a href="/above/?newcategory">New Category</a>  <br />
+            - <a href="/above/?viewcategories">View Categories</a> 
+
         </div>
         <strong>Economy</strong>
         <div class="tabbed">
             - <a href="/above/?newitem">New Item</a>  <br />
             - <a href="/above/?viewitems">View Store Inventory</a>  <br />
             - <a href="/above/?money">Manage Money Supply</a>  <br />
+        </div>
+        <strong>Forum</strong>
+        <div class="tabbed">
+            - <a href="/above/">New Board</a>  <br />
+            - <a href="/above/">Manage Posts</a>  <br />
         </div>
         
 
