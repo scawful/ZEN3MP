@@ -31,6 +31,8 @@
     <div class="card w-100">
     <h5 class="card-header">{{ board.getTopicTitle(topic_id) }} </h5>
             <div class="card-body">
+            {% set username = board.getTopicOP(topic_id) %}
+                <img src="{{ board.getAddedByAvatar(username) }}" class="avatar w-auto">
             <h5><a href="https://zeniea.com/forum/?topic={{topic_id}}">{{ board.getTopicTitle(topic_id) }}</a></h5>
                     <div>                    
                         <small> Posted by 
@@ -46,6 +48,8 @@
                 <h5>Replies</h5><hr>
                 {% for i in 0..num_replies %}
                 {% set row_id = board.getReplyID(topic_id)[i] %}
+                {% set username = board.getReplyOP(row_id, topic_id) %}
+                        <img src="{{ board.getAddedByAvatar(username) }}" class="avatar w-auto">
                         <div>                    
                             <small> Posted by 
                             <a href="https://zeniea.com/{{ board.getReplyOP(row_id, topic_id)}} ">
@@ -56,6 +60,7 @@
                     {{ board.getReplyBody(row_id, topic_id) }}
                     <div class="float-right">{{ board.getReplyDate(row_id, topic_id) }}</div>
                     <hr>
+                    <br />
                 {% endfor %}
             {% endif %}
             </div>

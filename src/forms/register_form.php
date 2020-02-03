@@ -140,7 +140,7 @@ if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 				ZEN3MP is an experimental project so this verification page may change. Eventually there will be an update character page for any legacy accounts caught up in development changes.
 
 				Please click this link to activate your account and set up your character:
-				http://www.zeniea.com/?verify&email='.$em.'&key='.$verify_hash.'
+				http://www.zeniea.com/verify.php?email='.$em.'&key='.$verify_hash.'
 
 
 				'; // message above including the link

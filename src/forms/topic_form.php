@@ -5,7 +5,7 @@ if(isset($_POST['new_topic']))
     $title = $_POST['title'];
     $body = $_POST['body'];
     $category = $_POST['category'];
-    $reply_to = "";
+    $reply_to = 0;
     $sticky = 0;
     $board_obj->postNewTopic($title, $body, $category, $sticky, $reply_to);
 }

@@ -30,8 +30,11 @@
     <h5 class="card-header">Topics</h5>
         {% if board.getTopicsByCategory(board_id) %}
             <div class="card-body">
-            {% set count = board.getTopicsByCategory(board_id) %}
-            {% for i in count..1|reverse  %}
+            {# {% set count = board.getTopicsByCategory(board_id) %} #}
+            {# {% for i in count..1|reverse  %} #}
+            {% for key, i in board.getPostsByCategory(board_id)|reverse %}
+            {% set username = board.getTopicOP(i) %}
+                <img src="{{ board.getAddedByAvatar(username) }}" class="avatar w-auto">
                 <h5><a href="https://zeniea.com/forum/?topic={{i}}">{{ board.getTopicTitle(i) }}</a></h5>
                     <div>                    
                         <small> Posted by 
