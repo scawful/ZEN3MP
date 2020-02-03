@@ -8,6 +8,8 @@ class Board {
         $this->user_obj = new User($user, $spdo);
     }
 
+    // Category
+
     public function getBoardsByCategory($id) {
         $stmt = $this->spdo->prepare('SELECT * FROM boards WHERE category = ?');
         $stmt->execute([$id]);
@@ -28,6 +30,8 @@ class Board {
         $id = $stmt->fetchColumn();
         return $id;
     }
+
+    // Board
 
     public function getBoardID($id) {
         $stmt = $this->spdo->prepare('SELECT id FROM boards WHERE category = ?');
@@ -70,6 +74,15 @@ class Board {
         $row = $stmt->rowCount();
         return $row;
     }
+
+    public function getNumBoards() {
+        $stmt = $this->spdo->prepare('SELECT COUNT(*) FROM boards');
+        $stmt->execute();
+        $num = $stmt->fetchColumn();
+        return $num;
+    }
+
+    // Replies
 
     public function getNumReplies($id) {
         $stmt = $this->spdo->prepare('SELECT * FROM topics WHERE reply_to = ?');
@@ -150,6 +163,11 @@ class Board {
         return $user_obj->getUserID();
     }
 
+    public function getAddedByAvatar($username) {
+        $user_obj = new User($username, $this->spdo);
+        return $user_obj->getAvatar();
+    }
+
     public function checkForBoard($id) {
         $stmt = $this->spdo->prepare('SELECT id FROM boards WHERE id = ?');
         $stmt->execute([$id]);
@@ -159,6 +177,18 @@ class Board {
         } else {
             header("Location:https://zeniea.com/forum/");
         }
+    }
+
+    public function getPostsByCategory($id) {
+        $posts = array();
+        $stmt = $this->spdo->prepare('SELECT id FROM topics WHERE category_id = ? AND reply_to = ?');
+        $stmt->execute([$id, 0]);
+        while($row = $stmt->fetch()) 
+        {
+            $id = $row['id'];
+            array_push($posts,$id);
+        }
+        return $posts;
     }
 
     public function postNewTopic($title, $body, $category, $sticky, $reply_to) {
