@@ -99,33 +99,35 @@
             <br>Friends: {{ num_friends }}
 
             {% if login_flag > 0 %}
-              <form class="" action="{{ username }}" method="POST">
-                {% if userLoggedIn != username %}
-                    {% if profile_user_obj.isClosed %}
-                        {% include 'lib/pages/user_closed.php' %}
-                    {% endif %}
-
+                {% if profile_user_obj.isClosed %}
+                    <p>User Closed.
+                    <br/>This account is Closed</p>
+                {% else %}
+                <form class="" action="{{ username }}" method="POST">
                     {% if userLoggedIn != username %}
-                        Mutual Friends: {{ user.getMutualFriends(username) }} <br />
-                    {% endif %}
 
-                    {% if user.isFriend(username) %}
-                        <input type="submit" name="remove_friend" class="btn btn-danger" value="Remove Friend"><br>
-                    {% elseif user.didReceiveRequest(username) %}
-                        <input type="submit" name="respond_request" class="btn-warning" value="Respond to Request"><br>
-                    {% elseif user.didSendRequest(username) %}
-                        <input type="submit" name="" class="btn btn-default" value="Request Sent."><br>
-                    {% else %}
-                        <input type="submit" name="add_friend" class="btn btn-success" value="Add Friend."><br>
-                    {% endif %}
-                    <br />
-                    <button type="button" class="btn btn-secondary btn-block">Challenge to a battle!</button>
-                    <button type="button" class="btn btn-info btn-block">Offer to trade.</button>
+                        {% if userLoggedIn != username %}
+                            Mutual Friends: {{ user.getMutualFriends(username) }} <br />
+                        {% endif %}
+
+                        {% if user.isFriend(username) %}
+                            <input type="submit" name="remove_friend" class="btn btn-danger" value="Remove Friend"><br>
+                        {% elseif user.didReceiveRequest(username) %}
+                            <input type="submit" name="respond_request" class="btn-warning" value="Respond to Request"><br>
+                        {% elseif user.didSendRequest(username) %}
+                            <input type="submit" name="" class="btn btn-default" value="Request Sent."><br>
+                        {% else %}
+                            <input type="submit" name="add_friend" class="btn btn-success" value="Add Friend."><br>
+                        {% endif %}
+                        <br />
+                        <button type="button" class="btn btn-secondary btn-block">Challenge to a battle!</button>
+                        <button type="button" class="btn btn-info btn-block">Offer to trade.</button>
+                        {% endif %}
+                    
+                </form>
+                <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#post_form" style="margin-top: 10px;">Post Something</button>
 
                 {% endif %}
-               </form>
-               <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#post_form" style="margin-top: 10px;">Post Something</button>
-
             {% endif %}
         </div>
 
@@ -134,6 +136,7 @@
 {% block side %}
     <div class="titleBar">Character</div>
         <div class="article">
+        {% if char_obj.checkForCharacter == true %}
             {{ char_obj.getCharacterName }} <br />
             Level: {{ char_obj.getCharacterLevel }} <br />
             Class: {{ char_obj.getCharacterClass }} <br />
@@ -158,6 +161,11 @@
 
             <strong>Attributes</strong> <br /><hr style="margin: 0px">
             {{ char_obj.listCharacterAttributes }}
+            {% elseif character.checkForCharacter == true %}
+            {% else %}
+            <a href="/?new_character">New Character</a>
+
+        {% endif %}
         </div>
         <!-- Modal -->
         <div class="modal fade" id="post_form" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
