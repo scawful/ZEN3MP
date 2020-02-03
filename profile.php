@@ -1,6 +1,5 @@
 <?php
 namespace zen3mp;
-
 require('src/config.php');
 require('src/incl.php');
 require __DIR__ . '/vendor/autoload.php';
@@ -20,7 +19,11 @@ if(isset($_GET['profile_username'])) {
   $user_details_query = $spdo->prepare('SELECT * FROM users WHERE username = ?');
   $user_details_query->execute([$username]);
   $user_array = $user_details_query->fetch();
-  $prof_num_friends = (substr_count($user_array['friend_list'], ",")) - 1;
+  if ($user_array > 0) {
+    $prof_num_friends = (substr_count($user_array['friend_list'], ",")) - 1;
+  } else {
+      header("Location: https://zeniea.com/");
+  }
 }
 
 if(isset($_POST['remove_friend'])) {
