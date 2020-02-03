@@ -1,0 +1,135 @@
+{% extends "base.twig" %}
+{% block title %} Quests {% endblock %}
+
+{% block main %}
+
+    {% if q_id == 0 %}
+    <div class="card">
+        <h4 class="card-header">Main Quests</h4>
+        {% set count = quest.getNumQuestCategories %}
+        {% for i in 1..count %}
+            <div class="card-body pb-0">
+                <h5>
+                    {{ quest.getQuestCategoryTitle(i) }}
+                    <div class='float-right'>
+                        <a href='?quest&q={{i}}' class='btn btn-primary'>Begin Quest</a>
+                    </div>
+                </h5>
+                    <small>Level Required: {{ quest.getQuestCategoryLevel(i) }} <br> {{ quest.getQuestCategoryDesc(i) }} </small>
+                    <hr>
+            </div>
+        
+        {% endfor %}
+        <h4 class="card-header">Open Worlds</h4>
+            <div class="card-body">
+                <h5>Coming soon</h5>
+            </div>
+    </div>
+    {% else %}
+        {% if p_id != 0 %}
+            {# {{ quest.loadPage(p_id) }} #}
+            {# Quest Page #}
+                <div class='card'>
+				<div class='card-header'>{{ quest.getQuestPageTitleByCategory(q_id, p_id) }}</div>
+				<img class='card-img-top' src='https://zeniea.com/img/quests/pages/{{ quest.getQuestPageMediaByCategory(q_id, p_id) }}'>
+				<div class='card-body'>
+					<p class='card-text'>{{ quest.getQuestPageBodyByCategory(q_id, p_id) }}</p>
+					<div class='d-flex justify-content-between d-inline'>
+					<div class='float-left'>
+		            <a href='?quest&q={{q_id}}&p={{p_id - 1}}' class='btn btn-primary'>
+						<i class='typcn typcn-arrow-left-thick icon'></i> Previous Page
+					</a>
+					</div>
+
+						<a href='' class='btn btn-primary'>
+							<i class='typcn typcn-bookmark icon'></i> Save / Load
+						</a>
+						<a href='' class='btn btn-primary'>
+							<i class='typcn typcn-archive icon'></i> Logs
+						</a>
+						<a href='' class='btn btn-primary'>
+							<i class='typcn typcn-document-text icon'></i> Author's Note
+						</a>
+
+					<div class='float-right'>
+		            <a href='?quest&q={{q_id}}&p={{p_id + 1}}' class='btn btn-primary'>
+						Next Page <i class='typcn typcn-arrow-right-thick icon'></i>
+					</a>
+					</div>
+					</div>
+				</div>
+			</div>
+        {% elseif p_id == 0 %}
+            {# {{ quest.showQuestHome(q_id) }} #}
+            {# Quest Home Page #}
+            <div class='card'>
+                <div class='card-header'>{{ quest.getQuestPageTitleByCategory(q_id, p_id) }}</div>
+                <img class='card-img-top' src='https://zeniea.com/img/quests/pages/{{ quest.getQuestPageMediaByCategory(q_id, p_id) }}'>
+                <div class='card-body'>
+                <p class='card-text'>{{ quest.getQuestPageBodyByCategory(q_id, p_id) }}</p>
+				  	<div class='float-left'>
+	  	            <a href='?quest' class='btn btn-primary'>
+	  					<i class='typcn typcn-arrow-left-thick icon'></i> Return to Worlds
+	  				</a>
+	  	            </div>
+		            <div class='float-right'>
+		            <a href='?quest&q={{q_id}}&p={{p_id + 1}}' class='btn btn-primary'>Begin Quest
+						<i class='typcn typcn-arrow-right-thick icon'></i></a>
+		            </div>
+		        </div>
+		      </div>
+
+        {% endif %}
+    {% endif %}
+
+
+
+
+{% endblock %}
+
+{% block profile %}
+<div class="titleBar">Character</div>
+    <div class="article">
+        {% if character.checkForCharacter == true %}
+            {{ character.getCharacterName }} <br />
+            Level: {{ character.getCharacterLevel }} <br />
+            Class: {{ character.getCharacterClass }} <br />
+            Race: {{ character.getCharacterRace }} <br />
+                    <div class='progress' style='margin-bottom: 5px; width: 100%;'>
+                                <div class='progress-bar bg-success' role='progressbar' style='width: 100%' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100'>
+                        Health: {{ character.getCharacterHealth }}
+                    </div>
+                            </div>
+                    <div class='progress' style='margin-bottom: 5px; width: 100%;'>
+                                <div class='progress-bar bg-info' role='progressbar' style='width: 100%' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100'>
+                        Mana: {{ character.getCharacterMana }}
+                    </div>
+                            </div>
+                    <div class='progress' style='margin-bottom: 5px; width: 100%;'>
+                                <div class='progress-bar bg-warning' role='progressbar' style='width: 100%' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100'>
+                        Fatigue: {{ character.getCharacterFatigue }}
+                    </div>
+                </div>
+
+                <strong>Attributes</strong> <br /><hr style="margin: 0px">
+                {{ character.listCharacterAttributes }}
+        {% else %}
+            <a href="?new_character">New Character</a>
+
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block side %}
+    {% if q_id == 0 %}
+    <div class="titleBar">Activity</div>
+        <div class="article">
+        </div>
+    {% else %}
+    <div class="titleBar">Location</div>
+        <div class="article">
+            <br />
+        </div>
+    {% endif %}
+{% endblock %}
