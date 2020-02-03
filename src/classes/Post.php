@@ -7,12 +7,11 @@ class Post {
     private $spdo;
     private $rpdo;
 
-	public function __construct($user, $spdo, $rpdo){
+	public function __construct($user, $spdo, $rpdo) {
         $this->user_obj = new User($user, $spdo);
         $this->username = $this->user_obj->getUsername();
         $this->spdo = $spdo;
         $this->rpdo = $rpdo;
-        
 	}
 
 	public function submitPhoto($user_to, $imageName) {
@@ -45,14 +44,20 @@ class Post {
 
 	}
 
-	public function submitNewsPost($title, $body, $added_by) {
+    public function submitNewsPost($title, $body, $added_by, $category) 
+    {
+        $date_added = date("Y-m-d H:i:s");
+        $qry = $this->spdo->prepare('SELECT MAX(post_id) FROM news_posts WHERE category = ?');
+        $qry->execute([$category]);
+        $post_id = $qry->fetchColumn();
 
-		//Current date and time
-		$date_added = date("Y-m-d H:i:s");
+        if ($post_id == 0)
+            $post_id = 1;
+        else
+            $post_id++;
 
-		$stmt = $this->spdo->prepare('INSERT INTO news_posts VALUES(0, ?, ?, ?, ?, ?)');
-		$stmt->execute([$title, $body, $added_by, $date_added, "0"]);
-
+		$stmt = $this->spdo->prepare('INSERT INTO news_posts VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
+		$stmt->execute([$post_id, $title, $body, $added_by, $date_added, "0", $category]);
 	}
 
 	public function submitPost($body, $user_to, $imageName) {
@@ -542,7 +547,6 @@ class Post {
 		  }
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public function loadNewsPosts($data, $limit) {
 
@@ -556,10 +560,10 @@ class Post {
 
 
 		$str = ""; //String to return
-		$stmt = $this->spdo->prepare('SELECT * FROM news_posts ORDER BY id DESC');
-		$stmt->execute();
+		$stmt = $this->spdo->prepare('SELECT * FROM news_posts WHERE category = ? ORDER BY id DESC');
+		$stmt->execute(["news"]);
 
-		$stmt2 = $this->spdo->query('SELECT COUNT(*) FROM news_posts ORDER BY id DESC');
+		$stmt2 = $this->spdo->query('SELECT COUNT(*) FROM news_posts WHERE category = "news" ORDER BY id DESC');
 		$num_rows = $stmt2->fetchColumn();
 
 	    if($num_rows > 0) {
@@ -574,7 +578,6 @@ class Post {
 	          	$body = $row['body'];
 	          	$added_by = $row['added_by'];
 	          	$date_time = $row['date_added'];
-
 
 				$user_logged_obj = new User($userLoggedIn, $this->spdo);
 				if($user_logged_obj->isFriend($added_by)){
@@ -628,9 +631,60 @@ class Post {
 
 		echo $str;
 
-	}
+    }
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function getNumIOPosts()
+    {
+        $stmt = $this->spdo->prepare('SELECT * FROM news_posts WHERE category = ?');
+        $stmt->execute(["io"]);
+        $array = $stmt->rowCount();
+        return $array;
+    }
+    
+    public function getIOPostTitle($post_id)
+    {
+        $stmt = $this->spdo->prepare('SELECT title FROM news_posts WHERE category = ? AND post_id = ?');
+        $stmt->execute(["io", $post_id]);
+        $title = $stmt->fetchColumn();
+        return $title;
+    }
+
+    public function getIOPostBody($post_id)
+    {
+        $stmt = $this->spdo->prepare('SELECT body FROM news_posts WHERE category = ? AND post_id = ?');
+        $stmt->execute(["io", $post_id]);
+        $body = $stmt->fetchColumn();
+        return $body;
+    }
+
+    public function getIOPostAddedBy($post_id)
+    {
+        $stmt = $this->spdo->prepare('SELECT added_by FROM news_posts WHERE category = ? AND post_id = ?');
+        $stmt->execute(["io", $post_id]);
+        $added_by = $stmt->fetchColumn();
+        return $added_by;
+    }
+
+    public function getIOPostDate($post_id)
+    {
+        $stmt = $this->spdo->prepare('SELECT date_added FROM news_posts WHERE category = ? AND post_id = ?');
+        $stmt->execute(["io", $post_id]);
+        $date_added = $stmt->fetchColumn();
+        return $date_added;
+    }
+
+    public function getIOPostAddedByAvatar($post_id)
+    {
+        $stmt = $this->spdo->prepare('SELECT added_by FROM news_posts WHERE category = ? AND post_id = ?');
+        $stmt->execute(["io", $post_id]);
+        $added_by = $stmt->fetchColumn();
+        $avi_obj = new User($added_by, $this->spdo);
+        $avatar = $avi_obj->getAvatar();
+        return $avatar;
+    }
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public function getSinglePost($post_id) {
@@ -786,7 +840,7 @@ class Post {
 	    echo $str;
 
 
-		}
+	}
 
 	private function datetime($date_time) {
 		//post timeframe

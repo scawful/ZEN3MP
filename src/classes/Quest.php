@@ -15,123 +15,67 @@ class Quest {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-	public function listQuests($category){
-
-		$stmt = $this->rpdo->query("SELECT * FROM quests WHERE active='yes' AND category='$category'");
-		$str = "";
-
-		while($row = $stmt->fetch()) {
-			$id = $row['id'];
-			$title = $row['title'];
-			$desc = $row['desc'];
-			$lvl = $row['lvreq'];
-
-			$str .= "<h5>$title
-			        <div class='float-right'>
-			          <a href='?world&q=$id' class='btn btn-primary'>Begin Quest</a>
-			        </div>
-			      </h5>
-			      <small>Level Required: $lvl <br> $desc  </small>
-			      <hr>";
-		}
-		echo $str;
-
-	}
-
-	public function showQuestHome($quest_id) { // load first page of a quest
-
-		$stmt = $this->rpdo->prepare('SELECT * FROM quest_pages WHERE q_id = ?');
-		$stmt->execute([$quest_id]);
-		$quest = $stmt->fetch();
-
-		$id = $quest['id'];
-		$title = $quest['title'];
-		$body = $quest['body'];
-		$media = $quest['media'];
-		$next_page = $quest['p_id'] + 1;
-
-		echo "<div class='card'>
-		        <div class='card-header'>$title</div>
-		        <img class='card-img-top' src='$media'>
-		        <div class='card-body'>
-		          <p class='card-text'>$body</p>
-				  	<div class='float-left'>
-	  	            <a href='?world' class='btn btn-primary'>
-	  					<i class='typcn typcn-arrow-left-thick icon'></i> Return to Worlds
-	  				</a>
-	  	            </div>
-		            <div class='float-right'>
-		            <a href='?world&q=$quest_id&p=$next_page' class='btn btn-primary'>Begin Quest
-						<i class='typcn typcn-arrow-right-thick icon'></i></a>
-		            </div>
-		        </div>
-		      </div>
-		      ";
-	}
-
-////////////////////////////////////////////////////////////////////////////////////////////
-
-	public function loadPage($page_id) {
-
-		$stmt = $this->rpdo->prepare('SELECT * FROM quest_pages WHERE p_id = ?');
-		$stmt->execute([$page_id]);
-		$page = $stmt->fetch();
-
-		$title = $page['title'];
-		$body = $page['body'];
-		$media = $page['media'];
-		$quest = $page['q_id'];
-		$prevpage = $page_id - 1;
-		$nextpage = $page_id + 1;
-
-		if($page_id == 1) {
-			$leftmsg = "Return Home";
-		} else {
-			$leftmsg = "Previous Page";
-		}
-
-		echo "<div class='card'>
-				<div class='card-header'>$title</div>
-				<img class='card-img-top' src='$media'>
-				<div class='card-body'>
-					<p class='card-text'>$body</p>
-					<div class='d-flex justify-content-between d-inline'>
-					<div class='float-left'>
-					<a href='?world&q=$quest&p=$prevpage' class='btn btn-primary'>
-						<i class='typcn typcn-arrow-left-thick icon'></i> $leftmsg
-					</a>
-					</div>
-
-						<a href='' class='btn btn-primary'>
-							<i class='typcn typcn-bookmark icon'></i> Save / Load
-						</a>
-						<a href='' class='btn btn-primary'>
-							<i class='typcn typcn-archive icon'></i> Logs
-						</a>
-						<a href='' class='btn btn-primary'>
-							<i class='typcn typcn-document-text icon'></i> Author's Note
-						</a>
-
-					<div class='float-right'>
-					<a href='?world&q=$quest&p=$nextpage' class='btn btn-primary'>
-						Next Page <i class='typcn typcn-arrow-right-thick icon'></i>
-					</a>
-					</div>
-					</div>
-				</div>
-			</div>
-			";
-	}
-
-////////////////////////////////////////////////////////////////////////////////////////////
+    public function getNumQuestCategories()
+    {
+        $stmt = $this->rpdo->prepare('SELECT COUNT(*) FROM quests WHERE active = ?');
+        $stmt->execute(["yes"]);
+        $num = $stmt->fetchColumn();
+        return $num;
+    }
 
     public function addQuestCategory($title, $description, $lvreq, $category) 
     {	  
 		$stmt = $this->rpdo->prepare('INSERT INTO quests VALUES(0, ?, ?, ?, ?, ?)');
 		$stmt->execute([$title, $description, $lvreq, 'yes', $category]);
-	}
+    }
+    
+    public function addQuestPage($title, $body, $media, $authors_note, $quest_id)
+    {
+        $prpr = $this->rpdo->prepare('SELECT MAX(p_id) FROM quest_pages WHERE q_id = ?');
+        $prpr->execute([$quest_id]);
+        $page_id = $prpr->fetchColumn();
+        if($page_id > 0)
+            $page_id++;
 
-	public function battleMenu() {
+        //Current date and time
+        $date_added = date("Y-m-d H:i:s");
+        $added_by = $this->user->getUsername();
+
+        // temporary variables 
+        $location = 1;
+        $deleted = 0;
+
+        $stmt = $this->rpdo->prepare('INSERT INTO quest_pages VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$quest_id, $page_id, $location, $title, $body, $media, $added_by, $authors_note, $date_added, $deleted]);
+    }
+
+    public function deleteQuestPage($q_id, $p_id) 
+    {
+        $set = 0;
+        $prpr = $this->rpdo->prepare('SELECT MAX(p_id) FROM quest_pages WHERE q_id = ?');
+        $prpr->execute([$q_id]);
+        $page_id = $prpr->fetchColumn();
+
+        $stmt = $this->rpdo->prepare('DELETE FROM quest_pages WHERE q_id = ? AND p_id = ?');
+        $stmt->execute([$q_id, $p_id]);
+
+        if($p_id < $page_id)
+        {
+            $num = $this->getNumQuestPagesByCategory($q_id, $p_id);
+            for ($x = 0; $x < $num; $x++) 
+            {
+                $qry = $this->rpdo->prepare('UPDATE quest_pages SET p_id = ? WHERE q_id = ? AND p_id = ?');
+                $qry->execute([$set, $q_id, $x]);
+                if ($qry->rowCount() > 0)
+                    $set++;
+            }
+        }
+
+        header("Location: https://zeniea.com/above/?viewpages&q=$q_id");
+    }
+
+    public function battleMenu() 
+    {
 		echo "<div class='btn-group' role='group' aria-label='Commands'>
 		        <button type='button' class='btn btn-warning'>Fight</button>
 		        <button type='button' class='btn btn-info'>Mana</button>
@@ -149,10 +93,19 @@ class Quest {
         return $pages;
     }
 
+    public function getNumQuestPagesByCategory($id)
+    {
+        $stmt = $this->rpdo->prepare('SELECT COUNT(*) from quest_pages WHERE q_id = ?');
+        $stmt->execute([$id]);
+        $num = $stmt->fetchColumn();
+        $num--;
+        return $num;
+    }
+
     public function getNumQuests()
     {
-        $stmt = $this->rpdo->prepare('SELECT COUNT(*) FROM quests');
-        $stmt->execute();
+        $stmt = $this->rpdo->prepare('SELECT COUNT(*) FROM quests WHERE active = ?');
+        $stmt->execute(["yes"]);
         $quests = $stmt->fetchColumn();
         return $quests;
     }
@@ -165,28 +118,45 @@ class Quest {
         return $title;
     }
 
-    public function getQuestPageTitle($id)
+    public function getQuestCategoryDesc($id) 
     {
-        $stmt = $this->rpdo->prepare('SELECT title FROM quest_pages WHERE id = ?');
+        $stmt = $this->rpdo->prepare('SELECT tagline FROM quests WHERE id = ?');
         $stmt->execute([$id]);
+        $desc = $stmt->fetchColumn();
+        return $desc;
+    }
+
+    public function getQuestCategoryLevel($id) 
+    {
+        $stmt = $this->rpdo->prepare('SELECT lvreq FROM quests WHERE id = ?');
+        $stmt->execute([$id]);
+        $lvl = $stmt->fetchColumn();
+        return $lvl;
+    }
+
+    public function getQuestPageTitleByCategory($q_id, $p_id)
+    {
+        $stmt = $this->rpdo->prepare('SELECT title FROM quest_pages WHERE q_id = ? AND p_id = ?');
+        $stmt->execute([$q_id, $p_id]);
         $title = $stmt->fetchColumn();
         return $title;
     }
 
-    public function getQuestPageBody($id)
+    public function getQuestPageBodyByCategory($q_id, $p_id)
     {
-        $stmt = $this->rpdo->prepare('SELECT body FROM quest_pages WHERE id = ?');
-        $stmt->execute([$id]);
+        $stmt = $this->rpdo->prepare('SELECT body FROM quest_pages WHERE q_id = ? AND p_id = ?');
+        $stmt->execute([$q_id, $p_id]);
         $body = $stmt->fetchColumn();
         return $body;
     }
 
-    public function getQuestPageBodyPreview($id)
+    public function getQuestPageBodyPreviewByCategory($q_id, $p_id)
     {
-        $stmt = $this->rpdo->prepare('SELECT body FROM quest_pages WHERE id = ?');
-        $stmt->execute([$id]);
+        $stmt = $this->rpdo->prepare('SELECT body FROM quest_pages WHERE q_id = ? AND p_id = ?');
+        $stmt->execute([$q_id, $p_id]);
         $body = $stmt->fetchColumn();
         $max = 40;
+        $string = $body;
         if (strlen($body) > $max) 
         {
             $shorter = substr($body, 0, $max+1);
@@ -195,21 +165,42 @@ class Quest {
         return $string;
     }
 
-    public function getQuestPageMedia($id)
+    public function getQuestPageMediaByCategory($q_id, $p_id)
     {
-        $stmt = $this->rpdo->prepare('SELECT media FROM quest_pages WHERE id = ?');
-        $stmt->execute([$id]);
+        $stmt = $this->rpdo->prepare('SELECT media FROM quest_pages WHERE q_id = ? AND p_id = ?');
+        $stmt->execute([$q_id, $p_id]);
         $media = $stmt->fetchColumn();
         return $media;
     }
 
-    public function getQuestPageCategoryTitle($id)
+    public function getQuestPageNoteByCategory($q_id, $p_id)
     {
-        $stmt = $this->rpdo->prepare('SELECT q_id FROM quest_pages WHERE id = ?');
-		$stmt->execute([$id]);
-        $quest_id = $stmt->fetchColumn();
+        $stmt = $this->rpdo->prepare('SELECT author_note FROM quest_pages WHERE q_id = ? AND p_id = ?');
+        $stmt->execute([$q_id, $p_id]);
+        $note = $stmt->fetchColumn();
+        return $note;
+    }
+
+    public function getQuestPageAuthorByCategory($q_id, $p_id)
+    {
+        $stmt = $this->rpdo->prepare('SELECT added_by FROM quest_pages WHERE q_id = ? AND p_id = ?');
+        $stmt->execute([$q_id, $p_id]);
+        $author = $stmt->fetchColumn();
+        return $author;
+    }
+
+    public function getQuestPageDateByCategory($q_id, $p_id)
+    {
+        $stmt = $this->rpdo->prepare('SELECT date FROM quest_pages WHERE q_id = ? AND p_id = ?');
+        $stmt->execute([$q_id, $p_id]);
+        $date = $stmt->fetchColumn();
+        return $date;
+    }
+
+    public function getQuestPageCategoryTitle($q_id)
+    {
         $stmt2 = $this->rpdo->prepare('SELECT title FROM quests WHERE id = ?');
-        $stmt2->execute([$quest_id]);
+        $stmt2->execute([$q_id]);
         $quest = $stmt2->fetchColumn();
         return $quest;
     }
