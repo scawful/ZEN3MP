@@ -5,6 +5,7 @@ class ImageUpload {
     public $newImageName;
     public $imageFileName;
     public $errorMessage;
+    public $aboveDirectory;
 
     public function __construct() {
 
@@ -18,8 +19,9 @@ class ImageUpload {
       
         if($imageName != "")
         {
-            $targetDir = "../../img/" . $directory;
+            $targetDir = $directory;
             $this->imageFileName =  uniqid() . basename($imageName);
+            $this->aboveDirectory = $targetDir;
             $imageName = $targetDir . $this->imageFileName;
             $imageFileType = pathinfo($imageName, PATHINFO_EXTENSION);
       
@@ -38,7 +40,6 @@ class ImageUpload {
             {
                 if(move_uploaded_file($_FILES['new-image']['tmp_name'], $imageName)) {
                     //image uploaded okay
-                    $this->newImageName = str_replace("../../", "/", $imageName);
                 }
                 else {
                     //image did not upload
@@ -50,8 +51,21 @@ class ImageUpload {
         return $uploadOk;
     }
 
+    public function getAboveImageDir() 
+    {
+        $this->newImageName = str_replace("../../", "/", $this->imageFileName);
+        return $this->newImageName;
+    }
+
+    public function parseDirectory($directory)
+    {
+        $this->aboveDirectory = str_replace("../../", "", $directory);
+        return $this->aboveDirectory;
+    }
+
     public function getNewImageDir() 
     {
+        $this->newImageName = str_replace("../", "https://zeniea.com/", $imageName);
         return $this->newImageName;
     }
 
