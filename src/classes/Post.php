@@ -14,11 +14,11 @@ class Post {
         $this->rpdo = $rpdo;
 	}
 
-	public function submitPhoto($user_to, $imageName) {
-
-		//Current date and time
+    public function submitMediaPost($user_to, $file_name, $file_type) 
+    {
+		// current date and time
 		$date_added = date("Y-m-d H:i:s");
-		//Get username
+		// get username
 		$added_by = $this->user_obj->getUsername();
 
 		//If user is on own profile, user_to is 'none'
@@ -26,8 +26,8 @@ class Post {
 			$user_to = "none";
 		}
 
-		$stmt = $this->spdo->prepare('INSERT INTO posts VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?)');
-		$stmt->execute([" ", $added_by, $user_to, $date_added, "no", "no", "0", $imageName]);
+		$stmt = $this->spdo->prepare('INSERT INTO posts VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+		$stmt->execute([" ", $added_by, $user_to, $date_added, "no", "no", "0", $file_name, $file_type]);
 		$returned_id = $this->spdo->lastInsertId();
 
 		//Insert notification
@@ -60,17 +60,19 @@ class Post {
 		$stmt->execute([$post_id, $title, $body, $added_by, $date_added, "0", $category]);
 	}
 
-	public function submitPost($body, $user_to, $imageName) {
+    public function submitPost($body, $user_to, $imageName, $file_type) 
+    {
+
 		$body = strip_tags($body); //removes html tags
-		//$body = mysqli_real_escape_string($this->con, $body);
-		$check_empty = preg_replace('/\s+/', '', $body); //Deltes all spaces
+		$check_empty = preg_replace('/\s+/', '', $body); //Deletes all spaces
 
-
-		if($check_empty != "") {
+        if($check_empty != "") 
+        {
 
 			$body_array = preg_split("/\s+/", $body);
 
-			foreach($body_array as $key => $value) {
+            foreach($body_array as $key => $value) 
+            {
 
 				if(strpos($value, "www.youtube.com/watch?v=") !== false) {
 
@@ -81,25 +83,26 @@ class Post {
 
 				}
 
-			}
+            }
+            
 			$body = implode(" ", $body_array);
 
-			//Current date and time
+			// current date and time
 			$date_added = date("Y-m-d H:i:s");
-			//Get username
+			// get username
 			$added_by = $this->user_obj->getUsername();
 
-			//If user is on own profile, user_to is 'none'
+			// if user is on own profile, user_to is 'none'
 			if($user_to == $added_by) {
 				$user_to = "none";
             }
 
-			//insert post
-			$stmt = $this->spdo->prepare('INSERT INTO posts VALUES(0, ?, ?, ?, ?, ?, ?, ?, ? )');
-			$stmt->execute([$body, $added_by, $user_to, $date_added, "no", "no", "0", $imageName]);
+			// insert post
+			$stmt = $this->spdo->prepare('INSERT INTO posts VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?, ? )');
+			$stmt->execute([$body, $added_by, $user_to, $date_added, "no", "no", "0", $imageName, $file_type]);
             $returned_id = $this->spdo->lastInsertId();
 
-            //Insert notification
+            // insert notification
             $notification = new Notification($added_by, $this->spdo);
             
             // calculate gold for post
@@ -199,7 +202,8 @@ class Post {
 		}
 	}
 
-	public function calculateTrend($term) {
+    public function calculateTrend($term) 
+    {
 
 		if($term != '') {
 			$stmt = $this->spdo->prepare('SELECT COUNT(*) FROM trends WHERE title = ?');
@@ -226,7 +230,7 @@ class Post {
 			$start = ($page - 1) * $limit;
 
 
-		$str = ""; //String to return
+        $str = ""; //String to return
 
 		$data_query = $this->spdo->prepare('SELECT * FROM posts WHERE deleted = ? ORDER BY id DESC');
 		$data_query->execute(["no"]);
@@ -243,8 +247,10 @@ class Post {
 				$id = $row['id'];
 				$body = $row['body'];
 				$added_by = $row['added_by'];
-				$date_time = $row['date_added'];
-				$imagePath = $row['image'];
+                $date_time = $row['date_added'];
+                $imagePath = $row['file_name'];
+                $file_name = $row['file_name'];
+                $file_type = $row['file_type'];
 
 				//Prepare user_to string so  it can included even if not posted
 				if($row['user_to'] == "none") {
@@ -308,16 +314,36 @@ class Post {
 				$comments_check->execute([$id]);
 				$comments_check_num = $comments_check->fetchColumn();
 
-		        //Timeframe
+		        // timeframe
 				$time_message = $this->datetime($date_time);
 
-				if($imagePath != "") {
+                // new file upload routine 
+                if ($file_type == "png" || $file_type == "jpeg" || $file_type == "jpg" || $file_type == "gif")
+                {
+                    $file_insert = "<div class='card-img'><img src='$file_name' class='post_image'></div>";
+                } 
+                else if ($file_type == "mp4" || $file_type == "avi" || $file_type == "mkv") 
+                {
+                    $file_insert = "<div class='w-100'><video class='post_image' controls>
+                                        <source src='https://zeniea.com/$file_name'>
+                                        Your browser does not support the video tag.
+                                        </video> 
+                                    </div>";
+                }
+                else {
+                    $file_insert = "";
+                }
+
+                // old image upload routine 
+                if ($imagePath != "") 
+                {
 					$imageDiv = "<div class='card-img'>
 									<img src='$imagePath' class='post_image'>
 								</div>";
 				} else {
 					$imageDiv = "";
-				}
+                }
+                
 
 				$str .= "<div class='status_post'>
 							<div class='card'>
@@ -329,7 +355,7 @@ class Post {
 									<a href='$added_by'>$displayname</a> $user_to
 									<span class='postTime'><a href='post.php?id=$id'>$time_message</a> $delete_button</span>
 							</h4>
-							<p class='card-text'>$body<br>$imageDiv</p>
+							<p class='card-text'>$body<br>$file_insert</p>
 							<br/>
 							<div class='widgets'>
 								<a onClick='javascript:toggle$id()' class='btn btn-primary card-link'>
@@ -342,7 +368,8 @@ class Post {
 						</div>
 						<p align='center'>
 						<div class='post_comment' id='toggleComment$id' style='display:none; width: 100%; overflow:auto; height: auto;'>
-							<iframe src='lib/pages/comment_frame.php?post_id=$id' id='comment_iframe' style='overflow:visible; height: 200px;' frameborder=0 width=100%></iframe>
+                            <iframe src='lib/pages/comment_frame.php?post_id=$id' id='comment_iframe' frameborder=0 width=100%></iframe>
+                            <!-- style='overflow:visible; height: 200px;' -->
 						</div>
 						</p>
 						";
@@ -401,7 +428,6 @@ class Post {
 		$data_query = $this->spdo->prepare('SELECT * FROM posts WHERE deleted = ? and ((added_by = ? AND user_to = ?) OR user_to = ?) ORDER BY id DESC');
 		$data_query->execute(['no', $profileUser, 'none', $profileUser]);
 		$num_rows = $data_query->rowCount();
-	    ///$data_query = mysqli_query($this->con, "SELECT * FROM posts WHERE deleted='no' AND ((added_by='$profileUser' AND user_to='none') OR user_to='$profileUser') ORDER BY id DESC");
 
 	    if($num_rows > 0) {
 
@@ -409,12 +435,13 @@ class Post {
 	        $count = 1;
 
 
-	        while($row = $data_query->fetch())  { ///mysqli_fetch_array($data_query)
+	        while($row = $data_query->fetch())  {
 				$id = $row['id'];
 				$body = $row['body'];
 				$added_by = $row['added_by'];
 				$date_time = $row['date_added'];
-				$imagePath = $row['image'];
+                $file_name = $row['file_name'];
+                $file_type = $row['file_type'];
 
 				if($num_iterations++ < $start)
 					continue;
@@ -439,9 +466,9 @@ class Post {
 
 				// Delete Post Button
 				if($userLoggedIn == $added_by)
-				$delete_button = "<button class='btn btn-danger close' id='post$id'><i class='typcn typcn-delete icon' style='font-size: 24px; margin: 5px;'></i></button>";
+				    $delete_button = "<button class='btn btn-danger close' id='post$id'><i class='typcn typcn-delete icon' style='font-size: 24px; margin: 5px;'></i></button>";
 				else
-				$delete_button = "";
+				    $delete_button = "";
 
 				$user_details_query = $this->spdo->prepare('SELECT displayname, avatar FROM users WHERE username = ?');
 				$user_details_query->execute([$added_by]);
@@ -475,16 +502,24 @@ class Post {
 	          	//Timeframe
 				$time_message = $this->datetime($date_time);
 
-				if($imagePath != "") {
-					$imageDiv = "<div class='card-img'>
-									<img src='$imagePath' class='post_image'>
-								</div>";
-				}
-				else {
-					$imageDiv = "";
-				}
+                // new file upload routine 
+                if ($file_type == "png" || $file_type == "jpeg" || $file_type == "jpg" || $file_type == "gif")
+                {
+                    $file_insert = "<div class='card-img'><img src='$file_name' class='post_image'></div>";
+                } 
+                else if ($file_type == "mp4" || $file_type == "avi" || $file_type == "mkv") 
+                {
+                    $file_insert = "<div class='w-100'><video class='post_image' controls>
+                                        <source src='https://zeniea.com/$file_name'>
+                                        Your browser does not support the video tag.
+                                        </video> 
+                                    </div>";
+                }
+                else {
+                    $file_insert = "";
+                }
 
-	          $str .= "<div class='status_post'>
+	            $str .= "<div class='status_post'>
 	                    <div class='card'>
 	                    <div class='card-body'>
 	                      <a href='$added_by'>
@@ -494,7 +529,7 @@ class Post {
 	                        <a href='$added_by'>$displayname</a> $user_to
 	                        <span class='postTime'><a href='post.php?id=$id'>$time_message</a> $delete_button</span>
 	                    </h4>
-	                    <p class='card-text'>$body<br>$imageDiv</p>
+	                    <p class='card-text'>$body<br>$file_insert</p>
 											<br/>
 	                    <div class='widgets'>
 	                      <a onClick='javascript:toggle$id()' class='btn btn-primary card-link'><i class='typcn typcn-arrow-back icon'> Replies <span class='badge badge-primary'>$comments_check_num</span></i></a>
@@ -708,8 +743,8 @@ class Post {
 			$body = $row['body'];
 			$added_by = $row['added_by'];
 			$date_time = $row['date_added'];
-			$imagePath = $row['image'];
-
+            $file_name = $row['file_name'];
+            $file_type = $row['file_type'];
 
 			//Prepare user_to string so  it can included even if not posted
 			if($row['user_to'] == "none") {
@@ -767,15 +802,24 @@ class Post {
 
 			//Timeframe
 			$time_message = $this->datetime($date_time);
+            
 
-			if($imagePath != "") {
-				$imageDiv = "<div class='card-img'>
-												<img src='$imagePath' class='post_image'>
-											</div>";
-			}
-			else {
-				$imageDiv = "";
-			}
+            // new file upload routine 
+            if ($file_type == "png" || $file_type == "jpeg" || $file_type == "jpg" || $file_type == "gif")
+            {
+                $file_insert = "<div class='card-img'><img src='$file_name' class='post_image'></div>";
+            } 
+            else if ($file_type == "mp4" || $file_type == "avi" || $file_type == "mkv") 
+            {
+                $file_insert = "<div class='w-100'><video class='post_image' controls>
+                                    <source src='https://zeniea.com/$file_name'>
+                                    Your browser does not support the video tag.
+                                    </video> 
+                                </div>";
+            }
+            else {
+                $file_insert = "";
+            }
 
 			$str .= "<div class='status_post'>
 								<div class='card'>
@@ -787,7 +831,7 @@ class Post {
 										<a href='$added_by'>$displayname</a> $user_to
 										<span class='postTime'>$time_message $delete_button</span>
 								</h4>
-								<p class='card-text'>$body<br>$imageDiv</p>
+								<p class='card-text'>$body<br>$file_insert</p>
 								<br/>
 								<div class='widgets'>
 									<a onClick='javascript:toggle$id()' class='btn btn-primary card-link'><i class='typcn typcn-arrow-back icon'> Replies <span class='badge badge-primary'>$comments_check_num</span></i></a>

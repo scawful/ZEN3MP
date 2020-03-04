@@ -6,26 +6,28 @@
 
   <div class="post_column">
 
-    <!-- <div class="alert alert-primary alert-dismissible fade show" role="alert">
-      <strong>Welcome to Zeniea!</strong> If you're interested check out these experimental pages.
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+      <strong>Welcome to Zeniea!</strong> Video upload feature is now live! 
+      <!-- If you're interested check out these experimental pages. -->
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <p>
+      <!--<p>
         <ul style="list-style-type: square;">
           <li><a href="?board">Discussion Boards</a></li>
         </ul>
-      </p>
-
-    </div>-->
+      </p>-->
+    </div>
 
       <form class="post_form" action="/" method="POST" enctype="multipart/form-data" autocomplete="off">
         <input type="text" class="form-control" name="post_text" id="post_text" placeholder="Type something here..." style="width: 90%; float: left; overflow: scroll;">
         <button type="submit" name="post" id="post_button" value="POST" class="btn btn-post" style="float: right;">POST</button>
         <br /><br />
-        <div class="custom-file">
-          <label class="custom-file-label" for="customFile">Choose file (optional)</label>
-          <input type="file" class="custom-file-input" id="customFile" name="fileToUpload">
+        <div class="row">
+            <div class="custom-file">
+                <label class="custom-file-label" for="customFile">Upload Media</label>
+                <input type="file" class="custom-file-input " id="customFile" name="fileToUpload">
+            </div>
         </div>
       </form>
     </div>

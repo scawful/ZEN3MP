@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . "/classes/Utils.php");
 require_once(__DIR__ . "/classes/ImageUpload.php");
+require_once(__DIR__ . "/classes/Upload.php");
 require_once(__DIR__ . "/classes/User.php");
 require_once(__DIR__ . "/classes/Character.php");
 require_once(__DIR__ . "/classes/Post.php");
