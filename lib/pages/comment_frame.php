@@ -41,13 +41,14 @@ $style = $user_obj->getUserStyle();
   <body>
 
     <script>
-    function toggle() {
-      var element = document.getElementById("comment_section");
+    function toggle() 
+    {
+        var element = document.getElementById("comment_section");
 
-    if(element.style.display == "block")
-          element.style.display = "none";
-      else
-      element.style.display = "block";
+        if (element.style.display == "block")
+            element.style.display = "none";
+        else
+            element.style.display = "block";
     }
   	</script>
      <?php
