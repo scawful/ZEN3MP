@@ -63,8 +63,8 @@ class Post {
     public function submitPost($body, $user_to, $imageName, $file_type) 
     {
 
-		$body = strip_tags($body); //removes html tags
-		$check_empty = preg_replace('/\s+/', '', $body); //Deletes all spaces
+		$body = strip_tags($body); // removes html tags
+		$check_empty = preg_replace('/\s+/', '', $body); // Deletes all spaces
 
         if($check_empty != "") 
         {
@@ -73,15 +73,14 @@ class Post {
 
             foreach($body_array as $key => $value) 
             {
-
-				if(strpos($value, "www.youtube.com/watch?v=") !== false) {
-
+                
+                if (strpos($value, "www.youtube.com/watch?v=") !== false) 
+                {
 					$link = preg_split("!&!", $value);
 					$value = preg_replace("!watch\?v=!", "embed/", $link[0]);
 					$value = "<br><iframe width=\'560\' height=\'315\' src=\'" . $value ."\'></iframe><br>";
 					$body_array[$key] = $value;
-
-				}
+                }
 
             }
             
@@ -205,7 +204,8 @@ class Post {
     public function calculateTrend($term) 
     {
 
-		if($term != '') {
+        if ($term != '') 
+        {
 			$stmt = $this->spdo->prepare('SELECT COUNT(*) FROM trends WHERE title = ?');
 			$stmt->execute([$term]);
 			$num_rows = $stmt->fetchColumn();
@@ -219,8 +219,8 @@ class Post {
 
 	}
 
-	public function loadPostsFriends($data, $limit) {
-
+	public function loadPostsFriends($data, $limit) 
+	{
 		$page = $data['page'];
 		$userLoggedIn = $this->user_obj->getUsername();
 
@@ -248,7 +248,6 @@ class Post {
 				$body = $row['body'];
 				$added_by = $row['added_by'];
                 $date_time = $row['date_added'];
-                $imagePath = $row['file_name'];
                 $file_name = $row['file_name'];
                 $file_type = $row['file_type'];
 
@@ -297,10 +296,11 @@ class Post {
           		?>
 
 				<script>
-				function toggle<?php echo $id; ?>() {
+				function toggle<?php echo $id; ?>() 
+                {
 					var element = document.getElementById("toggleComment<?php echo $id; ?>");
 
-					if(element.style.display == "block")
+					if (element.style.display == "block")
 						element.style.display = "none";
 					else
 						element.style.display = "block";
@@ -309,7 +309,7 @@ class Post {
 
 	          	<?php
 
-		        //Check how many comments
+		        // check how many comments
 				$comments_check = $this->spdo->prepare('SELECT COUNT(*) FROM comments WHERE post_id = ?');
 				$comments_check->execute([$id]);
 				$comments_check_num = $comments_check->fetchColumn();
@@ -333,17 +333,6 @@ class Post {
                 else {
                     $file_insert = "";
                 }
-
-                // old image upload routine 
-                if ($imagePath != "") 
-                {
-					$imageDiv = "<div class='card-img'>
-									<img src='$imagePath' class='post_image'>
-								</div>";
-				} else {
-					$imageDiv = "";
-                }
-                
 
 				$str .= "<div class='status_post'>
 							<div class='card'>

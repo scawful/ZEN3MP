@@ -16,11 +16,12 @@ include("src/auth.php");
 include("src/globals.php");
 include("src/forms/register_form.php");
 include("src/forms/login_form.php");
-include("src/forms/timeline_post_form.php");
+include("src/forms/file_upload_form.php");
 include("src/forms/message_post_form.php");
 include("src/forms/new_character_form.php");
 
-switch (True) {
+switch (True) 
+{
     case isset($_GET['news']):
         echo $twig->render('info/news.twig');
         break;
