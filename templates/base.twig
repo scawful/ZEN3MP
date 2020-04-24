@@ -6,47 +6,50 @@
 
     <section class="columns">
 
-    <div id="profcol" class="columnBase">
-    {% block profile %}
-      {% if login_flag > 0 %}
-        <div class="titleBar">User</div>
-          <div class="column">
-            <img class="avatar" src="{{ user.avatar }}" alt="{{ user.displayname }}'s Avatar">
-            <a href="/{{ user.username }}"><strong>{{ user.displayname }}</strong></a>
-            <span class="badge badge-dark">{{ user.rank }}</span>
-            <br />Posts: {{ user.numPosts }}
-            <br />Likes: {{ user.numLikes }}
-            <br />Friends: {{ user.getNumberOfFriends }}
-        <br />
-        
-        <strong>Character</strong>
-        <hr style="margin: 0px;">
-        <ul style="padding: 0px;">
-            <li>Name:  {{ character.getCharacterName }} </li>
-            <li>Level: {{ character.getCharacterLevel }}</li>
-            <li>Gold: {{ character.getCharacterMoney }}</li>
-          
-        </ul>
+    {# <div id="profcol" class="columnBase">
 
-        <strong>Explore</strong>
-        <hr style="margin: 0px;">
-        <ul style="padding: 0px;">
-            <li>Newest User: <a href="https://zeniea.com/{{user.getNewestUserUN}}">{{ user.getNewestUserDN }}</a></li>
-            <li>Newest Item: <a href="https://zeniea.com/?store&item={{inventory.getNewestItemID}}">{{ inventory.getItemName(inventory.getNewestItemID) }}</a></li>
-
-        </ul>
-
-        </div>
-
-      {% else %}
-
-      {% endif %}
-    {% endblock %}
-    </div>
+    </div> #}
 
     <div id="maincol" class="columnBase"> {% block main %} {% endblock %} </div>
 
-    <div id="sidecol" class="columnBase"> {% block side %} {% endblock %} </div>
+    <div id="sidecol" class="columnBase">
+    
+      {% block profile %}
+        {% if login_flag > 0 %}
+          <div class="column">
+              <img class="avatar" src="{{ user.avatar }}" alt="{{ user.displayname }}'s Avatar">
+              <a href="/{{ user.username }}"><strong>{{ user.displayname }}</strong></a>
+              <span class="badge badge-dark">{{ user.rank }}</span>
+              <br />Posts: {{ user.numPosts }}
+              <br />Likes: {{ user.numLikes }}
+              <br />Friends: {{ user.getNumberOfFriends }}
+          <br />
+          
+          <strong>Character</strong>
+          <hr style="margin: 0px;">
+          <ul style="padding: 0px;">
+              <li>Name:  {{ character.getCharacterName }} </li>
+              <li>Level: {{ character.getCharacterLevel }}</li>
+              <li>Gold: {{ character.getCharacterMoney }}</li>
+            
+          </ul>
+
+          <strong>Explore</strong>
+          <hr style="margin: 0px;">
+          <ul style="padding: 0px;">
+              <li>Newest User: <a href="https://zeniea.com/{{user.getNewestUserUN}}">{{ user.getNewestUserDN }}</a></li>
+              <li>Newest Item: <a href="https://zeniea.com/?store&item={{inventory.getNewestItemID}}">
+                  {{ inventory.getItemName(inventory.getNewestItemID) }}</a>
+              </li>
+          </ul>
+        {% else %}
+
+        {% endif %}
+      {% endblock %}
+    
+      {% block side %} {% endblock %} 
+        </div>
+    </div>
 
     </section>
 

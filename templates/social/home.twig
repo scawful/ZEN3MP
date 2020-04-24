@@ -1,9 +1,9 @@
 {% extends "base.twig" %}
-{% block title %}Home{% endblock %}
+{% block title %}
+Home
+{% endblock %}
 
 {% block main %}
-<div class="titleBar">Timeline</div>
-
   <div class="post_column">
 
     <div class="alert alert-primary alert-dismissible fade show" role="alert">
@@ -37,7 +37,8 @@
 {% endblock %}
 
 {% block side %}
-    <div class="titleBar">Trending</div>
+    <strong>Trending</strong>
+    <hr style="margin: 0px;">
     <ul class="trending-list-group">
         {{ user.getTrends }}
     </ul>
