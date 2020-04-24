@@ -44,16 +44,18 @@ $style = $user_obj->getUserStyle();
       }
     ?>
     <style>
-    body {
+	body 
+	{
       background: none;
     }
     </style>
     <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/bootstrap.css" />
   </head>
   <body>
-<div class="float-right">
+	<div class="float-right">
 	<?php
-  	if(isset($_GET['post_id'])) {
+	if ( isset($_GET['post_id']) ) 
+	{
   		$post_id = $_GET['post_id'];
   	}
 
@@ -70,7 +72,8 @@ $style = $user_obj->getUserStyle();
     $total_user_likes = $row['num_likes'];
 
     //Like button
-  	if(isset($_POST['like_button'])) {
+	if ( isset($_POST['like_button']) ) 
+	{
   		$total_likes++;
 		$query = $spdo->prepare('UPDATE posts SET likes = ? WHERE id = ?');
 		$query->execute([$total_likes, $post_id]);
@@ -81,14 +84,17 @@ $style = $user_obj->getUserStyle();
 		$insert_user->execute([$userLoggedIn, $post_id]);
 
   		//Insert Notification
-      if($user_liked != $userLoggedIn) {
+	  if ( $user_liked != $userLoggedIn ) 
+	  {
         $notification = new Notification($userLoggedIn, $spdo);
         $notification->insertNotification($post_id, $user_liked, "like");
       }
 
-  	}
+	  }
+	  
   	//Unlike button
-  	if(isset($_POST['unlike_button'])) {
+	if( isset($_POST['unlike_button']) ) 
+	{
   		$total_likes--;
 		$query = $spdo->prepare('UPDATE posts SET likes = ? WHERE id = ?');
 		$query->execute([$total_likes, $post_id]);
@@ -104,19 +110,19 @@ $style = $user_obj->getUserStyle();
 	$check_query->execute([$userLoggedIn, $post_id]);
 	$num_rows = $check_query->rowCount();
 
-    if($num_rows > 0) {
+	if ( $num_rows > 0 ) 
+	{
   		echo '<form action="like_form.php?post_id=' . $post_id . '" method="POST" name="unlike_form" class="comment_like">
           <button type="submit" name="unlike_button" value="Unlike" class="btn btn-primary card-link">
-          <i class="typcn typcn-star-full-outline icon"></i> Unlike '. $total_likes .'</button>
-  			</form>
-  		';
+          <i class="typcn typcn-star-full-outline icon"></i> '. $total_likes .'</button>
+  			</form>';
   	}
-  	else {
+	else 
+	{
   		echo '<form action="like_form.php?post_id=' . $post_id . '" method="POST" name="like_form" class="comment_like">
         <button type="submit" name="like_button" value="Like" class="btn btn-primary card-link">
-        <i class="typcn typcn-star-outline icon"></i> Like '. $total_likes .'</button>
-  			</form>
-  		';
+        <i class="typcn typcn-star-outline icon"></i> '. $total_likes .'</button>
+  			</form>';
   	}
 
     ?>
