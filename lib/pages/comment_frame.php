@@ -32,7 +32,8 @@ $style = $user_obj->getUserStyle();
     <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/zen3mp.css" />
 
     <style>
-    body {
+    body 
+    {
       background: none; !important
     }
     </style>

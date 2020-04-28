@@ -5,6 +5,25 @@
 
 <div class="article">
     <h2>View Categories</h2>
+    <div class="view_page_container">
+    {% for i in 1..quest.getNumQuestCategories %}
+        <div class="view_page_elements">
+            <div class="view_page_column" style="width: 50px;"><h4>{{ i }}</h4></div>                    
+            <div class="view_page_column w-75">
+                <h5>{{ quest.getQuestCategoryTitle(i) }}</h5>
+                <br />
+            </div>
+            <div class="view_page_column w-100">
+                <p>{{ quest.getQuestCategoryDesc(i) }}</p>
+                <br />
+            </div>   
+            <div class="view_page_column">   
+                <a href="https://zeniea.com/above/?editcategory&q={{i}}" class="btn btn-success mb-1">Edit</a>
+                <a href="https://zeniea.com/above/?deletecategory&q={{i}}" class="btn btn-danger mb-1">Delete</a>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
 
 </div>
 
