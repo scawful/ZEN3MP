@@ -1,23 +1,30 @@
-<br>
 <div class="card">
   <form class="" action="" method="POST" style="text-align: left; margin: 10px;">
 
     <h4>Modify User Details:</h4>
-    <div class="form-group">
-      <label for="formGroupExampleInput">Display Name:</label>
-      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_array.displayname }}" name="displayname"  style="width: 300px;">
+    <div class="input-group w-50 mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">Display Name</span>
+      </div>
+      <input type="text" class="form-control w-50" id="formGroupExampleInput" value="{{ user_array.displayname }}" name="displayname"  >
     </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">E-Mail: </label>
-      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_array.email }}" name="email"  style="width: 300px;">
+    <div class="input-group w-50 mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">E-Mail</span>
+      </div>
+      <input type="text" class="form-control w-50" id="formGroupExampleInput" value="{{ user_array.email }}" name="email"  >
     </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">Avatar: (Temporary Solution) </label>
-      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_array.avatar }}" name="avatar" style="width: 300px;">
+    <div class="input-group w-50 mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">Avatar</span>
+      </div>
+      <input type="text" class="form-control w-50" id="formGroupExampleInput" value="{{ user_array.avatar }}" name="avatar" >
     </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">Header Image: (Temporary Solution) </label>
-      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_array.header_img }}" name="header_image" style="width: 300px;">
+    <div class="input-group w-50 mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">Header</span>
+      </div>
+      <input type="text" class="form-control w-50" id="formGroupExampleInput" value="{{ user_array.header_img }}" name="header_image" >
     </div>
 
     <!-- echo $message; -->
@@ -30,31 +37,44 @@
     <h4>Modify User About:</h4>
     <div class="form-group">
       <label for="formGroupExampleInput">Bio: *stripped tags until i add markdown*</label>
-      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.bio }}" name="userBio" style="width: 600px;">
+      {# <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.bio }}" name="userBio" style="width: 600px;"> #}
+      <textarea class="form-control w-50" name="userBio">{{ user_about.bio }}</textarea>
     </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput">Website: </label>
-      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.website }}" name="userWebsite"  style="width: 300px;">
+    <div class="input-group w-50 mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">Website</span>
+      </div>
+      <input type="text" class="form-control w-50" id="formGroupExampleInput" value="{{ user_about.website }}" name="userWebsite">
     </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">Twitter: </label>
-      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.twitter }}" name="userTwitter"  style="width: 300px;">
+    <div class="input-group w-50 mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">Twitter</span>
+      </div>
+      <input type="text" class="form-control w-50" id="formGroupExampleInput" value="{{ user_about.twitter }}" name="userTwitter">
     </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">YouTube: </label>
-      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.youtube }}" name="userYouTube" style="width: 300px;">
+    <div class="input-group w-50 mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">YouTube</span>
+      </div>
+      <input type="text" class="form-control w-50" id="formGroupExampleInput" value="{{ user_about.youtube }}" name="userYouTube">
     </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">Discord: </label>
-      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.discord }}" name="userDiscord" style="width: 300px;">
+    <div class="input-group w-50 mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">Discord</span>
+      </div>
+      <input type="text" class="form-control w-50" id="formGroupExampleInput" value="{{ user_about.discord }}" name="userDiscord">
     </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">Github: </label>
-      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.github }}" name="userGithub" style="width: 300px;">
+    <div class="input-group w-50 mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">GitHub</span>
+      </div>
+      <input type="text" class="form-control w-50" id="formGroupExampleInput" value="{{ user_about.github }}" name="userGithub">
     </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">Nintendo Switch: </label>
-      <input type="text" class="form-control" id="formGroupExampleInput" value="{{ user_about.switch }}" name="userSwitch" style="width: 300px;">
+    <div class="input-group w-50 mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">Nintendo Switch</span>
+      </div>
+      <input type="text" class="form-control w-50" id="formGroupExampleInput" value="{{ user_about.switch }}" name="userSwitch">
     </div>
 
     <button type="submit" name="update_about" id="update_details" class="btn btn-primary">Submit</button>
