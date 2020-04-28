@@ -33,14 +33,14 @@ Home
     </div>
 
   <div class="posts_area"></div>
-  <img id="loading" src="img/icons/loading.gif">
+  <img id="loading" src="img/icons/loading.gif" class="rounded mx-auto d-block">
 {% endblock %}
 
 {% block side %}
     <strong>Trending</strong>
     <hr style="margin: 0px;">
     <ul class="trending-list-group">
-        {{ user.getTrends }}
+        {{ posts.getTrends }}
     </ul>
 
 {% endblock %}
