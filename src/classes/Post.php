@@ -403,7 +403,8 @@ class Post {
 
 	}
 
-	public function loadProfilePosts($data, $limit) {
+    public function loadProfilePosts($data, $limit) 
+    {
 	    $page = $data['page'];
 	    $profileUser = $data['profileUsername'];
 	    $userLoggedIn = $this->user_obj->getUsername();
@@ -444,7 +445,8 @@ class Post {
 				}
 
 				//Prepare user_to string so  it can included even if not posted
-				if($row['user_to'] == "none") {
+                if ($row['user_to'] == "none") 
+                {
 					$user_to = "";
 				}
 				else {
@@ -454,7 +456,7 @@ class Post {
 				}
 
 				// Delete Post Button
-				if($userLoggedIn == $added_by)
+				if ($userLoggedIn == $added_by)
 				    $delete_button = "<button class='btn btn-danger close' id='post$id'><i class='typcn typcn-delete icon' style='font-size: 24px; margin: 5px;'></i></button>";
 				else
 				    $delete_button = "";
@@ -572,8 +574,8 @@ class Post {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public function loadNewsPosts($data, $limit) {
-
+    public function loadNewsPosts($data, $limit) 
+    {
 		$page = $data['page'];
 		$userLoggedIn = $this->user_obj->getUsername();
 
@@ -590,13 +592,13 @@ class Post {
 		$stmt2 = $this->spdo->query('SELECT COUNT(*) FROM news_posts WHERE category = "news" ORDER BY id DESC');
 		$num_rows = $stmt2->fetchColumn();
 
-	    if($num_rows > 0) {
-
+        if($num_rows > 0) 
+        {
 	        $num_iterations = 0;  //Number of results checked (not necessaryily posted)
 	        $count = 1;
 
-
-	        while($row = $stmt->fetch())  {
+            while($row = $stmt->fetch())  
+            {
 	        	$id = $row['id'];
 				$title = $row['title'];
 	          	$body = $row['body'];
@@ -604,49 +606,48 @@ class Post {
 	          	$date_time = $row['date_added'];
 
 				$user_logged_obj = new User($userLoggedIn, $this->spdo);
-				if($user_logged_obj->isFriend($added_by)){
-
+                if ( $user_logged_obj->isFriend($added_by) )
+                {
 					if($num_iterations++ < $start)
 						continue;
 
-				//Once 10 posts have been loaded, break
-				if($count > $limit) {
-					break;
-				}
-				else {
-					$count++;
-				}
+                    // Once 10 posts have been loaded, break
+                    if ($count > $limit) 
+                    {
+                        break;
+                    }
+                    else {
+                        $count++;
+                    }
 
-				// Delete Post Button
-				if($userLoggedIn == $added_by)
-					$delete_button = "<button class='btn btn-danger close' id='post$id'><i class='typcn typcn-delete icon' style='font-size: 24px; margin: 5px;'></i></button>";
-				else
-					$delete_button = "";
+                    // Delete Post Button
+                    if ($userLoggedIn == $added_by)
+                        $delete_button = "<button class='btn btn-danger close' id='post$id'><i class='typcn typcn-delete icon' style='font-size: 24px; margin: 5px;'></i></button>";
+                    else
+                        $delete_button = "";
 
-				$user_details_query = $this->spdo->prepare('SELECT displayname, avatar FROM users WHERE username = ?');
-				$user_details_query->execute([$added_by]);
-				$user_row = $user_details_query->fetch();
-	          	$displayname = $user_row['displayname'];
-	          	$avatar = $user_row['avatar'];
+                    $user_details_query = $this->spdo->prepare('SELECT displayname, avatar FROM users WHERE username = ?');
+                    $user_details_query->execute([$added_by]);
+                    $user_row = $user_details_query->fetch();
+                    $displayname = $user_row['displayname'];
+                    $avatar = $user_row['avatar'];
 
-	          	//Timeframe
-	        	$date_time_now = date("Y-m-d H:i:s");
+                    // Timeframe
+                    $date_time_now = date("Y-m-d H:i:s");
 
-				$str .= "<div class='post'>
-										<a href='$added_by'>
-										<img src='$avatar' width='50' class=avatar title='$added_by'>
-										</a>
-										<div class='feed-post-header'><strong>$title</strong></div>
-											<div class='postTime'>posted $date_time by <a href='/$added_by'>$added_by</a></div>
-									<p class='card-text'>$body</p>
-								</div>
-								";
-
-		            }
+                    $str .= "<div class='post'>
+                                <a href='$added_by'>
+                                <img src='$avatar' width='50' class=avatar title='$added_by'>
+                                </a>
+                                <div class='feed-post-header'><strong>$title</strong></div>
+                                <div class='postTime'>posted $date_time by <a href='/$added_by'>$added_by</a></div>
+                                <p class='card-text'>$body</p>
+                            </div>";
+		        }
 
 			} //End while loop
 
-			if($count > $limit)
+			if ($count > $limit)
 				$str .= "<input type='hidden' class='nextPage' value='" . ($page + 1) . "'>
 							<input type='hidden' class='noMorePosts' value='false'>";
 			else
@@ -709,7 +710,30 @@ class Post {
         return $avatar;
     }
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+
+    public function getTrends() 
+    {
+		$stmt = $this->spdo->prepare('SELECT * FROM trends ORDER BY hits DESC LIMIT 10');
+		$stmt->execute();
+		$row = $stmt->fetch();
+
+        foreach ($stmt as $row) 
+        {
+			$word = $row['title'];
+			$word_dot = strlen($word) >= 14 ? "..." : "";
+
+			$trimmed_word = str_split($word, 14);
+			$trimmed_word = $trimmed_word[0];
+            
+			echo "<li class='trending-list-group-item'>";
+			echo $trimmed_word . $word_dot;
+			echo "</li><br>";
+            
+		}
+	}
+
 
 	public function getSinglePost($post_id) {
 		$userLoggedIn = $this->user_obj->getUsername();
@@ -883,7 +907,7 @@ class Post {
 
 		$interval = $start_date->diff($end_date);
 		if($interval->y >= 1) {
-			if($interval == 1)
+			if($interval->y == 1)
 				$time_message = $interval->y . " year ago"; // 1 year ago
 			else
 				$time_message = $interval->y . " years ago"; // 1+ year ago
