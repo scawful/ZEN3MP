@@ -58,7 +58,7 @@ class Message {
 	        $user_from = $row['user_from'];
 	        $body = $row['body'];
 
-	        $div_top = ($user_to == $userLoggedIn) ? "<div class='message card' id='one'>" : "<div class='message card' id='two'>";
+	        $div_top = ($user_to == $userLoggedIn) ? "<div class='message' id='one'>" : "<div class='message' id='two'>";
 	        $data = $data . $div_top . $body . "</div><br><br>";
 		}
 		return $data;
@@ -118,7 +118,7 @@ class Message {
 		                      <small>
 		                      To: " . $user_found_obj->getDisplayName() . "</span>
 		                      " . $latest_message_details[2] . "</small></div>
-		                      <p id='grey' style='margin: 0;'>" . $latest_message_details[0] . $split . "</p>
+		                      <p class='m-0'>" . $latest_message_details[0] . $split . "</p>
 		                      </div></a>
 
 		                      ";

@@ -152,7 +152,7 @@ class Notification {
 
 		$interval = $start_date->diff($end_date);
 		if($interval->y >= 1) {
-			if($interval == 1)
+			if($interval->y == 1)
 				$time_message = $interval->y . " year ago"; // 1 year ago
 			else
 				$time_message = $interval->y . " years ago"; // 1+ year ago
