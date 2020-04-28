@@ -2,8 +2,6 @@
 {% block title %}Store{% endblock %}
 
 {% block main %}
-    <div class="titleBar">Item Store</div>
-
     {% if buy_id != 0 and confirm == 0 %}
         <div class="article">
             Confirm Purchase of {{ inventory.getItemName(buy_id) }} for {{ inventory.getItemCost(i_id) }}?
@@ -18,12 +16,10 @@
             }, 3000);
             </script>
     {% else %}
-        <br />
+        
     {% endif %}
 
     {% if i_id == 0 %}
-    <br>
-
 
     <ul class="nav nav-tabs">
       <li class="nav-item">
@@ -121,10 +117,8 @@
  {% endblock %}
 
  {% block side %}
- <div class="titleBar">Economy</div>
-   <div class="article">
+    <strong>Economics</strong>
+    <hr class="m-0" >
      {{ character.getAllCharacterMoney() }}
      Total Stores Value: {{ inventory.getInventoryValue() }} <br />
-   </div>
-
  {% endblock %}

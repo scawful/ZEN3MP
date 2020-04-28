@@ -87,14 +87,10 @@
 
 {% endblock %}
 
-{% block profile %}
-<div class="titleBar">Character</div>
-    <div class="article">
+{% block side %}
+    <strong>Stats</strong>
+    <hr class="m-0 mb-1">
         {% if character.checkForCharacter == true %}
-            {{ character.getCharacterName }} <br />
-            Level: {{ character.getCharacterLevel }} <br />
-            Class: {{ character.getCharacterClass }} <br />
-            Race: {{ character.getCharacterRace }} <br />
                     <div class='progress' style='margin-bottom: 5px; width: 100%;'>
                                 <div class='progress-bar bg-success' role='progressbar' style='width: 100%' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100'>
                         Health: {{ character.getCharacterHealth }}
@@ -117,19 +113,4 @@
             <a href="?new_character">New Character</a>
 
         {% endif %}
-    </div>
-
-{% endblock %}
-
-{% block side %}
-    {% if q_id == 0 %}
-    <div class="titleBar">Activity</div>
-        <div class="article">
-        </div>
-    {% else %}
-    <div class="titleBar">Location</div>
-        <div class="article">
-            <br />
-        </div>
-    {% endif %}
 {% endblock %}
