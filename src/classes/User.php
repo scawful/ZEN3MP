@@ -1,15 +1,24 @@
 <?php
 namespace zen3mp;
+use \Datetime;
 
 class User {
 	private $user;
 	private $spdo;
 
-	public function __construct($user, $spdo){
+    public function __construct($user, $spdo)
+    {
 		$this->spdo = $spdo;
 		$stmt = $this->spdo->prepare('SELECT * FROM users WHERE username = ?');
 		$stmt->execute([$user]);
-		$this->user = $stmt->fetch();
+        $this->user = $stmt->fetch();
+
+        $user_id = $this->user['id'];
+        $stmt = $this->spdo->prepare('SELECT * FROM users_about WHERE user_id = ?');
+		$stmt->execute([$user_id]);
+		$this->user_about = $stmt->fetch();
+
+        $this->promoteNewUser();
 	}
 
 	public function getUsername() {
@@ -40,8 +49,12 @@ class User {
 		return $this->user['avatar'];
 	}
 
-	public function getFriendList() {
+    public function getFriendList() {
 		return $this->user['friend_list'];
+    }
+
+    public function getUserStyle() {
+		return $this->user_about['style'];
 	}
 
 	public function getNumberOfFriendRequests() {
@@ -71,7 +84,7 @@ class User {
     }
 
     public function getNumActiveUsers() {
-        $stmt = $this->spdo->prepare('SELECT COUNT(*) from users WHERE verify_user = ?');
+        $stmt = $this->spdo->prepare('SELECT COUNT(*) FROM users WHERE verify_user = ?');
         $stmt->execute(["yes"]);
         $num = $stmt->fetchColumn();
         return $num;
@@ -92,12 +105,38 @@ class User {
 	public function isFriend($username_to_check) {
 		$usernameComma = "," . $username_to_check . ",";
 
-		if(strstr($this->user['friend_list'], $usernameComma) || $username_to_check == $this->user['username']) {
+		if (strstr($this->user['friend_list'], $usernameComma) || $username_to_check == $this->user['username']) {
 		  return true;
 		} else {
 		  return false;
 		}
-	}
+    }
+
+    public function isAdmin() {
+        $rank = $this->user['user_title'];
+		$array = array("Admin", "God");
+		if (in_array($rank, $array))
+            return true;
+		else
+			return false;
+    }
+    
+    // Incomplete 
+    public function fetchMutualFriends()
+    {
+        $stmt = $this->spdo->prepare('SELECT * FROM users WHERE verify_user = ?');
+        $stmt->execute(["yes"]);
+
+        while ( $row = $stmt->fetch() )
+        {
+            $user_to_check = $row['username'];
+            if ( $this->isFriend($user_to_check) )
+            {
+                echo $user_to_check . "<br />";
+            }
+        }
+        
+    }
 
 	// ==================== Friend Requests ========================
 
@@ -149,7 +188,8 @@ class User {
 		$stmt->execute([$user_to, $user_from]);
 	}
 
-	public function getMutualFriends($user_to_check) {
+    public function getMutualFriends($user_to_check) 
+    {
 		$mutualFriends = 0;
   		$user_array = $this->user['friend_list'];
   		$user_array_explode = explode(",", $user_array);
@@ -173,35 +213,33 @@ class User {
 		return $mutualFriends;
     }
 
+    public function promoteNewUser()
+    {
+        $stmt = $this->spdo->prepare('SELECT id, signup_date, num_posts FROM users WHERE user_closed = ?');
+        $stmt->execute(["no"]);
+        $row = $stmt->fetch();
 
-	public function getUserStyle() {
-		$user_id = $this->user['id'];
-		$stmt = $this->spdo->prepare('SELECT style FROM users_about WHERE user_id = ?');
-		$stmt->execute([$user_id]);
-		$row = $stmt->fetch();
-		$style = $row['style'];
-		return $style;
-	}
+        foreach ($stmt as $row)
+        {
+            $posts = $row['num_posts'];
+            $id = $row["id"];
+            $dt = $row["signup_date"];
+            $date = new DateTime($dt);
+            $now = new DateTime();
+            $diff = $now->diff($date);
 
-	public function getTrends() {
-		$stmt = $this->spdo->prepare('SELECT * FROM trends ORDER BY hits DESC LIMIT 10');
-		$stmt->execute();
-		$row = $stmt->fetch();
+            if ($diff->days > 30) 
+            {
+                if ( $posts > 5 )
+                {
+                    $stmt = $this->spdo->prepare('UPDATE users SET user_title = ? WHERE id = ?');
+                    $stmt->execute(["User", $id]);
+                }
+            }
+        }
+    }
 
-		foreach ($stmt as $row) {
-
-			$word = $row['title'];
-			$word_dot = strlen($word) >= 14 ? "..." : "";
-
-			$trimmed_word = str_split($word, 14);
-			$trimmed_word = $trimmed_word[0];
-
-			echo "<li class='trending-list-group-item'>";
-			echo $trimmed_word . $word_dot;
-			echo "</li><br>";
-
-		}
-	}
+	// ==================== Experimental Functions ========================
 
 	public function listUsers() {
 
@@ -213,32 +251,22 @@ class User {
 		while($row = $stmt->fetch()) {
 
 		    $num_friends_ulist = (substr_count($row['friend_list'], ",")) - 1;
-		    echo '<div class="card" style="width: 18rem; border: 1px solid black; margin: 2px;  overflow: hidden; flex-grow: 1;">
-		          <img class="card-img-top" src="' . $row['header_img'] . '" alt="Card image cap" style="height: 185px;">
+		    echo '<div class="card" style="width: 100%; border: 1px solid black; margin: 2px;  overflow: hidden;">
 		          <div class="card-body">
 		          <img src="' . $row['avatar'] . '" class="avatar">
-		          <h5 class="card-title"><a href="' . $row['username'] . '">' . $row['username'] . '</a></h5>
-		          <p class="card-text">Rank: '. $row['user_title'] . '
-		          <br>Posts: ' . $row['num_posts'] . '
-		          <br>Likes: ' . $row['num_likes'] . '
+				  <h5 class="card-title">
+					  <a href="' . $row['username'] . '">' . $row['username'] . '</a>
+					  <span class="badge badge-primary">'. $row['user_title'] . '</span> 
+				  </h5>
+		          Posts: ' . $row['num_posts'] . '
 		          <br>Friends: ' . $num_friends_ulist . '
-		          <br>Date Joined: ' . $row['signup_date'] . '</p>
+		          <br>Date Joined: ' . $row['signup_date'] . '
 		          </div>
 		          </div>
 		          ';
 		}
 		echo '</div>';
 
-	}
-
-	public function aboveButton() {
-		$rank = $this->user['user_title'];
-		$array = array("Admin", "God");
-		if (in_array($rank, $array)) {
-			echo "<a href='/above/' title='Above'><i class='typcn typcn-weather-cloudy icon btnPurp'></i></a>";
-		} else {
-			echo "";
-		}
 	}
 
 	public function getUserAboutDetails() {
