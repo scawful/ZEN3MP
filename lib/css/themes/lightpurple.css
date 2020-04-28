@@ -16,10 +16,10 @@ a:hover	{		color: #fff;	text-decoration:	underline;	}
   border: 1px solid !important;
 }
 #maincol		{
-  background-color: #b19cd9;
+  background-color: #c0aee0;
 }
 #sidecol	{
-  background-color:	#c0aee0;
+  background-color: #b19cd9;
 }
 #profcol    {
   background-color: #c0aee0;
@@ -124,7 +124,16 @@ a:hover	{		color: #fff;	text-decoration:	underline;	}
   *background-color: #482f7b;
   border-color: #482f7b;
 }
-
+.btn-post {
+    background-color: #7653bd;
+    color: #fff;
+    border-color: #6944b2;
+}
+.btn-post:hover {
+    color: #fff;
+    background-color: #53368d;
+    border-color: #482f7b;
+}
 .btn-secondary {
     background-color: #cb7785;
     border-color: #cb7785;
@@ -233,7 +242,7 @@ button:hover {
 /* Columns */
 
 .column {
-	background-color: #c0aee0;
+	background-color: #b19cd9;
 }
 
 .widgets {

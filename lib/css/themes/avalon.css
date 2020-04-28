@@ -75,6 +75,21 @@ a:hover {
   color: #fff !important;
 }
 
+/* Layout Redux */
+.columnBase  {
+    color: #444;
+    border: 1px solid #C6CACF !important;
+}
+#maincol {
+    background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+}
+#sidecol {
+    background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+}
+#profcol {
+    background: #F0F3F4 url(img/cell.gif) top left repeat-x;
+}
+
 .boxes  {
   color: #444;
   border: solid 1px #C6CACF !important;
