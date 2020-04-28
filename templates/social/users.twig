@@ -2,14 +2,12 @@
 {% block title %}Users{% endblock %}
 
 {% block main %}
-    <div class="titleBar">Active Users</div>
+    <div class="article">
     {{ user.listUsers }}
-
+    </div>
 {% endblock %}
 
 {% block side %}
-<div class="titleBar">Ads served by Google</div>
-    <div class="article">
     <br />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <!-- TallBoi -->
@@ -22,5 +20,5 @@
     <script>
          (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
-</div>
+    <br />
 {% endblock %}

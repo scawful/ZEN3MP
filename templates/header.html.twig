@@ -7,13 +7,13 @@
     <meta name="author" content="Justin Scofield">
     <meta name="keywords" content="Zeniea,ZEN3MP,HTML,CSS,XML,JavaScript,PHP,MySQL,jQuery,Bootstrap,RPG,Quest,Fight,Trade,Talk,Social,Network">
     <meta name="description" content="A modern role-playing quest game built into a social network! Uses HTML5, PHP, and Javascript to create a dynamic user experience. Currently in development and accepting registrants.">
-    <meta name="viewport" content="width=device-width, initial-scale=0.9">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Zeniea Stylesheets -->
     {% if login_flag > 0 %}
       <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/themes/{{ style }}.css" />
     {% else %}
-      <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/themes/purpleStyle.css" />
+      <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/themes/lightpurple.css" />
     {% endif %}
 
     <link rel="stylesheet" type="text/css" href="https://zeniea.com/lib/css/zen3mp.css" />
@@ -77,7 +77,9 @@
 
       <div class="profile-options">
         {% if login_flag > 0 %}
-            {{ user.aboveButton }}
+            {% if user.isAdmin %}
+                <a href='/above/' title='Above'><i class='typcn typcn-weather-cloudy icon btnPurp'></i></a>
+            {% endif %}
             <a href="/{{ userLoggedIn }}" title="Profile"><i class="typcn typcn-user icon btnPurp"></i></a>
                   {% if user.getNumberOfFriendRequests > 0 %}
                     <a href="requests.php"><span class="badge badge-notification" id="unread_requests">
@@ -108,7 +110,7 @@
       <input type="hidden" id="dropdown_data_type" value="">
     </div>
 
-    {% block javascript %}
+{% block javascript %}
     <script>
       $('#customFile').on('change',function(){
           //get the file name
