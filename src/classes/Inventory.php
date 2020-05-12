@@ -1,14 +1,16 @@
 <?php
 namespace zen3mp;
 
-class Inventory {
+class Inventory 
+{
 	private $user;
   	private $item_obj;
 	private $spdo;
 	private $rpdo;
 	private $character;
 
-	public function __construct($user, $character, $spdo, $rpdo) {
+    public function __construct($user, $character, $spdo, $rpdo) 
+    {
 		$this->rpdo = $rpdo;
 		$this->spdo = $spdo;
 		$this->user_obj = new User($user, $spdo);
@@ -37,14 +39,16 @@ class Inventory {
 		return $this->all_items[$id]["price"];	
     }
 
-    public function getNewestItemID() {
+    public function getNewestItemID() 
+    {
         $stmt = $this->rpdo->prepare('SELECT id FROM items ORDER BY date_added DESC');
         $stmt->execute();
         $item = $stmt->fetchColumn();
         return $item;
     }
 
-    public function getNumItems() {
+    public function getNumItems() 
+    {
         $stmt = $this->rpdo->prepare('SELECT COUNT(*) FROM items WHERE active = ?');
         $stmt->execute(["yes"]);
         $num = $stmt->fetchColumn();
@@ -84,17 +88,15 @@ class Inventory {
         } else {
             echo "Not enough gold for purchase!";
         }
-
-
 	}
 
-	public function listItems($store_type) {
-
+    public function listItems($store_type) 
+    {
 		$store_items = $this->rpdo->prepare('SELECT * FROM items WHERE active = ? AND type_id = ?');
 		$store_items->execute(["yes", $store_type]);
         $str = "";
 
-	    while($row = $store_items->fetch()) {
+	    while ($row = $store_items->fetch()) {
 			$id = $row['id'];
 			$type = $row['type_id'];
 			$name = $row['name'];
@@ -116,13 +118,15 @@ class Inventory {
 
 	}
 
-	public function getInventoryValue() {
+    public function getInventoryValue() 
+    {
 		$stmt = $this->rpdo->query("SELECT SUM(price) AS value_inv FROM items");
 		$sum = $stmt->fetchColumn();
 		return $sum;
 	}
 
-	public function getitemInfo($item_id){
+    public function getitemInfo($item_id)
+    {
 		$item_query = $this->rpdo->query("SELECT * FROM items WHERE id='$item_id'");
 		$row = $item_query->fetch();
 
@@ -138,7 +142,7 @@ class Inventory {
 		$lvl = $row['required_level'];
 		$icon = $row['icon'];
 
-		if($icon == "N/A") {
+		if ($icon == "N/A") {
 			$icon_div = "";
 		} else {
 			$icon_div = "<img class='card-img-top' src='$icon'>";
@@ -157,8 +161,9 @@ class Inventory {
 
   }
 
-	public function addNewItem($name, $type, $desc, $gold, $icon, $equip_zone, $lvl, $str, $int, $wpr, $agt, $spd, $end, $per, $wsd, $lck, $added_by){
-
+    public function addNewItem($name, $type, $desc, $gold, $icon, $equip_zone, $lvl, 
+                               $str, $int, $wpr, $agt, $spd, $end, $per, $wsd, $lck, $added_by)
+    {
 		$date_added = date("Y-m-d H:i:s");
 		$new_item_query = $this->rpdo->prepare('INSERT INTO items VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$new_item_query->execute([$type, $name, $desc, $icon, $gold, $lvl, $equip_zone, "yes", $date_added, $added_by]);
@@ -167,11 +172,20 @@ class Inventory {
 		$item_atrb_query = $this->rpdo->prepare('INSERT INTO item_attribute (item_id, attribute_id, value)
 													VALUES (?, 1, ?), (?, 2, ?), (?, 3, ?), (?, 4, ?),
 															(?, 5, ?),(?, 7, ?), (?, 8, ?), (?, 9, ?)');
-		$item_atrb_query->execute([$item_id, $str, $item_id, $int, $item_id, $wpr, $item_id, $agt, $item_id, $spd, $item_id, $end, $item_id, $per, $item_id, $wsd, $item_id, $lck]);
+        $item_atrb_query->execute([$item_id, $str, 
+                                   $item_id, $int, 
+                                   $item_id, $wpr, 
+                                   $item_id, $agt, 
+                                   $item_id, $spd, 
+                                   $item_id, $end, 
+                                   $item_id, $per, 
+                                   $item_id, $wsd, 
+                                   $item_id, $lck]);
 
 	}
 
-	public function getPlayerInventory() {
+    public function getPlayerInventory() 
+    {
 		$user_id = $this->user_obj->getUserID();
 		$user_character = $this->rpdo->query("SELECT * FROM user_character WHERE user_id='$user_id'");
 		$row = $user_character->fetch();
@@ -179,11 +193,13 @@ class Inventory {
 		$character_item_query = $this->rpdo->query("SELECT * FROM character_item WHERE character_id='$character_id'");
 		$str = "";
 
-		while ($row2 = $character_item_query->fetch()) {
+        while ($row2 = $character_item_query->fetch()) 
+        {
             $item_id = $row2['item_id'];
             $amount = $row2['amount'];
+
 			$item_info_query = $this->rpdo->query("SELECT * FROM items WHERE id='$item_id'");
-			$row3 = $item_info_query->fetch();
+            $row3 = $item_info_query->fetch();
 			$name = $row3['name'];
 			$desc = $row3['desc'];
 			$price = $row3['price'];
@@ -191,17 +207,14 @@ class Inventory {
 			$lvl = $row3['required_level'];
 			$icon = $row3['icon'];
 
-			$str .= "<div class='card' style='width: 25%; margin: 5px;'>
-						<div class='card-header'>$name <div class='float-right'>$amount</div></div>
-						<div class='card-body'>$desc</div>
-					</div>";
-			//$player_chara = mysqli_query($this->rpgcon, "SELECT * FROM rpg_character WHERE character_id='$character_id'");
-
+            $str .= "<tr>
+                    <th scope='row'>$name</th>
+                    <td>$desc</td>
+                    <td>$amount</td>
+                    <td>Equip</td>
+                    </tr>";
 		}
-		echo "<div style='display: flex; flex-direction: row;'>";
 		echo $str;
-		echo "</div>";
-
 	}
 
 

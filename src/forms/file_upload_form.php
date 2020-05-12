@@ -41,6 +41,10 @@ if (isset($_POST['post']))
 			}
 		}
     }
+    else {
+        $newFileName = "";
+        $newFileType = "";
+    }
 
     // submit post to database 
     if ($uploadOk) 

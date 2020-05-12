@@ -51,9 +51,8 @@
 
 </head>
 <body>
-
   <div id="navBox" class="boxes">
-
+    {{ character.checkForLevel }}
       <a href="/" title="Home"><i class="typcn typcn-home icon btnPurp"></i></a>
       {% if login_flag > 0 %}
         <a href="/?quest" title ="Quests"><i class="typcn typcn-world icon btnPurp"></i></a>

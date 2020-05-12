@@ -86,7 +86,7 @@ $style = $user_obj->getUserStyle();
   		//Insert Notification
 	  if ( $user_liked != $userLoggedIn ) 
 	  {
-        $notification = new Notification($userLoggedIn, $spdo);
+        $notification = new Notification($userLoggedIn, $character, $spdo, $rpdo);
         $notification->insertNotification($post_id, $user_liked, "like");
       }
 

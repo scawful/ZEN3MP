@@ -1,0 +1,23 @@
+{% extends "base.twig" %}
+{% block title %} Notifications {% endblock %}
+
+{% block main %} 
+    <div class="article">
+    {% if notif_id != 0 and notifications.getNotificationUserTo(notif_id) == userLoggedIn %}
+        {# {{ notifications.getNotificationFrom(notif_id) }} #}
+        <h3> {{ notifications.getNotificationMessage(notif_id) }} </h3>
+        {{ notifications.getNotificationDate(notif_id) }} <br />
+
+        
+        {% set type = notifications.getNotificationType(notif_id) %}
+        {% set type_id = notifications.getNotificationTypeID(notif_id) %}
+        {% if type == "comment" or type == "like" %}
+            <a href="https://zeniea.com/post.php?id={{ type_id }}">Link to post</a>           
+        {% endif %}
+        
+    {% else %}
+        
+    {% endif %}
+    </div>
+{% endblock %}
+

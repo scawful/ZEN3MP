@@ -1,19 +1,19 @@
 <?php
 namespace zen3mp;
 
-class Quest {
-
+class Quest 
+{
 	private $user_obj;
 	private $rpdo;
 	private $spdo;
 
-	public function __construct($user_obj, $rpdo, $spdo) {
+    public function __construct($user, $character, $rpdo, $spdo) 
+    {
 		$this->rpdo = $rpdo;
-		$this->spdo = $spdo;
-		$this->user = new User($user_obj, $spdo);
+        $this->spdo = $spdo;
+        $this->character = $character;
+        $this->user = new User($user, $spdo);
 	}
-
-////////////////////////////////////////////////////////////////////////////////////////////
 
     public function getNumQuestCategories()
     {
@@ -34,7 +34,7 @@ class Quest {
         $prpr = $this->rpdo->prepare('SELECT MAX(p_id) FROM quest_pages WHERE q_id = ?');
         $prpr->execute([$quest_id]);
         $page_id = $prpr->fetchColumn();
-        if($page_id > 0)
+        if ($page_id > 0)
             $page_id++;
 
         //Current date and time
@@ -59,7 +59,7 @@ class Quest {
         $stmt = $this->rpdo->prepare('DELETE FROM quest_pages WHERE q_id = ? AND p_id = ?');
         $stmt->execute([$q_id, $p_id]);
 
-        if($p_id < $page_id)
+        if ($p_id < $page_id)
         {
             $num = $this->getNumQuestPagesByCategory($q_id, $p_id);
             for ($x = 0; $x < $num; $x++) 
@@ -203,6 +203,33 @@ class Quest {
         $stmt2->execute([$q_id]);
         $quest = $stmt2->fetchColumn();
         return $quest;
+    }
+
+    public function setQuestPageReadByCharacter($q_id, $p_id)
+    {
+        $char_id = $this->character->getCharacterID();
+        $stmt = $this->rpdo->prepare('SELECT * FROM page_read WHERE character_id = ? AND quest_id = ? AND page_id = ?');
+        $stmt->execute([$char_id, $q_id, $p_id]);
+        if ( !$stmt->rowCount() )
+        {
+            $stmt2 = $this->rpdo->prepare('INSERT INTO page_read VALUES(0, ?, ?, ?, ?)');
+            $stmt2->execute([$char_id, $q_id, $p_id, 1]);
+        }
+    }
+
+    public function checkQuestCompletionByCharacter($q_id)
+    {
+        $char_id = $this->character->getCharacterID();
+        $stmt = $this->rpdo->prepare('SELECT * FROM page_read WHERE character_id = ? AND quest_id = ?');
+        $stmt->execute([$char_id, $q_id]);
+        $num_read = $stmt->rowCount();
+        $num_pages = $this->getNumQuestPagesByCategory($q_id);
+
+        if ( $num_read == $num_pages )
+        {
+            $stmt2 = $this->rpdo->prepare('INSERT INTO quest_complete VALUES (0, ?, ?, ?)');
+            $stmt2->execute([$char_id, $q_id, 1]);
+        }
     }
 
 }

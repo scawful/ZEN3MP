@@ -18,7 +18,7 @@ $user_id = $user_obj->getUserID();
 $username = $user_obj->getUsername();
 
 // Warrior Submit
-if(isset($_POST['submit_warrior_class'])){
+if (isset($_POST['submit_warrior_class'])){
 
     $newCharName = strip_tags($_POST['character_name_select']);
     $newCharClass = $_POST['warrior_class_select'];
@@ -78,19 +78,35 @@ if(isset($_POST['submit_warrior_class'])){
             break;
     }
 
-    $newCharQuery = $rpdo->prepare('INSERT INTO rpg_character VALUES (0, 1, ?, ?, ?, 1, ?, ?, ?, 0, 100, 1)');
+    $newCharQuery = $rpdo->prepare('INSERT INTO rpg_character VALUES (0, 1, ?, ?, ?, 1, ?, ?, ?, 0, 100, 100, 1)');
     $newCharQuery->execute([$newCharName, $newCharClass, $newCharRace, $healthStat, $manaStat, $fatigueStat]);
     $characterId = $rpdo->lastInsertId();
 
     $newCharLinkQuery = $rpdo->prepare('INSERT INTO user_character VALUES (0, ?, ?)');
-    $newCharLinkQuery->execute([$user_id, $characterId]);
+    $newCharLinkQuery->execute([$user_id, $characterId, 1]);
 
     $newCharAtrbQuery = $rpdo->prepare('INSERT INTO character_attribute (character_id, attribute_id, value)
                                                     VALUES (?, 1, ?), (?, 2, ?), (?, 3, ?), (?, 4, ?),
                                                     (?, 5, ?), (?, 6, ?), (?, 7, ?), (?, 8, ?), (?, 9, ?)');
-    $newCharAtrbQuery->execute([$characterId, $strengthAtrb, $characterId, $intelligenceAtrb, $characterId, $willpowerAtrb, $characterId, $agilityAtrb, $characterId, $speedAtrb, $characterId, $enduranceAtrb, $characterId, $personalityAtrb, $characterId, $wisdomAtrb, $characterId, $luckAtrb]);
+    $newCharAtrbQuery->execute([$characterId, 
+                                $strengthAtrb, 
+                                $characterId, 
+                                $intelligenceAtrb, 
+                                $characterId, 
+                                $willpowerAtrb, 
+                                $characterId, 
+                                $agilityAtrb, 
+                                $characterId, 
+                                $speedAtrb, 
+                                $characterId, 
+                                $enduranceAtrb, 
+                                $characterId, 
+                                $personalityAtrb, 
+                                $characterId, 
+                                $wisdomAtrb, 
+                                $characterId, 
+                                $luckAtrb]);
 
-    //$_SESSION['username'] = $username;
     header("Location: ".$username."");
     exit();
 
@@ -163,19 +179,35 @@ if(isset($_POST['submit_warrior_class'])){
             break;
     }
 
-    $newCharQuery = $rpdo->prepare('INSERT INTO rpg_character VALUES (0, 1, ?, ?, ?, 1, ?, ?, ?, 0, 100, 1)');
+    $newCharQuery = $rpdo->prepare('INSERT INTO rpg_character VALUES (0, 1, ?, ?, ?, 1, ?, ?, ?, 0, 100, 100, 1)');
     $newCharQuery->execute([$newCharName, $newCharClass, $newCharRace, $healthStat, $manaStat, $fatigueStat]);
     $characterId = $rpdo->lastInsertId();
 
     $newCharLinkQuery = $rpdo->prepare('INSERT INTO user_character VALUES (0, ?, ?)');
-    $newCharLinkQuery->execute([$user_id, $characterId]);
+    $newCharLinkQuery->execute([$user_id, $characterId, 1]);
 
     $newCharAtrbQuery = $rpdo->prepare('INSERT INTO character_attribute (character_id, attribute_id, value)
                                                     VALUES (?, 1, ?), (?, 2, ?), (?, 3, ?), (?, 4, ?),
                                                     (?, 5, ?), (?, 6, ?), (?, 7, ?), (?, 8, ?), (?, 9, ?)');
-    $newCharAtrbQuery->execute([$characterId, $strengthAtrb, $characterId, $intelligenceAtrb, $characterId, $willpowerAtrb, $characterId, $agilityAtrb, $characterId, $speedAtrb, $characterId, $enduranceAtrb, $characterId, $personalityAtrb, $characterId, $wisdomAtrb, $characterId, $luckAtrb]);
+    $newCharAtrbQuery->execute([$characterId, 
+                                $strengthAtrb, 
+                                $characterId, 
+                                $intelligenceAtrb, 
+                                $characterId, 
+                                $willpowerAtrb, 
+                                $characterId, 
+                                $agilityAtrb, 
+                                $characterId, 
+                                $speedAtrb, 
+                                $characterId, 
+                                $enduranceAtrb, 
+                                $characterId, 
+                                $personalityAtrb, 
+                                $characterId, 
+                                $wisdomAtrb, 
+                                $characterId, 
+                                $luckAtrb]);
 
-    //$_SESSION['username'] = $username;
     header("Location: ".$username."");
     exit();
 
@@ -248,19 +280,36 @@ if(isset($_POST['submit_warrior_class'])){
             break;
     }
 
-    $newCharQuery = $rpdo->prepare('INSERT INTO rpg_character VALUES (0, 1, ?, ?, ?, 1, ?, ?, ?, 0, 100, 1)');
+    $newCharQuery = $rpdo->prepare('INSERT INTO rpg_character VALUES (0, 1, ?, ?, ?, 1, ?, ?, ?, 0, 100, 100, 1)');
     $newCharQuery->execute([$newCharName, $newCharClass, $newCharRace, $healthStat, $manaStat, $fatigueStat]);
     $characterId = $rpdo->lastInsertId();
 
     $newCharLinkQuery = $rpdo->prepare('INSERT INTO user_character VALUES (0, ?, ?)');
-    $newCharLinkQuery->execute([$user_id, $characterId]);
+    $newCharLinkQuery->execute([$user_id, $characterId, 1]);
 
     $newCharAtrbQuery = $rpdo->prepare('INSERT INTO character_attribute (character_id, attribute_id, value)
                                                     VALUES (?, 1, ?), (?, 2, ?), (?, 3, ?), (?, 4, ?),
                                                     (?, 5, ?), (?, 6, ?), (?, 7, ?), (?, 8, ?), (?, 9, ?)');
-    $newCharAtrbQuery->execute([$characterId, $strengthAtrb, $characterId, $intelligenceAtrb, $characterId, $willpowerAtrb, $characterId, $agilityAtrb, $characterId, $speedAtrb, $characterId, $enduranceAtrb, $characterId, $personalityAtrb, $characterId, $wisdomAtrb, $characterId, $luckAtrb]);
+    $newCharAtrbQuery->execute([$characterId, 
+                                $strengthAtrb, 
+                                $characterId, 
+                                $intelligenceAtrb, 
+                                $characterId, 
+                                $willpowerAtrb, 
+                                $characterId, 
+                                $agilityAtrb, 
+                                $characterId, 
+                                $speedAtrb, 
+                                $characterId, 
+                                $enduranceAtrb, 
+                                $characterId, 
+                                $personalityAtrb, 
+                                $characterId, 
+                                $wisdomAtrb, 
+                                $characterId, 
+                                $luckAtrb]);
+                                
 
-    //$_SESSION['username'] = $username;
     header("Location: ".$username."");
     exit();
 

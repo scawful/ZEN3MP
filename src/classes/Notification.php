@@ -2,26 +2,91 @@
 namespace zen3mp;
 use \DateTime;
 
-class Notification {
-	private $user_obj;
-	private $spdo;
+class Notification 
+{
+    private $user_obj;
+    private $char_obj;
+    private $spdo;
+    private $rpdo;
 
-	public function __construct($user, $spdo){
-		$this->user_obj = new User($user, $spdo);
-		$this->spdo = $spdo;
-		$this->utils = new Utils();
+    public function __construct($user, $character, $spdo, $rpdo)
+    {
+        $this->user_obj = new User($user, $spdo);
+        $this->utils = new Utils();
+        $this->char_obj = $character;
+        $this->spdo = $spdo;
+        $this->rpdo = $rpdo;
 	}
 
-	public function getUnreadNumber() {
+    public function getUnreadNumber() 
+    {
 		$userLoggedIn = $this->user_obj->getUsername();
 		$stmt = $this->spdo->prepare('SELECT COUNT(*) FROM notifications WHERE viewed = ? AND user_to = ?');
 		$stmt->execute(["no", $userLoggedIn]);
 		$num_unread = $stmt->fetchColumn();
 		return $num_unread;
-	}
+    }
+    
+    public function getNotificationUserTo($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT user_to FROM notifications WHERE id = ?');
+        $stmt->execute([$id]);
+        $user_to = $stmt->fetchColumn();
+        return $user_to;
+    }
 
-	public function getNotifications($data, $limit) {
+    public function getNotificationFrom($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT user_from FROM notifications WHERE id = ?');
+        $stmt->execute([$id]);
+        $user_from = $stmt->fetchColumn();
+        return $user_from;
+    }
 
+    public function getNotificationMessage($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT message FROM notifications WHERE id = ?');
+        $stmt->execute([$id]);
+        $msg = $stmt->fetchColumn();
+        return $msg;
+    }
+
+    public function getNotificationDate($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT datetime FROM notifications WHERE id = ?');
+        $stmt->execute([$id]);
+        $datetime = $stmt->fetchColumn();
+        $new_date = date_create($datetime);
+        $format_datetime = date_format($new_date, "m/d/Y H:i");
+        return $format_datetime;
+    }
+
+    public function getNotificationType($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT type FROM notifications WHERE id = ?');
+        $stmt->execute([$id]);
+        $type = $stmt->fetchColumn();
+        return $type;
+    }
+
+    public function getNotificationTypeID($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT type_id FROM notifications WHERE id = ?');
+        $stmt->execute([$id]);
+        $type_id = $stmt->fetchColumn();
+        return $type_id;
+    }
+
+    public function getNextInsertID()
+    {
+        $stmt = $this->spdo->prepare('SELECT MAX(id) FROM notifications');
+        $stmt->execute();
+        $id = $stmt->fetchColumn() + 1;
+        return $id;
+    }
+
+    public function getNotifications($data, $limit) 
+    {
 		$page = $data['page'];
 		$userLoggedIn = $this->user_obj->getUsername();
 		$return_string = "";
@@ -42,7 +107,7 @@ class Notification {
 		$stmt2->execute([$userLoggedIn]);
 		$num_rows = $stmt2->fetchColumn();
 
-	    if($num_rows == 0) {
+	    if ($num_rows == 0) {
 	      echo "You have no notifications.";
 	      return;
 	    }
@@ -50,7 +115,7 @@ class Notification {
 		$num_iterations = 0; // num messages checked
 		$count = 1; // number of messages posted
 
-		while($row = $stmt->fetch()) {
+		while ($row = $stmt->fetch()) {
 
 			if($num_iterations++ < $start)
 				continue;
@@ -62,15 +127,13 @@ class Notification {
 			}
 
 			$user_from = $row['user_from'];
-			$date_time = $row['datetime'];
-
-			$user_data_query = $this->spdo->prepare('SELECT * FROM users WHERE username = ?');
-			$user_data_query->execute([$user_from]);
-			$user_data = $user_data_query->fetch();
+            $date_time = $row['datetime'];
+            
+            $user_from_obj = new User($user_from, $this->spdo, $this->rpdo);
+            $user_from_avatar = $user_from_obj->getAvatar();
 
 	        //Timeframe
-	        $time_message = $this->datetime($date_time);
-
+	        $time_message = $this->utils->datetime($date_time);
 
 			$opened = $row['opened'];
 			$style = ($row['opened'] == 'no') ? "background-color: #374925;" : "";
@@ -78,11 +141,10 @@ class Notification {
 			$return_string .= " <a href='" . $row['link'] . "' class='list-group-item list-group-item-action flex-column align-items-start'>
 								<div class='user_found_messages' style='" . $style . "'>
                                     <div class='d-flex justify-content-between'>
-                                        <img src='" . $user_data['avatar'] . "' class='list-group-avatar float-left'>
+                                        <img src='" . $user_from_avatar . "' class='list-group-avatar float-left'>
                                         <small>" . $time_message . "</small>
                                     </div>
                                     " . $row['message'] . "
-                                
                                 </div></a>";
 		}
 
@@ -97,13 +159,15 @@ class Notification {
 
 	}
 
-	public function insertNotification($post_id, $user_to, $type) {
+    public function insertNotification($post_id, $user_to, $type) 
+    {
 		$userLoggedIn = $this->user_obj->getUsername();
 		$userLoggedInDisplayName = $this->user_obj->getDisplayName();
 
 		$date_time = date("Y-m-d H:i:s");
 
-		switch($type) {
+        switch ($type) 
+        {
 		    case 'comment':
 		        $message = $userLoggedInDisplayName . " commented on your post";
 		        break;
@@ -121,93 +185,41 @@ class Notification {
                 break;
 		}
 
-		$link = "post.php?id=" . $post_id;
-		$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
-		$stmt->execute([$user_to, $userLoggedIn, $message, $link, $date_time, "no", "no"]);
+		$link = "?notification=" . $this->getNextInsertID();
+		$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+		$stmt->execute([$user_to, $userLoggedIn, $message, $link, $type, $post_id, $date_time, "no", "no"]);
     }
     
-    public function insertRPGNotification($post_id, $user_to, $type, $gold) {
+    public function insertRPGNotification($post_id, $user_to, $type, $modifier) 
+    {
         $userLoggedIn = $this->user_obj->getUsername();
 		$userLoggedInDisplayName = $this->user_obj->getDisplayName();
 
 		$date_time = date("Y-m-d H:i:s");
+        $link = "";
 
-		switch($type) {
+        switch ($type) 
+        {
 		    case 'gold_added':
-		        $message = $gold . " gold awarded for this post.";
-		        break;
+                $message = $modifier . " gold awarded for this post.";
+                $link = "post.php?id=" . $post_id;
+                break;
+            case 'level_up':
+                $message = $this->char_obj->getCharacterName() . " leveled up to level " . $modifier . ".";
+                $link = "?notification=" . $this->getNextInsertID();
+                break;
 		}
 
-		$link = "post.php?id=" . $post_id;
-		$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?)');
-		$stmt->execute([$user_to, $userLoggedIn, $message, $link, $date_time, "no", "no"]);
+		$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+		$stmt->execute([$user_to, $userLoggedIn, $message, $link, $type, $post_id, $date_time, "no", "no"]);
     }
-
-	private function datetime($date_time) {
-
-		//post timeframe
-		$date_time_now = date("Y-m-d H:i:s");
-		$start_date = new DateTime($date_time); // Time of post
-		$end_date = new DateTime($date_time_now); // current time
-
-		$interval = $start_date->diff($end_date);
-		if($interval->y >= 1) {
-			if($interval->y == 1)
-				$time_message = $interval->y . " year ago"; // 1 year ago
-			else
-				$time_message = $interval->y . " years ago"; // 1+ year ago
-		}
-		else if ($interval->m >= 1) {
-			if($interval->d == 0) {
-				$days = " ago";
-			}
-			else if($interval->d == 1) {
-				$days = $interval->d . " day ago";
-			}
-			else {
-				$days = $interval->d . " days ago";
-			}
-
-			if($interval->m == 1){
-				$time_message = $interval->m . " month " . $days;
-			} else {
-				$time_message = $interval->m . " months " . $days;
-			}
-		}
-		else if($interval->d >= 1) {
-			if($interval->d == 1) {
-				$time_message = "Yesterday";
-			}
-			else {
-				$time_message = $interval->d . " days ago";
-			}
-		}
-		else if($interval->h >= 1) {
-			if($interval->h == 1) {
-				$time_message = $interval->h . " hour ago";
-			}
-			else {
-				$time_message = $interval->h . " hours ago";
-			}
-		}
-		else if($interval->i >= 1) {
-			if($interval->i == 1) {
-				$time_message = $interval->i . " minute ago";
-			}
-			else {
-				$time_message = $interval->i . " minutes ago";
-			}
-		}
-		else {
-			if($interval->s < 30) {
-				$time_message = "Just now";
-			}
-			else {
-				$time_message = $interval->s . " seconds ago";
-			}
-		}
-		return $time_message;
-	}
+    
+    public function openLevelNotif()
+    {
+        $userLoggedIn = $this->user_obj->getUsername();
+        $opened_query = $this->spdo->prepare('UPDATE notifications SET opened = ? WHERE user_to = ? AND link = ? ');
+		$opened_query->execute(["yes", $userLoggedIn, $userLoggedIn]);
+    }
 
 }
 

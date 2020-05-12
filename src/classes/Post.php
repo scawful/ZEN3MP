@@ -7,21 +7,77 @@ class Post {
     private $spdo;
     private $rpdo;
 
-	public function __construct($user, $spdo, $rpdo) {
+    public function __construct($user, $spdo, $rpdo) 
+    {
         $this->user_obj = new User($user, $spdo);
         $this->username = $this->user_obj->getUsername();
+        $this->character = "Placeholder";
         $this->spdo = $spdo;
         $this->rpdo = $rpdo;
-	}
+    }
+    
+    public function getPostBody($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT body FROM posts WHERE id = ?');
+        $stmt->execute([$id]);
+        $body = $stmt->fetchColumn();
+        return $body;
+    }
+
+    public function getPostAddedBy($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT added_by FROM posts WHERE id = ?');
+        $stmt->execute([$id]);
+        $added_by = $stmt->fetchColumn();
+        return $added_by;
+    }
+
+    public function getPostUserTo($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT user_to FROM posts WHERE id = ?');
+        $stmt->excute([$id]);
+        $user_to = $stmt->fetchColumn();
+        return $user_to;
+    }
+
+    public function getPostDateAdded($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT date_added FROM posts WHERE id = ?');
+        $stmt->execute([$id]);
+        $date_added = $stmt->fetchColumn();
+        return $date_added;
+    }
+
+    public function getPostLikes($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT likes FROM posts WHERE id = ?');
+        $stmt->execute([$id]);
+        $likes = $stmt->fetchColumn();
+        return $likes;
+    }
+
+    public function getPostFileName($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT file_name FROM posts WHERE id = ?');
+        $stmt->execute([$id]);
+        $file_name = $stmt->fetchColumn();
+        return $file_name;
+    }
+
+    public function getPostFileType($id)
+    {
+        $stmt = $this->spdo->prepare('SELECT file_type FROM posts WHERE id = ?');
+        $stmt->execute([$id]);
+        $file_type = $stmt->fetchColumn();
+        return $file_type;
+    }
 
     public function submitMediaPost($user_to, $file_name, $file_type) 
     {
-		// current date and time
 		$date_added = date("Y-m-d H:i:s");
-		// get username
 		$added_by = $this->user_obj->getUsername();
 
-		//If user is on own profile, user_to is 'none'
+		// If user is on own profile, user_to is 'none'
 		if($user_to == $added_by) {
 			$user_to = "none";
 		}
@@ -30,13 +86,13 @@ class Post {
 		$stmt->execute([" ", $added_by, $user_to, $date_added, "no", "no", "0", $file_name, $file_type]);
 		$returned_id = $this->spdo->lastInsertId();
 
-		//Insert notification
+		// Insert notification
 		if($user_to != 'none') {
 			$notification = new Notification($added_by, $spdo);
 			$notification->insertNotification($returned_id, $user_to, "profile_post");
 		}
 
-		//Update post count for user
+		// Update post count for user
 		$num_posts = $this->user_obj->getNumPosts();
 		$num_posts++;
 		$update_query = $this->spdo->prepare('UPDATE users SET num_posts = ? WHERE username = ?');
@@ -92,7 +148,7 @@ class Post {
 			$added_by = $this->user_obj->getUsername();
 
 			// if user is on own profile, user_to is 'none'
-			if($user_to == $added_by) {
+			if ($user_to == $added_by) {
 				$user_to = "none";
             }
 
@@ -102,14 +158,16 @@ class Post {
             $returned_id = $this->spdo->lastInsertId();
 
             // insert notification
-            $notification = new Notification($added_by, $this->spdo);
+            $notification = new Notification($added_by, $this->character, $this->spdo, $this->rpdo);
             
             // calculate gold for post
             $character = new Character($this->username, $this->spdo, $this->rpdo);
             $checkForChar = $character->checkForCharacter();
-            if ($checkForChar === true) { 
+            if ($checkForChar === true) 
+            { 
                 $char_luck = $character->getCharacterLuck();
                 $string_bytes = strlen($body);
+
                 if ($string_value < 250)
                     $randkey = rand(4, 8);
                 else
@@ -180,8 +238,9 @@ class Post {
 			$no_punctuation = preg_replace("/[^a-zA-Z 0-9]+/", "", $body);
 
 			//Predict whether user is posting a url. If so, do not check for trending words
-			if(strpos($no_punctuation, "height") === false && strpos($no_punctuation, "width") === false
-				&& strpos($no_punctuation, "http") === false && strpos($no_punctuation, "youtube") === false){
+			if (strpos($no_punctuation, "height") === false && strpos($no_punctuation, "width") === false
+                && strpos($no_punctuation, "http") === false && strpos($no_punctuation, "youtube") === false)
+            {
 				//Convert users post (with punctuation removed) into array - split at white space
 				$keywords = preg_split("/[\s,]+/", $no_punctuation);
 
@@ -203,7 +262,6 @@ class Post {
 
     public function calculateTrend($term) 
     {
-
         if ($term != '') 
         {
 			$stmt = $this->spdo->prepare('SELECT COUNT(*) FROM trends WHERE title = ?');
@@ -238,12 +296,13 @@ class Post {
   		$num_query->execute(["no"]);
 		$num_rows = $num_query->fetchColumn();
 
-		if($num_rows > 0) {
-
+        if($num_rows > 0) 
+        {
 	        $num_iterations = 0;  //Number of results checked (not necessaryily posted)
 	        $count = 1;
 
-			while($row = $data_query->fetch())  {
+            while ($row = $data_query->fetch())  
+            {
 				$id = $row['id'];
 				$body = $row['body'];
 				$added_by = $row['added_by'];
@@ -252,7 +311,7 @@ class Post {
                 $file_type = $row['file_type'];
 
 				//Prepare user_to string so  it can included even if not posted
-				if($row['user_to'] == "none") {
+				if ($row['user_to'] == "none") {
 					$user_to = "";
 				}
 				else {
@@ -425,7 +484,8 @@ class Post {
 	        $count = 1;
 
 
-	        while($row = $data_query->fetch())  {
+            while ($row = $data_query->fetch())  
+            {
 				$id = $row['id'];
 				$body = $row['body'];
 				$added_by = $row['added_by'];
@@ -562,7 +622,7 @@ class Post {
 	            <?php
 				}
 
-				if($count > $limit) {
+				if ($count > $limit) {
 					$str .= "<input type='hidden' class='nextPage' value='" . ($page + 1) . "'>
 								<input type='hidden' class='noMorePosts' value='false'>";
 				} else {
@@ -592,9 +652,9 @@ class Post {
 		$stmt2 = $this->spdo->query('SELECT COUNT(*) FROM news_posts WHERE category = "news" ORDER BY id DESC');
 		$num_rows = $stmt2->fetchColumn();
 
-        if($num_rows > 0) 
+        if ($num_rows > 0) 
         {
-	        $num_iterations = 0;  //Number of results checked (not necessaryily posted)
+	        $num_iterations = 0;  // Number of results checked (not necessarily posted)
 	        $count = 1;
 
             while($row = $stmt->fetch())  
@@ -735,7 +795,8 @@ class Post {
 	}
 
 
-	public function getSinglePost($post_id) {
+    public function getSinglePost($post_id) 
+    {
 		$userLoggedIn = $this->user_obj->getUsername();
 
 		$opened_query = $this->spdo->prepare('UPDATE notifications SET opened = ? WHERE user_to = ? AND link LIKE ? ');
@@ -749,8 +810,8 @@ class Post {
 		$num_rows = $num_rows_qry->fetchColumn();
 
 
-	    if($num_rows > 0) {
-
+        if ($num_rows > 0) 
+        {
 			$row = $data_query->fetch();
 			$id = $row['id'];
 			$body = $row['body'];
@@ -784,11 +845,11 @@ class Post {
 	          else
 	            $delete_button = "";
 
-						$user_details_query = $this->spdo->prepare('SELECT displayname, avatar FROM users WHERE username = ?');
-						$user_details_query->execute([$added_by]);
-						$user_row = $user_details_query->fetch();
-						$displayname = $user_row['displayname'];
-						$avatar = $user_row['avatar'];
+            $user_details_query = $this->spdo->prepare('SELECT displayname, avatar FROM users WHERE username = ?');
+            $user_details_query->execute([$added_by]);
+            $user_row = $user_details_query->fetch();
+            $displayname = $user_row['displayname'];
+            $avatar = $user_row['avatar'];
 
 	          ?>
 

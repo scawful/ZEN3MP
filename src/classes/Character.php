@@ -1,7 +1,8 @@
 <?php
 namespace zen3mp;
 
-class Character {
+class Character 
+{
 	private $user_obj;
 	private $spdo;
 	private $rpdo;
@@ -10,7 +11,8 @@ class Character {
 	{
 		$this->user_obj = new User($user, $spdo);
 		$this->spdo = $spdo;
-		$this->rpdo = $rpdo;
+        $this->rpdo = $rpdo;
+        $this->user = $user;
 
 		$this->user_id = $this->user_obj->getUserID();
 		
@@ -65,45 +67,90 @@ class Character {
 		return $this->character['class'];
     }
 
+    public function getCharacterExp(){
+        return $this->character['xp'];
+    }
+
+    public function getCharacterPrevExp(){
+        return $this->character['prev_xp'];
+    }
+
     public function getCharacterLuck() {
         return $this->character_atrb['attribute_id'][9];
     }
-    
-    public function setCharacterMoney($amount) {
+
+    public function setCharacterLevel($lvl)
+    {
+        $stmt = $this->rpdo->prepare('UPDATE rpg_character SET level = ? WHERE character_id = ?');
+        $stmt->execute([$lvl, $this->getCharacterID()]);
+    }
+
+    public function setCharacterMoney($amount) 
+    {
         $stmt = $this->rpdo->prepare('UPDATE rpg_character SET money = money + ? WHERE character_id = ?');
         $stmt->execute([$amount, $this->getCharacterID()]);
     }
 
-	public function listCharacterAttributes() {
-		$user_character_id = $this->getCharacterID();
-		$stmt = $this->rpdo->prepare('SELECT * FROM character_attribute WHERE character_id = ?');
-		$stmt->execute([$user_character_id]);
-		echo "<div style='float:left;'>Strength<br>Intelligence<br>Willpower<br>Agility<br>Speed<br>Endurance<br>Personality<br>Wisdom<br>Luck</div>";
-		while($row = $stmt->fetch()) {
-	        printf ("<div style='float: right;'> %d</div><br>", $row['value']);
-		}
-	}
-
-	public function getAllCharacterMoney() {
-		$stmt = $this->rpdo->prepare('SELECT SUM(money) AS sum_money FROM rpg_character');
-		$stmt->execute();
-		$row = $stmt->fetch();
-		$sum = $row['sum_money'];
-		echo "Total Character Gold: " . $sum . "<br />";
+    public function setCharacterExp($amount)
+    {
+        $stmt = $this->rpdo->prepare('UPDATE rpg_character SET xp = xp + ? WHERE character_id = ?');
+        $stmt->execute([$amount, $this->getCharacterID()]);
     }
-    
-    public function checkForCharacter() {
+
+    public function setCharacterPrevExp($amount)
+    {
+        $stmt = $this->rpdo->prepare('UPDATE rpg_character SET prev_xp = ? WHERE character_id = ?');
+        $stmt->execute([$amount, $this->getCharacterID()]);
+    }
+
+    public function checkForLevel()
+    {  
+        $currentLevel = $this->getCharacterLevel();
+        $prevExp = $this->getCharacterPrevExp();
+        $modifier = $prevExp + ($prevExp * 0.10);
+        $added_by = $this->user_obj->getUsername();
+
+        if ( $this->getCharacterExp() > $modifier )
+        {
+            $currentLevel++;
+            $this->setCharacterPrevExp($modifier);
+            $this->setCharacterLevel($currentLevel);
+            $notification = new Notification($this->user, $this->spdo, $this->rpdo);
+            $notification->insertRPGNotification(0, $added_by, "level_up", $currentLevel);
+        }
+    }
+
+    public function checkForCharacter() 
+    {
         $stmt = $this->rpdo->prepare('SELECT 1 FROM user_character WHERE user_id = ? LIMIT 1');
         $stmt->execute([$this->user_id]);
         $count = $stmt->fetchColumn();
-        if($count == 0) {
+        if ($count == 0) {
             return false;
         } else {
             return true;
         }
     }
 
+    public function getAllCharacterMoney() 
+    {
+		$stmt = $this->rpdo->prepare('SELECT SUM(money) AS sum_money FROM rpg_character');
+		$stmt->execute();
+		$row = $stmt->fetch();
+		$sum = $row['sum_money'];
+		return $sum;
+    }
 
-
+    public function listCharacterAttributes() 
+    {
+		$user_character_id = $this->getCharacterID();
+		$stmt = $this->rpdo->prepare('SELECT * FROM character_attribute WHERE character_id = ?');
+		$stmt->execute([$user_character_id]);
+		echo "<div style='float:left;'>Strength<br>Intelligence<br>Willpower<br>Agility<br>Speed<br>Endurance<br>Personality<br>Wisdom<br>Luck</div>";
+        while ($row = $stmt->fetch())
+        {
+	        printf ("<div style='float: right;'> %d</div><br>", $row['value']);
+		}
+	}
 }
 ?>

@@ -20,30 +20,30 @@
                         <br />
                     
                         {% if character.checkForCharacter == true %}
-                        <strong>{{ character.getCharacterName }}</strong>
-                        <hr style="margin: 0px;">
-                        <ul style="padding: 0px;">
-                            <li>Level: {{ character.getCharacterLevel }}</li>
-                            <li>Race: {{ character.getCharacterRace }}</li>
-                            <li>Class: {{ character.getCharacterClass }}</li>
-                            <li>Gold: {{ character.getCharacterMoney }}</li>
-                            
-                        </ul>
+                            <strong>{{ character.getCharacterName }}</strong>
+                            <hr style="margin: 0px;">
+                            <ul class="p-0 mb-1">
+                                <li>Level: {{ character.getCharacterLevel }}</li>
+                                <li>Race: {{ character.getCharacterRace }}</li>
+                                <li>Class: {{ character.getCharacterClass }}</li>
+                                <li>Gold: {{ character.getCharacterMoney }}</li>
+                            </ul>
                         {% else %}
                             <strong><a href="/?new_character">Create Character</a></strong>
                             <hr class="m-0">
                             <br />
                         {% endif %}
 
-                        <strong>Explore</strong>
+                        {# <strong>Explore</strong>
                         <hr class="m-0">
                         <ul class="p-0">
                             <li>New User: <a href="https://zeniea.com/{{user.getNewestUserUN}}">{{ user.getNewestUserDN }}</a></li>
                             <li>Hot Item: <a href="https://zeniea.com/?store&item={{inventory.getNewestItemID}}">
                                 {{ inventory.getItemName(inventory.getNewestItemID) }}</a>
                             </li>
-                        </ul>
+                        </ul> #}
                     <!-- Logged out display -->
+                   
                     {% else %}
 
                     {% endif %}
@@ -57,24 +57,24 @@
 
     </section>
 
-        <div id="adBox" class="columnBase">
-            {% block advertisement %}
-                <div class="titleBar">Ads served by Google</div>
-                <div style="text-align: center; margin: 5px;">
-                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                    <!-- ZCMS -->
-                    <ins class="adsbygoogle"
-                        style="display:block"
-                        data-ad-client="ca-pub-8036786549441922"
-                        data-ad-slot="6715135446"
-                        data-ad-format="auto"
-                        data-full-width-responsive="true"></ins>
-                    <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
-                </div>
-            {% endblock %}
-        </div>
+    <div id="adBox" class="columnBase">
+        {% block advertisement %}
+            <div class="titleBar">Ads served by Google</div>
+            <div style="text-align: center; margin: 5px;">
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- ZCMS -->
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-8036786549441922"
+                    data-ad-slot="6715135446"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        {% endblock %}
+    </div>
 
 {% include('footer.twig') %}
 

@@ -2,6 +2,7 @@
 {% block title %} {{ username }} {% endblock %}
 
 {% block main %}
+    {{ notifications.openLevelNotif }}
 
     <img src="{{ user_array.header_img }}" class="card-img-top" style="border-bottom: 1px solid black;">
 
@@ -85,7 +86,19 @@
 
           <div role="tabpanel" class="tab-pane fade" id="inventory_div">
             <hr class="m-0 halfBorder">
-            {{ inventory.getPlayerInventory }}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Owned</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ inventory.getPlayerInventory }}
+                </tbody>
+            </table>
           </div>
 
           <div role="tabpanel" class="tab-pane fade" id="settings_div">
