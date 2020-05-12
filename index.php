@@ -56,6 +56,12 @@ switch (True)
         else
             echo $twig->render('login.twig');
         break;
+    case isset($_GET['notification']):
+        if($isLoggedIn == true)
+            echo $twig->render('social/notification.twig');
+        else
+            echo $twig->render('login.twig');
+        break;
     case isset($_GET['privacy']):
         echo $twig->render('info/privacy.twig');
         break;
@@ -81,7 +87,7 @@ switch (True)
         include ('lib/pages/logout.php');
         break;
     default:
-        if($isLoggedIn == true) {
+        if ($isLoggedIn == true) {
             echo $twig->render('social/home.twig');
         } else {
             echo $twig->render('login.twig');
@@ -89,10 +95,10 @@ switch (True)
         break;
 }
 
-if(isset($_POST['register_button'])) {
+if (isset($_POST['register_button'])) 
+{
 	echo '
 	<script>
-
 	$(document).ready(function() {
 		$("#first").hide();
 		$("#second").show();

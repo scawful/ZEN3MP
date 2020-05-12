@@ -1,13 +1,13 @@
 <?php
 namespace zen3mp;
 
+$imageUpload = new ImageUpload();
+
 if ($isLoggedIn == True)
 {
-    $admin_auth_query = $spdo->prepare('SELECT user_title FROM users WHERE username = ?');
-    $admin_auth_query->execute([$userLoggedIn]);
-    $admin_auth_code = $admin_auth_query->fetch();
-    $admin = "Admin";
-    if($admin_auth_code['user_title'] != $admin) {
+    $user_obj = new User($userLoggedIn, $spdo);
+    if ($user_obj->isAdmin() == FALSE)
+    {
         header("Location: https://zeniea.com/");
     }
 } else {
@@ -21,7 +21,8 @@ if (isset($_POST['news_post']))
     $newsPostTitle = (!isset($_POST['post_title']) || empty($_POST['post_title'])) ? "" : $_POST['post_title'];
     $added_by = $_POST['added_by'];
     $category = $_POST['category'];
-    if($newsPostBody != "") {
+    if($newsPostBody != "") 
+    {
         $post->submitNewsPost($newsPostTitle, $newsPostBody, $added_by, $category);
     }
     else {
@@ -42,7 +43,6 @@ if (isset($_POST['new_quest']))
 
 if (isset($_POST['new_quest_page']))
 {
-    $ImageUpload = new ImageUpload();
     $uploadOk = 1;
     $title = $_POST['title'];
     $body = $_POST['contents'];
@@ -52,19 +52,19 @@ if (isset($_POST['new_quest_page']))
     $imageName = $_FILES['new-image']['name'];
     $directory = "../img/quests/pages/";
 
-    $uploadOk = $ImageUpload->uploadImage($imageName, $directory);
+    $uploadOk = $imageUpload->uploadImage($imageName, $directory);
     if($uploadOk) 
     {
-        $media = $ImageUpload->getNewImageFile();
+        $media = $imageUpload->getNewImageFile();
         $quest_obj->addQuestPage($title, $body, $media, $authors_note, $quest_id);
     } else {
-        echo $ImageUpload->getErrorMessage();
+        echo $imageUpload->getErrorMessage();
     }
 }
 
 if (isset($_POST['edit_page']))
 {
-    $ImageUpload = new ImageUpload();
+    
     $uploadOk = 1;
     $title = $_POST['title'];
     $body = $_POST['contents'];
@@ -74,13 +74,13 @@ if (isset($_POST['edit_page']))
     $imageName = $_FILES['new-image']['name'];
     $directory = "../img/quests/pages/";
 
-    $uploadOk = $ImageUpload->uploadImage($imageName, $directory);
+    $uploadOk = $imageUpload->uploadImage($imageName, $directory);
     if($uploadOk) 
     {
-        $media = $ImageUpload->getNewImageFile();
+        $media = $imageUpload->getNewImageFile();
         $quest_obj->addQuestPage($title, $body, $media, $authors_note, $quest_id);
     } else {
-        echo $ImageUpload->getErrorMessage();
+        echo $imageUpload->getErrorMessage();
     }
 }
 
@@ -101,7 +101,8 @@ if (isset($_POST['twitter_post']))
 
 if(isset($_POST['new_item']))
 {
-    $item = new Inventory($connect_social, $connect_rpg, $userLoggedIn);
+    $character = new Character($userLoggedIn, $spdo, $rpdo);
+    $item = new Inventory($userLoggedIn, $character, $spdo, $rpdo);
     $item_name = $_POST['item-name'];
     $item_type = $_POST['item-type'];
     $item_desc = $_POST['item-desc'];
@@ -119,47 +120,17 @@ if(isset($_POST['new_item']))
     $lck = $_POST['luck'];
 
     $uploadOk = 1;
-    $imageName = $_FILES['item-icon']['name'];
-    $errorMessage = "";
+    $imageName = $_FILES['new-image']['name'];
+    $directory = "/img/uploads/items/";
 
-    if($imageName != "")
+    $uploadOk = $imageUpload->uploadImage($imageName, $directory);
+    if($uploadOk) 
     {
-        $targetDir = "/img/uploads/items/";
-        $imageName = $targetDir . uniqid() . basename($imageName);
-        $imageFileType = pathinfo($imageName, PATHINFO_EXTENSION);
-
-        if($_FILES['item-icon']['size'] > 10000000)
-        {
-            $errorMessage = "Sorry your file is too large";
-            $uploadOk = 0;
-        }
-
-        if(strtolower($imageFileType) != "jpeg" && strtolower($imageFileType) != "png" && strtolower($imageFileType) != "jpg") 
-        {
-            $errorMessage = "Sorry, only jpeg, jpg and png files are allowed";
-            $uploadOk = 0;
-        }
-
-        if($uploadOk) 
-        {
-            if(move_uploaded_file($_FILES['item-icon']['tmp_name'], $imageName)) {
-                //image uploaded okay
-            }
-            else {
-                //image did not upload
-                $uploadOk = 0;
-            }
-        }
-
-    }
-
-    if($uploadOk) {
         $item->addNewItem($item_name, $item_type, $item_desc, $item_price, $imageName, $equip_zone, $req_level, $str, $int, $wpr, $agt, $spd, $end, $per, $wsd, $lck, $userLoggedIn);
     }
-    else {
-        echo "<div style='text-align: center; padding: 2px;' class='alert alert-danger'>
-                $errorMessage
-                </div>";
+    else 
+    {
+        echo $imageUpload->getErrorMessage();
     }
 
 
@@ -167,17 +138,16 @@ if(isset($_POST['new_item']))
 
 if(isset($_POST['new_image']))
 {
-    $ImageUpload = new ImageUpload();
     $directory = $_POST['directory'];
     $imageName = $_FILES['new-image']['name'];
-    $uploadOk = $ImageUpload->uploadImage($imageName, $directory);
+    $uploadOk = $imageUpload->uploadImage($imageName, $directory);
     if($uploadOk) 
     {
         echo "<div style='text-align: center;' class='alert alert-primary'>
-                <a href='https://zeniea.com/" . $ImageUpload->parseDirectory($directory) . "/" . $ImageUpload->getNewImageFile() . "'> " . $ImageUpload->getNewImageFile() . "</a>
+                <a href='https://zeniea.com/" . $imageUpload->parseDirectory($directory) . $imageUpload->getNewImageFile() . "'> " . $imageUpload->getNewImageFile() . "</a>
               </div>";
     } else {
-        echo $ImageUpload->getErrorMessage();
+        echo $imageUpload->getErrorMessage();
     }
 }
 
