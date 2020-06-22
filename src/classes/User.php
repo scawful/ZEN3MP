@@ -215,8 +215,8 @@ class User {
 
     public function promoteNewUser()
     {
-        $stmt = $this->spdo->prepare('SELECT id, signup_date, num_posts FROM users WHERE user_closed = ?');
-        $stmt->execute(["no"]);
+        $stmt = $this->spdo->prepare('SELECT id, signup_date, num_posts FROM users WHERE user_closed = ? AND user_title != ?');
+        $stmt->execute(["no", "Admin"]);
         $row = $stmt->fetch();
 
         foreach ($stmt as $row)
