@@ -12,6 +12,7 @@ class Notification
     public function __construct($user, $character, $spdo, $rpdo)
     {
         $this->user_obj = new User($user, $spdo);
+        $this->username = $this->user_obj->getUsername();
         $this->utils = new Utils();
         $this->char_obj = $character;
         $this->spdo = $spdo;
@@ -157,7 +158,13 @@ class Notification
 
 		return $return_string;
 
-	}
+    }
+
+    public function setPostNotificationRead($post_id)
+    {
+        $opened_query = $this->spdo->prepare('UPDATE notifications SET opened = ? WHERE user_to = ? AND link LIKE ? ');
+		$opened_query->execute(["yes", $this->username, "%=$post_id"]);
+    }
 
     public function insertNotification($post_id, $user_to, $type) 
     {
@@ -185,7 +192,7 @@ class Notification
                 break;
 		}
 
-		$link = "?notification=" . $this->getNextInsertID();
+		$link = "/?notification=" . $this->getNextInsertID();
 		$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$stmt->execute([$user_to, $userLoggedIn, $message, $link, $type, $post_id, $date_time, "no", "no"]);
     }
@@ -206,7 +213,7 @@ class Notification
                 break;
             case 'level_up':
                 $message = $this->char_obj->getCharacterName() . " leveled up to level " . $modifier . ".";
-                $link = "?notification=" . $this->getNextInsertID();
+                $link = "/?notification=" . $this->getNextInsertID();
                 break;
 		}
 

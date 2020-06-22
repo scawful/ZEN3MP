@@ -11,6 +11,7 @@
         
         {% set type = notifications.getNotificationType(notif_id) %}
         {% set type_id = notifications.getNotificationTypeID(notif_id) %}
+        {{ notifications.setPostNotificationRead(notif_id) }}
         {% if type == "comment" or type == "like" %}
             <a href="https://zeniea.com/post.php?id={{ type_id }}">Link to post</a>           
         {% endif %}
