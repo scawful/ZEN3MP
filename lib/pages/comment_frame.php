@@ -8,8 +8,10 @@ include ("../../src/classes/Notification.php");
 include ("../../src/classes/Utils.php");
 include ("../../src/auth.php");
 
+$character = "Placeholder";
+
 if ($isLoggedIn == True) {
-  $user_details_query = mysqli_query($connect_social, "SELECT * FROM users WHERE username='$userLoggedIn'");
+  $user_details_query = mysqli_query($connect_social, "SELECT * FROM users WHERE username = '$userLoggedIn'");
   $user = mysqli_fetch_array($user_details_query);
 }
 else {
@@ -64,36 +66,40 @@ $style = $user_obj->getUserStyle();
    	$posted_to = $row['added_by'];
     $user_to = $row['user_to'];
 
-   	if(isset($_POST['postComment' . $post_id])) {
+    if (isset($_POST['postComment' . $post_id])) 
+   {
    		$post_body = $_POST['post_body'];
    		$post_body = mysqli_escape_string($connect_social, $post_body);
    		$date_time_now = date("Y-m-d H:i:s");
    		$insert_post = mysqli_query($connect_social, "INSERT INTO comments VALUES (0, '$post_body', '$userLoggedIn', '$posted_to', '$date_time_now', 'no', '$post_id')");
 
-      if($posted_to != $userLoggedIn) {
-        $notification = new Notification($userLoggedIn, $spdo);
-        $notification->insertNotification($post_id, $posted_to, "comment");
-      }
-
-      if($user_to != 'none' && $user_to != $userLoggedIn) {
-        $notification = new Notification($userLoggedIn, $spdo);
-        $notification->insertNotification($post_id, $user_to, "profile_comment");
-      }
-
-      $get_commenters = mysqli_query($connect_social, "SELECT * FROM comments WHERE post_id='$post_id'");
-      $notified_users = array();
-      while($row = mysqli_fetch_array($get_commenters)) {
-
-        if($row['posted_by'] != $posted_to && $row['posted_by'] != $user_to
-            && $row['posted_by'] != $userLoggedIn && !in_array($row['posted_by'], $notified_users)) {
-
-              $notification = new Notification($userLoggedIn, $spdo);
-              $notification->insertNotification($returned_id, $row['posted_by'], "comment_non_owner");
-
-              array_push($notified_users, $row['posted_by']);
+        if ($posted_to != $userLoggedIn) 
+        {
+            $notification = new Notification($userLoggedIn, $character, $spdo, $rpdo);
+            $notification->insertNotification($post_id, $posted_to, "comment");
         }
 
-      }
+        if ($user_to != 'none' && $user_to != $userLoggedIn) 
+        {
+            $notification = new Notification($userLoggedIn, $character, $spdo, $rpdo);
+            $notification->insertNotification($post_id, $user_to, "profile_comment");
+        }
+
+        $get_commenters = mysqli_query($connect_social, "SELECT * FROM comments WHERE post_id='$post_id'");
+        $notified_users = array();
+        while ($row = mysqli_fetch_array($get_commenters)) 
+        {
+            if ($row['posted_by'] != $posted_to && $row['posted_by'] != $user_to
+                && $row['posted_by'] != $userLoggedIn && !in_array($row['posted_by'], $notified_users)) 
+            {
+
+                $notification = new Notification($userLoggedIn, $character, $spdo, $rpdo);
+                $notification->insertNotification($returned_id, $row['posted_by'], "comment_non_owner");
+
+                array_push($notified_users, $row['posted_by']);
+            }
+
+    }
 
       echo "<p>Comment Posted! </p>";
    	}
@@ -111,10 +117,10 @@ $style = $user_obj->getUserStyle();
     $get_comments = mysqli_query($connect_social, "SELECT * FROM comments WHERE post_id='$post_id' ORDER BY id ASC");
     $count = mysqli_num_rows($get_comments);
 
-    if($count != 0) {
-
-        while($comment = mysqli_fetch_array($get_comments)) {
-
+    if ($count != 0) 
+    {
+        while ($comment = mysqli_fetch_array($get_comments)) 
+        {
             $comment_body = $comment['post_body'];
             $posted_to = $comment['posted_to'];
             $posted_by = $comment['posted_by'];
@@ -127,7 +133,7 @@ $style = $user_obj->getUserStyle();
             $end_date = new DateTime($date_time_now); // current time
             $interval = $start_date->diff($end_date);
             if($interval->y >= 1) {
-              if($interval == 1)
+              if ($interval->y == 1)
                 $time_message = $interval->y . " year ago"; // 1 year ago
               else
                 $time_message = $interval->y . " years ago"; // 1+ year ago

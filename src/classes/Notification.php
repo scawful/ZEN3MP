@@ -116,12 +116,12 @@ class Notification
 		$num_iterations = 0; // num messages checked
 		$count = 1; // number of messages posted
 
-		while ($row = $stmt->fetch()) {
-
-			if($num_iterations++ < $start)
+        while ($row = $stmt->fetch()) 
+        {
+			if ($num_iterations++ < $start)
 				continue;
 
-			if($count > $limit) {
+			if ($count > $limit) {
 				break;
 			} else {
 				$count++;
@@ -139,7 +139,7 @@ class Notification
 			$opened = $row['opened'];
 			$style = ($row['opened'] == 'no') ? "background-color: #374925;" : "";
 
-			$return_string .= " <a href='" . $row['link'] . "' class='list-group-item list-group-item-action flex-column align-items-start'>
+			$return_string .= " <a href='/" . $row['link'] . "' class='list-group-item list-group-item-action flex-column align-items-start'>
 								<div class='user_found_messages' style='" . $style . "'>
                                     <div class='d-flex justify-content-between'>
                                         <img src='" . $user_from_avatar . "' class='list-group-avatar float-left'>
@@ -150,7 +150,8 @@ class Notification
 		}
 
 		//if posts were loaded
-		if($count > $limit) {
+        if ($count > $limit) 
+        {
 			$return_string .= "<input type='hidden' class='nextPageDropDownData' value='" . ($page + 1) . "'><input type='hidden' class='noMoreDropDownData' value='false'>";
 		} else {
 			$return_string .= "<input type='hidden' class='noMoreDropDownData' value='true'> <p style='text-align: center; margin: 3px;'>No more notifications to load.</p>";
@@ -192,7 +193,7 @@ class Notification
                 break;
 		}
 
-		$link = "/?notification=" . $this->getNextInsertID();
+		$link = "?notification=" . $this->getNextInsertID();
 		$stmt = $this->spdo->prepare('INSERT INTO notifications VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$stmt->execute([$user_to, $userLoggedIn, $message, $link, $type, $post_id, $date_time, "no", "no"]);
     }
@@ -213,7 +214,7 @@ class Notification
                 break;
             case 'level_up':
                 $message = $this->char_obj->getCharacterName() . " leveled up to level " . $modifier . ".";
-                $link = "/?notification=" . $this->getNextInsertID();
+                $link = "?notification=" . $this->getNextInsertID();
                 break;
 		}
 

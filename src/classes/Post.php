@@ -2,7 +2,8 @@
 namespace zen3mp;
 use \Datetime;
 
-class Post {
+class Post 
+{
     private $user_obj;
     private $spdo;
     private $rpdo;
@@ -88,7 +89,7 @@ class Post {
 
 		// Insert notification
 		if($user_to != 'none') {
-			$notification = new Notification($added_by, $spdo);
+			$notification = new Notification($added_by, $this->character, $this->spdo, $this->rpdo);
 			$notification->insertNotification($returned_id, $user_to, "profile_post");
 		}
 
