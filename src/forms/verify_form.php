@@ -21,7 +21,10 @@ if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['key']) && !e
     {
         echo $_POST['hidden'];
         $new_verify_hash = md5(rand(0,1000));
-        $update_user_query = mysqli_query($connect_social, "UPDATE users SET verify_hash='$new_verify_hash', verify_user='yes', user_closed='no' WHERE username='$username'");
+        // replace mysqli query with prepared statement
+        $update_user_query = $spdo->prepare('UPDATE users SET verify_hash = ? , verify_user = ?, user_closed = ? WHERE username = ?');
+        $update_user_query->execute([$new_verify_hash, "yes", "no", $username]);
+        //$update_user_query = mysqli_query($connect_social, "UPDATE users SET verify_hash='$new_verify_hash', verify_user='yes', user_closed='no' WHERE username='$username'");
         $_SESSION['username'] = $username;
         header("Location: https://zeniea.com/".$username."");
         exit();

@@ -1,0 +1,28 @@
+Lens of Truth HEX
+
+This is for making BG2 disappear when pressing X and R together (parallel worlds x button secret). But only if you have the Mirror in the inventory (suitable to revert it into Lens of Truth).
+
+
+108FD
+F0 --> 80
+
+30366
+91 9F 09 --> 00 A6 3F 
+
+
+new code (rom must be expanded to 2MB)
+at 1FA600
+A5 1B 29 01 F0 1A A5 F2 C9 50 D0 06 AF 53 F3 7E C9 02 D0 06 A5 1C 29 FD 80 04 A5 1C 09 02 85 1C 22 91 9F 09 6B
+
+
+Diferent key combinations = change the 10th byte in the main string to the following:
+
+byte-buttons pressed
+80 - A (not recommended)
+70 - X+R+L
+60 - X+L
+50 - X+R (default), command C9 50.
+40 - X
+30 - L+R
+20 - L
+10 - R

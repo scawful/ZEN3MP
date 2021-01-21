@@ -73,6 +73,14 @@ class Post
         return $file_type;
     }
 
+    public function getNumPosts()
+    {
+        $stmt = $this->spdo->prepare('SELECT COUNT(*) FROM posts WHERE deleted = ?');
+        $stmt->execute(["no"]);
+        $num_posts = $stmt->fetchColumn();
+        return $num_posts;
+    }
+
     public function submitMediaPost($user_to, $file_name, $file_type) 
     {
 		$date_added = date("Y-m-d H:i:s");
@@ -135,7 +143,7 @@ class Post
                 {
 					$link = preg_split("!&!", $value);
 					$value = preg_replace("!watch\?v=!", "embed/", $link[0]);
-					$value = "<br><iframe width=\'560\' height=\'315\' src=\'" . $value ."\'></iframe><br>";
+					$value = "<br><br><iframe width=560 height=315 src=" . $value ."></iframe><br>";
 					$body_array[$key] = $value;
                 }
 
@@ -162,29 +170,29 @@ class Post
             $notification = new Notification($added_by, $this->character, $this->spdo, $this->rpdo);
             
             // calculate gold for post
-            $character = new Character($this->username, $this->spdo, $this->rpdo);
-            $checkForChar = $character->checkForCharacter();
-            if ($checkForChar === true) 
-            { 
-                $char_luck = $character->getCharacterLuck();
-                $string_bytes = strlen($body);
+            // $character = new Character($this->username, $this->spdo, $this->rpdo);
+            // $checkForChar = $character->checkForCharacter();
+            // if ($checkForChar === true) 
+            // { 
+            //     $char_luck = $character->getCharacterLuck();
+            //     $string_bytes = strlen($body);
 
-                if ($string_value < 250)
-                    $randkey = rand(4, 8);
-                else
-                    $randkey = rand(6, 10);
+            //     if ($string_value < 250)
+            //         $randkey = rand(4, 8);
+            //     else
+            //         $randkey = rand(6, 10);
 
-                if ($imageName)
-                    $picture = rand(1, 15);
-                else 
-                    $picture = 0;
+            //     if ($imageName)
+            //         $picture = rand(1, 15);
+            //     else 
+            //         $picture = 0;
                 
-                $string_value = $string_bytes / $randkey;
-                $luck_bonus = pow(($char_luck / $randkey), 2);
-                $gold = ceil($string_value + $luck_bonus + $picture);
-                $character->setCharacterMoney($gold);
-                $notification->insertRPGNotification($returned_id, $added_by, "gold_added", $gold);
-            }
+            //     $string_value = $string_bytes / $randkey;
+            //     $luck_bonus = pow(($char_luck / $randkey), 2);
+            //     $gold = ceil($string_value + $luck_bonus + $picture);
+            //     $character->setCharacterMoney($gold);
+            //     $notification->insertRPGNotification($returned_id, $added_by, "gold_added", $gold);
+            // }
 
 			if ($user_to != 'none') {
                 $notification->insertNotification($returned_id, $user_to, "profile_post");
@@ -396,16 +404,15 @@ class Post
 
 				$str .= "<div class='status_post'>
 							<div class='card'>
-							<div class='card-body'>
+							<div class='card-body' style='padding: 5px; margin: 5px;'>
 								<a href='$added_by'>
-								<img src='$avatar' width='50' class=avatar title='$added_by'>
+								<img src='$avatar' class=avatar title='$added_by'>
 								</a>
-							<h4 class='card-title'>
+							<h5 class='card-title' style='margin-bottom: 0;'>
 									<a href='$added_by'>$displayname</a> $user_to
 									<span class='postTime'><a href='post.php?id=$id'>$time_message</a> $delete_button</span>
-							</h4>
+							</h5>
 							<p class='card-text'>$body<br>$file_insert</p>
-							<br/>
 							<div class='widgets'>
 								<a onClick='javascript:toggle$id()' class='btn btn-primary card-link'>
 									<i class='typcn typcn-arrow-back icon'> Replies
@@ -573,7 +580,7 @@ class Post
 
 	            $str .= "<div class='status_post'>
 	                    <div class='card'>
-	                    <div class='card-body'>
+	                    <div class='card-body' style='padding: 5px; margin: 5px;'>
 	                      <a href='$added_by'>
 	                      <img src='$avatar' width='50' class=avatar title='$added_by'>
 	                      </a>
@@ -582,7 +589,6 @@ class Post
 	                        <span class='postTime'><a href='post.php?id=$id'>$time_message</a> $delete_button</span>
 	                    </h4>
 	                    <p class='card-text'>$body<br>$file_insert</p>
-											<br/>
 	                    <div class='widgets'>
 	                      <a onClick='javascript:toggle$id()' class='btn btn-primary card-link'><i class='typcn typcn-arrow-back icon'> Replies <span class='badge badge-primary'>$comments_check_num</span></i></a>
 	                      <span class='likes'><iframe src='src/forms/like_form.php?post_id=$id' scrolling='no'></iframe></span>

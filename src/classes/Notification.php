@@ -21,9 +21,8 @@ class Notification
 
     public function getUnreadNumber() 
     {
-		$userLoggedIn = $this->user_obj->getUsername();
 		$stmt = $this->spdo->prepare('SELECT COUNT(*) FROM notifications WHERE viewed = ? AND user_to = ?');
-		$stmt->execute(["no", $userLoggedIn]);
+		$stmt->execute(["no", $this->username]);
 		$num_unread = $stmt->fetchColumn();
 		return $num_unread;
     }
@@ -84,6 +83,24 @@ class Notification
         $stmt->execute();
         $id = $stmt->fetchColumn() + 1;
         return $id;
+    }
+
+    public function getNotificationNumByUser()
+    {
+        $userLoggedIn = $this->user_obj->getUsername();
+        $stmt = $this->spdo->prepare('SELECT COUNT(*) FROM notifications WHERE user_to = ?');
+        $stmt->execute([$userLoggedIn]);
+        $num_notifs = $stmt->fetchColumn();
+        return $num_notifs;
+    }
+
+    public function getNotificationArray()
+    {
+        $userLoggedIn = $this->user_obj->getUsername();
+        $stmt = $this->spdo->prepare('SELECT id FROM notifications WHERE user_to = ?');
+        $stmt->execute([$userLoggedIn]);
+        $num_notifs = $stmt->fetch();
+        return $num_notifs;
     }
 
     public function getNotifications($data, $limit) 

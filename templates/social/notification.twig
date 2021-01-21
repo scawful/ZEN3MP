@@ -7,7 +7,6 @@
         {# {{ notifications.getNotificationFrom(notif_id) }} #}
         <h3> {{ notifications.getNotificationMessage(notif_id) }} </h3>
         {{ notifications.getNotificationDate(notif_id) }} <br />
-
         
         {% set type = notifications.getNotificationType(notif_id) %}
         {% set type_id = notifications.getNotificationTypeID(notif_id) %}
@@ -17,6 +16,17 @@
         {% endif %}
         
     {% else %}
+        <!-- notifications.getNotificationNumByUser() notifications.getNotificationArray  -->
+        {% for i in 1000..0 %}
+            {% if i != 0 and notifications.getNotificationUserTo(i) == userLoggedIn %}
+                    <h3> 
+                        <a href="https://zeniea.com/post.php?id={{notifications.getNotificationTypeID(i)}}">
+                            {{ notifications.getNotificationMessage(i) }} 
+                        </a>
+                    </h3>
+                        {{ notifications.getNotificationDate(i) }} <br /> <hr>
+            {% endif %}
+        {% endfor %}
         
     {% endif %}
     </div>

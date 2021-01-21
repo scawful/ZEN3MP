@@ -1,23 +1,23 @@
 {% extends "base.twig" %}
 {% block title %}
-Home
+Timeline
 {% endblock %}
 
 {% block main %}
   <div class="post_column">
 
-    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+    <!--<div class="alert alert-primary alert-dismissible fade show" role="alert">
       <strong>Welcome to Zeniea!</strong> Video upload feature is now live! 
-      <!-- If you're interested check out these experimental pages. -->
+       If you're interested check out these experimental pages. 
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <!--<p>
+      <p>
         <ul style="list-style-type: square;">
           <li><a href="?board">Discussion Boards</a></li>
         </ul>
-      </p>-->
-    </div>
+      </p>
+    </div>-->
 
       <form class="post_form" action="/" method="POST" enctype="multipart/form-data" autocomplete="off">
         <input type="text" class="form-control" name="post_text" id="post_text" placeholder="Type something here..." style="width: 90%; float: left; overflow: scroll;">
@@ -37,12 +37,22 @@ Home
 {% endblock %}
 
 {% block side %}
-    <strong>Trending</strong>
-    <hr style="margin: 0px;">
-    <ul class="trending-list-group">
-        {{ posts.getTrends }}
-    </ul>
 
+    <form action="search.php" method="GET" class="search-box-align" name="search_form">
+        <div class="input-group input-group-sm mt-3 mb-1">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Search</span>
+            </div>
+            <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                    onkeyup="getLiveSearchUsers(this.value, '{{ userLoggedIn }}')" name="q" autocomplete="off">
+        </div>
+    </form>
+
+    <div class="mt-2">
+        <strong>Trending</strong>
+        <hr class="m-0">
+        <ul class="trending-list-group"> {{ posts.getTrends }} </ul>
+    </div>
 {% endblock %}
 
 {% block javascript %}

@@ -19,6 +19,7 @@ include("src/forms/login_form.php");
 include("src/forms/file_upload_form.php");
 include("src/forms/message_post_form.php");
 include("src/forms/new_character_form.php");
+$twig->addGlobal('error_array', $error_array);
 
 switch (True) 
 {
@@ -74,9 +75,12 @@ switch (True)
         else
             echo $twig->render('login.twig');
         break;
-    // case isset($_GET['verify']):
-    //     echo $twig->render('social/verify.twig');
-    //     break;
+    case isset($_GET['requests']):
+        if($isLoggedIn == true)
+            echo $twig->render('social/requests.twig');
+        else
+            echo $twig->render('login.twig');
+        break;
     case isset($_GET['zelda']):
         echo $twig->render('info/zelda.twig');
         break;

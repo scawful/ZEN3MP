@@ -1,0 +1,48 @@
+
+
+;This is for making BG2 disappear when pressing X and R together (parallel worlds x button secret). But only if you have the Mirror in the inventory (suitable to revert it into Lens of Truth).
+
+
+;WRITTEN: by XaserLE
+;THANKS TO: -MathOnNapkins' Zelda Doc's
+; -wiiqwertyuiop for his Zelda Disassembly
+
+; Layer Flags: xxxsabcd (i count BG from 1 to 4 - MathOnNapkins RAM-Map counts from 0 to 3)
+; s - Sprite layer enabled 
+; a - (BG4 enabled)??
+; b - BG3 enabled
+; c - BG2 enabled
+; d - (BG1 enabled)??
+
+
+;header
+lorom
+
+ORG $0288FD ; go to the code that branches behin the dungeon map load if player didn't press X
+BRA $1C ; make it always branch, so map isn't loaded anymore
+
+ORG $068365 ; go to a originally JSL that is executed every frame
+JSL $3FA600 ; overwrite it (originally JSL $099F91)
+
+ORG $03FA600 ; go to expanded space to write our routine
+
+LDA $1B ; load data that tells us whether we are in a building or not
+AND #$01 ; are we in a building?
+BEQ $1A ; if not, don't use the x-button-secret, edited from 12 to 1A
+LDA $F2 ; load unfiltered joypad 1 register (AXLR|????)
+CMP #$50 ; X and R buttons pressed?
+BNE $06 ; if not, go to enable BG2
+LDA $7EF353 ; load ram mirror slot, added
+CMP #$02 ; compare to value 02 (have mirror is 02, no mirror is 00), added
+BNE $06 ; if not value 02, go to enable BG2, added
+LDA $1C ; load layer flags
+AND #$FD ; disable BG2 (0xFD = 11111101)
+BRA $04 ; go to store layer flags
+LDA $1C ; load layer flags
+ORA #$02 ; enable BG2 (0x02 = 00000010)
+STA $1C ; store layer flags
+
+JSL $099F91 ; at first execute original code
+
+RTL
+

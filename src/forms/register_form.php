@@ -130,7 +130,7 @@ if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 				// Verify User Email
 
 				$to      = $em; // Send email to our user
-				$subject = 'Zeniea | Registration Verification and Class Creation'; // Give the email a subject
+				$subject = 'Zeniea | Registration Verification'; // Give the email a subject
 				$message = '
 				Welcome to Zeniea!
 

@@ -1,0 +1,17 @@
+{% include('login_header.twig') %}
+
+<div class="login-wrapper">
+
+    <header>{% block title %}{% endblock %}</header>
+
+    <section class="columns">
+
+        <div id="maincol" class="columnBase"> {% block main %} {% endblock %} </div>
+
+        <div id="profcol" class="columnBase" style="height: 100%;"> {% block profile %} {% endblock %} </div>
+
+    </section>
+
+{% include('footer.twig') %}
+
+{% block javascript %}{% endblock %}

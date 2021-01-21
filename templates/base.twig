@@ -12,12 +12,9 @@
                     <!-- User logged in -->
                     {% if login_flag > 0 %}
                         <img class="avatar" src="{{ user.avatar }}" alt="{{ user.displayname }}'s Avatar">
-                        <a href="/{{ user.username }}"><strong>{{ user.displayname }}</strong></a>
-                        <span class="badge badge-primary">{{ user.rank }}</span>
-                        <br />Posts: {{ user.numPosts }}
-                        <br />Likes: {{ user.numLikes }}
-                        <br />Friends: {{ user.getNumberOfFriends }}
-                        <br />
+                        <strong>{{ user.displayname }}</strong>
+                        <span class="badge badge-primary">{{ user.rank }}</span><br>
+                        <a href="/{{ user.username }}" class="small">@{{user.username}}</a><br>
                     
                         {# {% if character.checkForCharacter == true %}
                             <strong>{{ character.getCharacterName }}</strong>

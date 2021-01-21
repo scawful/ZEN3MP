@@ -2,39 +2,9 @@
 {% block title %}News{% endblock %}
 
 {% block main %}
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link active" href="#site_news" aria-controls="site_news" data-toggle="tab" aria-selected="true">Site News</a>
-    </li>
-    {# <li class="nav-item">
-        <a class="nav-link" href="#sources" aria-controls="sources" data-toggle="tab" aria-selected="true">iO Resources</a>
-    </li> #}
-</ul>
 
-<div class="tab-content" id="myTabContent">
-
-    <div role="tabpanel" class="tab-pane fade show active" id="site_news" aria-labelledby="site_news">
-        <div class="posts_area">
-        </div>
-        <img id="loading" src="img/icons/loading.gif">
-    </div>
-
-    {# <div role="tabpanel" class="tab-pane fade" id="sources" aria-labelledby="sources">
-        <h3>Under Construction</h3>
-        {% for i in posts.getNumIOPosts..1 %}
-            <div class='post'>
-                <a href='$added_by'>
-                <img src='{{ posts.getIOPostAddedByAvatar(i) }}' width='50' class=avatar title='{{ posts.getIOPostAddedBy(i) }}'>
-                </a>
-                <div class='feed-post-header'><strong>{{ posts.getIOPostTitle(i) }}</strong></div>
-                    <div class='postTime'>posted {{ posts.getIOPostDate(i) }} by <a href='/{{ posts.getIOPostAddedBy(i) }}'>{{ posts.getIOPostAddedBy(i) }}</a></div>
-                <p class='card-text'>{{ posts.getIOPostBody(i) | raw }}</p>
-            </div>
-        {% endfor %}
-        <br />
-    </div> #}
-    
-</div>
+    <div class="posts_area"></div>
+    <img id="loading" src="img/icons/loading.gif">
 
 {% endblock %}
 
