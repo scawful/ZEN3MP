@@ -37,8 +37,10 @@ if(isset($_POST['add_friend'])) {
 }
 
 if(isset($_POST['respond_request'])) {
-  header("Location: ?requests");
+  header("Location: requests.php");
 }
+
+$message_obj = new Message($userLoggedIn, $spdo);
 
 if(isset($_POST['post_message'])) {
   if(isset($_POST['message_body'])) {
@@ -54,7 +56,6 @@ if(isset($_POST['post_message'])) {
         </script>";
 }
 
-$message_obj = new Message($userLoggedIn, $spdo);
 $profile_user_obj = new User($username, $spdo);
 $user_obj = new User($userLoggedIn, $spdo);
 $character_obj = new Character($username, $spdo, $rpdo);
