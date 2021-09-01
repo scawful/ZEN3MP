@@ -8,7 +8,8 @@ $password2 = ""; //password 2
 $date = ""; //Sign up date
 $error_array = array(); //Holds error messages
 
-if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
+if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!="")
+{
 
 	//Registration form values
 
@@ -135,19 +136,18 @@ if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 				Welcome to Zeniea!
 
 				Thanks for signing up, ' . $uname . '!
-				Your account has been created, however before you can log in you must create your character and decide their class. This acts as the verification process to prevent spammers.
+				Your account has been created, however before you can log in you must verify your account. 
 
-				ZEN3MP is an experimental project so this verification page may change. Eventually there will be an update character page for any legacy accounts caught up in development changes.
-
-				Please click this link to activate your account and set up your character:
-				http://www.zeniea.com/verify.php?email='.$em.'&key='.$verify_hash.'
+				Please click this link to activate your account:
+				https://www.zeniea.com/verify.php?email='.$em.'&key='.$verify_hash.'
 
 
 				'; // message above including the link
 
 				$headers = 'From:noreply@zeniea.com' . "\r\n"; // Set from headers
 				$mail = mail($to, $subject, $message, $headers); // Send our email
-				if($mail) {
+				if ( $mail ) 
+                {
 					//$query = mysqli_query($connect_social, "INSERT INTO users VALUES (0, '$uname', '$displayname', '$em', '$password', '$date', '$profile_pic', '0', '0', 'yes', ',', '/img/default-wallpaper.png', 'New User', 'no', '$verify_hash')");
 
 					$query = $spdo->prepare('INSERT INTO users VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -162,7 +162,9 @@ if(isset($_POST['register_button']) && $_POST['g-recaptcha-response']!=""){
 					$about_query->execute([$new_user_id, 'purpleStyle']);
 
 					array_push($error_array, "EmailSent");
-				} else {
+				} 
+                else 
+                {
 					echo "Mail sending failed.";
 				}
 
