@@ -180,8 +180,8 @@ class Notification
 
     public function setPostNotificationRead($post_id)
     {
-        $opened_query = $this->spdo->prepare('UPDATE notifications SET opened = ? WHERE user_to = ? AND link LIKE ? ');
-		$opened_query->execute(["yes", $this->username, "%=$post_id"]);
+        $opened_query = $this->spdo->prepare('UPDATE notifications SET viewed = ? WHERE user_to = ? AND id = ?');
+		$opened_query->execute(["yes", $this->username, $post_id]);
     }
 
     public function insertNotification($post_id, $user_to, $type) 
