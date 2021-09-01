@@ -5,7 +5,8 @@
 <div class="titleBar">Statistics</div>
     <div class="article">
 
-        Total Posts: {{ posts.getNumPosts }}<br>
+        Posts: {{ posts.getNumPosts }}<br>
+        Comments: {{ posts.getNumComments }} <br>
         Active Users: {{ user.getNumActiveUsers }}<br>
         Newest User: <a href="https://zeniea.com/{{user.getNewestUserNM}}">{{ user.getNewestUserDN }}</a><br>
         <span class="small hilit">
@@ -47,13 +48,13 @@
 
     </form>
     <div class='dropdown-divider'></div>
-    <a class='dropdown-item' href='#' id='signup' class='signup'>Need an account? Sign up.</a>
-    <a class='dropdown-item' href='#'>Forgot password? <span class="hilit">Sorry, broken :)</span></a>
+        <a class='dropdown-item' href='#' id='signup' class='signup'>Need an account? Sign up.</a>
+        <a class='dropdown-item' href='#' id='forgot' class='forgot'>Forgot password? <span class="hilit">Sorry, broken :)</span></a>
     </div>
 
     <!-- Register Form -->
     <div id='second'>
-    <form class="px-4 py-3" action="" method="POST">
+        <form class="px-4 py-3" action="" method="POST">
         <div class='form-group'>
             <input type='username' name="reg_uname" class='form-control' id='register_username' placeholder="Username" value="{% if session.reg_uname %}{{ session.reg_uname }}{% endif %}" required>
         </div>
@@ -109,7 +110,12 @@
 
         <div class='dropdown-divider'></div>
         <a class='dropdown-item' href='#' id='signin' class='signin'>Already have an account? Sign in here!</a>
+        <a class='dropdown-item' href='#' id='resend' class='resend'>Resend Verification Email.</a>
 
+    </div>
 
-</div>
+    <div id='third'>
+        test
+    </div>
+
 {% endblock %}
