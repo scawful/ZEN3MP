@@ -130,9 +130,13 @@ class User {
         while ( $row = $stmt->fetch() )
         {
             $user_to_check = $row['username'];
+            $user_avatar = $row['avatar'];
             if ( $this->isFriend($user_to_check) )
             {
-                echo $user_to_check . "<br />";
+                echo "<div class='mb-2'>
+                            <img src='" . $user_avatar . "' class='avatar'>
+                            <a href='https://zeniea.com/" . $user_to_check . "'>
+                            " . $user_to_check . "</a></div><br />";
             }
         }
         
