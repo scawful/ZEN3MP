@@ -76,7 +76,7 @@ switch (True)
             echo $twig->render('login.twig');
         break;
     case isset($_GET['requests']):
-        if($isLoggedIn == true)
+        if ($isLoggedIn == true)
             echo $twig->render('social/requests.twig');
         else
             echo $twig->render('login.twig');

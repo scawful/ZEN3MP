@@ -1,7 +1,7 @@
 <?php
 namespace zen3mp;
 
-if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['key']) && !empty($_GET['key'])) 
+if (isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['key']) && !empty($_GET['key'])) 
 {
     $verify_user_email = $_GET['email'];
     $verify_user_hash = $_GET['key'];
