@@ -10,6 +10,7 @@ class Post
 
     public function __construct($user, $spdo, $rpdo) 
     {
+        $this->userLoggedIn = $user;
         $this->user_obj = new User($user, $spdo);
         $this->username = $this->user_obj->getUsername();
         $this->character = "Placeholder";
@@ -81,6 +82,25 @@ class Post
         return $num_posts;
     }
 
+    public function getNumComments()
+    {
+        $stmt = $this->spdo->prepare('SELECT COUNT(*) FROM comments WHERE removed = ?');
+        $stmt->execute(["no"]);
+        $num_posts = $stmt->fetchColumn();
+        return $num_posts;
+    }
+
+    public function doesUserExist($username)
+    {
+        $stmt = $this->spdo->prepare('SELECT COUNT(*) FROM users WHERE username = ?');
+        $stmt->execute([$username]);
+        $exist = $stmt->fetchColumn();
+        if ($exist > 0)
+            return True;
+        else
+            return False; 
+    }
+
     public function submitMediaPost($user_to, $file_name, $file_type) 
     {
 		$date_added = date("Y-m-d H:i:s");
@@ -147,6 +167,23 @@ class Post
 					$body_array[$key] = $value;
                 }
 
+                if (strpos($value, "@") !== false)
+                {
+                    $usernameArray = explode("@", $value);
+                    if ($this->doesUserExist($usernameArray) == true)
+                    {
+                        $value = "<a href='https://zeniea.com/" . $usernameArray[1] . "'>@" . $usernameArray[1] . "</a>";
+                        $body_array[$key] = $value;
+                    }
+                    else
+                    {
+                        $value = "@" . $usernameArray[1];
+                        $body_array[$key] = $value;
+                    }
+                    
+                    // dick
+                }
+                
             }
             
 			$body = implode(" ", $body_array);
@@ -578,6 +615,23 @@ class Post
                     $file_insert = "";
                 }
 
+                if ($this->userLoggedIn == "Guest")
+                    $widget = "<span class='mt-2'></span>";
+                else 
+                {
+                    $widget = "<div class='widgets'>
+                                    <a onClick='javascript:toggle$id()' class='btn btn-primary card-link'>
+                                        <i class='typcn typcn-arrow-back icon'> 
+                                            Replies <span class='badge badge-primary'>
+                                                        $comments_check_num
+                                                    </span>
+                                        </i>
+                                    </a>
+                                    <span class='likes'>
+                                        <iframe src='src/forms/like_form.php?post_id=$id' scrolling='no'></iframe>
+                                    </span>
+                                </div>";
+                }
 	            $str .= "<div class='status_post'>
 	                    <div class='card'>
 	                    <div class='card-body' style='padding: 5px; margin: 5px;'>
@@ -589,10 +643,7 @@ class Post
 	                        <span class='postTime'><a href='post.php?id=$id'>$time_message</a> $delete_button</span>
 	                    </h4>
 	                    <p class='card-text'>$body<br>$file_insert</p>
-	                    <div class='widgets'>
-	                      <a onClick='javascript:toggle$id()' class='btn btn-primary card-link'><i class='typcn typcn-arrow-back icon'> Replies <span class='badge badge-primary'>$comments_check_num</span></i></a>
-	                      <span class='likes'><iframe src='src/forms/like_form.php?post_id=$id' scrolling='no'></iframe></span>
-	                    </div>
+                                $widget
 	                    </div>
 	                    </div>
 	                  </div>
