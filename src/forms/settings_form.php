@@ -86,8 +86,8 @@ if(isset($_POST['update_style'])) {
 
 //*****************************************
 
-if(isset($_POST['update_password'])) {
-
+if ( isset($_POST['update_password']) ) 
+{
   $old_password = strip_tags($_POST['oldpassword']);
   $new_password = strip_tags($_POST['newpassword']);
   $new_password2 = strip_tags($_POST['newpassword2']);
@@ -125,7 +125,8 @@ if(isset($_POST['update_password'])) {
 
 
 }
-else {
+else 
+{
   $password_message = "";
 }
 
