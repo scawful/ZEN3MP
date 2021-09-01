@@ -1,0 +1,26 @@
+{% extends "login_base.twig" %}
+{% block title %} Zeniea {% endblock %}
+
+{% block main %}
+  <div class="titleBar">Forgot Password</div>
+  <form class="" action="" method="POST" style="text-align: left; margin: 10px;">
+    <div class="form-group">
+      <label for="formGroupExampleInput4">Email: </label>
+      <input type="input" class="form-control" id="formGroupExampleInput" name="email">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput5">Username: </label>
+      <input type="input" class="form-control" id="formGroupExampleInput" name="username">
+    </div>
+
+    <button type="submit" name="forgot_password" id="forgot_password" class="btn btn-primary">Send Recovery Email</button>
+  </form>
+
+{% endblock %}
+
+{% block profile %}
+<div class="article">
+    <p><a href="https://zeniea.com/">Return Home</a></p>
+</div>
+
+{% endblock %}
