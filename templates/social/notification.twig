@@ -16,6 +16,8 @@
         {% endif %}
         
     {% else %}
+        <h5><a href="#">Mark All As Read</a></h5>
+        <hr>
         <!-- notifications.getNotificationNumByUser() notifications.getNotificationArray  -->
         {% for i in 1000..0 %}
             {% if i != 0 and notifications.getNotificationUserTo(i) == userLoggedIn %}
@@ -24,7 +26,9 @@
                             {{ notifications.getNotificationMessage(i) }} 
                         </a>
                     </h3>
-                        {{ notifications.getNotificationDate(i) }} <br /> <hr>
+                        <a href="https://zeniea.com/?notification={{i}}">
+                            {{ notifications.getNotificationDate(i) }} 
+                        </a><br /> <hr>
             {% endif %}
         {% endfor %}
         
