@@ -21,7 +21,7 @@ ol, ul { list-style: none; }
 .wrapper {
     margin: auto;
     /* max-width: 1256px;*/
-    max-width: 1123px;
+    max-width: 1024px;
 }
 
 .login-wrapper {
@@ -75,7 +75,7 @@ ol, ul { list-style: none; }
   grid-column-gap: 5px;
   grid-row-gap: 5px;
   margin: auto;
-  max-width: 1256px;
+  max-width: 1024px;
   padding-top: 50px;
 }
 
@@ -229,7 +229,7 @@ ol, ul { list-style: none; }
 .navBar {
     flex: auto;
     margin: auto;
-    max-width: 1123px;
+    max-width: 1024px;
 }
 
 .navEndPiece {
@@ -384,6 +384,10 @@ ol, ul { list-style: none; }
 
 #second {
 	display: none;
+}
+
+#third {
+    display: none;
 }
 
 /* Comment Sections */
