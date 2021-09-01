@@ -5,8 +5,8 @@
 
     <meta charset="UTF-8">
     <meta name="author" content="Justin Scofield">
-    <meta name="keywords" content="Zeniea,ZEN3MP,HTML,CSS,XML,JavaScript,PHP,MySQL,jQuery,Bootstrap,RPG,Quest,Fight,Trade,Talk,Social,Network">
-    <meta name="description" content="A modern role-playing quest game built into a social network! Uses HTML5, PHP, and Javascript to create a dynamic user experience. Currently in development and accepting registrants.">
+    <meta name="keywords" content="Zeniea,ZEN3MP,HTML,CSS,XML,JavaScript,PHP,MySQL,jQuery,Bootstrap,Talk,Social,Network">
+    <meta name="description" content="Micro-blogging discussion platform. Currently in development and accepting registrants.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Zeniea Stylesheets -->
@@ -129,9 +129,13 @@
         {% endif %}
         <a href="https://zeniea.com/{{ userLoggedIn }}">Profile</a> | 
         <a href="https://zeniea.com/?inbox">Messages</a> | 
-        <a href="https://zeniea.com/?notification">Notifications</a> | 
+        <a href="https://zeniea.com/?notification">Notifications</a> 
+            {% if notifications.getUnreadNumber > 0 %}
+                ({{ notifications.getUnreadNumber }})
+            {% endif %} | 
         <a href="/?logout&s={{ session_id }}" title="Logout">Logout</a>
     {% else %}
+        <a href="https://zeniea.com">Login / Register</a>
     {% endif %}
     </div>
 
